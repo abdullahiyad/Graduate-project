@@ -1,0 +1,129 @@
+/* start global varibales */
+:root {
+  --main-font: "Merienda", cursive;
+  --background-main-color: #00000082;
+  --front-main-color: #e0a840;
+  --font-color: #f7f4e3;
+  --large-font-size: 30px;
+  --small-font-size: 14px;
+  --radius-deg: 18px;
+}
+/* End global varibales */
+
+/* start reset */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+/*end reset */
+
+body {
+  font-family: var(--main-font);
+}
+input {
+  border: none;
+  outline: none;
+}
+a {
+  text-decoration: none;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  /* background-color: var(--background-main-color); */
+  background-image: url(/images/login-background.jpg);
+  background-repeat: no-repeat;
+  background-clip: content-box;
+}
+.login-container {
+  min-width: 300px;
+  max-width: fit-content;
+  margin: 10px auto;
+  margin-top: 200px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  text-align: center;
+  border: 2px solid var(--front-main-color);
+  padding: 20px;
+  border-radius: var(--radius-deg);
+  -webkit-border-radius: var(--radius-deg);
+  -moz-border-radius: var(--radius-deg);
+  -ms-border-radius: var(--radius-deg);
+  -o-border-radius: var(--radius-deg);
+  background-color: var(--background-main-color);
+  backdrop-filter: blur(40px);
+}
+.login-title {
+  color: var(--font-color);
+  font-size: var(--large-font-size);
+}
+.username-container .password-container {
+  display: block;
+  width: 100%;
+}
+.login-container i {
+  color: var(--font-color);
+  font-size: 20px;
+}
+.username,
+.password {
+  background-color: var(--front-main-color);
+  padding: 15px;
+  font-size: 20px;
+  border-radius: var(--radius-deg);
+  -webkit-border-radius: var(--radius-deg);
+  -moz-border-radius: var(--radius-deg);
+  -ms-border-radius: var(--radius-deg);
+  -o-border-radius: var(--radius-deg);
+  border: 1px solid var(--front-main-color);
+  background-color: transparent;
+  color: var(--font-color);
+  width: 70%;
+}
+.login-container .username:hover,
+.password:hover {
+  transition-duration: 1s;
+  border: 1px solid var(--font-color);
+}
+.login-container input::placeholder {
+  color: white;
+  opacity: 0.7;
+  font-size: var(--small-font-size);
+}
+form * {
+  margin: 10px;
+}
+form .login-btn {
+  padding: 10px 30px;
+  border-radius: var(--radius-deg);
+  -webkit-border-radius: var(--radius-deg);
+  -moz-border-radius: var(--radius-deg);
+  -ms-border-radius: var(--radius-deg);
+  -o-border-radius: var(--radius-deg);
+  background-color: transparent;
+  color: var(--front-main-color);
+  border: 1px solid var(--front-main-color);
+}
+form .login-btn:hover {
+  transition-duration: 0.8s;
+  background-color: var(--front-main-color);
+  color: var(--font-color);
+}
+.login-container .login-title {
+  padding: 25px;
+}
+.login-container p {
+  margin-top: 15px;
+  color: var(--font-color);
+  font-size: var(--small-font-size);
+}
+.login-container p a {
+  color: var(--front-main-color);
+}
