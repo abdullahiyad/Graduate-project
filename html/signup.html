@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignUp</title>
+    <!-- connect css file -->
+    <link rel="stylesheet" href="../css/signup-style.css" />
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="../css/fontawesome/css/all.min.css" />
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="signup-container">
+        <h2 class="signup-title">YKPO Cafe</h2>
+        <form class="signup-form" method="post">
+          <div class="name-container input-field-container">
+            <i class="fa-solid fa-user"></i>
+            <input
+              type="text"
+              name="name"
+              class="name input-style"
+              placeholder="Name"
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <div class="username-container input-field-container">
+            <i class="fa-solid fa-envelope"></i>
+            <input
+              type="email"
+              name="Email"
+              class="email input-style"
+              placeholder="Email"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="username-container input-field-container">
+            <i class="fa-solid fa-phone"></i>
+            <input
+              type="text"
+              name="phone"
+              class="phone input-style"
+              placeholder="Phone Number 05xxxxxxxx"
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <div class="password-container input-field-container">
+            <i class="fa-solid fa-key"></i>
+            <input
+              type="password"
+              name="password"
+              class="password input-style"
+              placeholder="Passwrod"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <input type="submit" value="signup" class="signup-btn" />
+        </form>
+        <p>You have account ? <a href="login.html">Login</a></p>
+      </div>
+    </div>
+    <div class="loader">
+      <div class="one"></div>
+      <div class="two"></div>
+      <div class="three"></div>
+    </div>
+    <!-- connect javascript file -->
+    <script src="../js/signup.js"></script>
+  </body>
+</html>

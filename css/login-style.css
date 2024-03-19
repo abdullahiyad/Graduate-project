@@ -1,9 +1,9 @@
 /* start global varibales */
 :root {
   --main-font: "Merienda", cursive;
-  --background-main-color: #00000082;
-  --front-main-color: #e0a840;
-  --font-color: #f7f4e3;
+  --background-main-color: #333;
+  --front-main-color: #ff7000;
+  --font-color: white;
   --large-font-size: 30px;
   --small-font-size: 14px;
   --radius-deg: 18px;
@@ -20,6 +20,10 @@
 
 body {
   font-family: var(--main-font);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
 }
 input {
   border: none;
@@ -34,37 +38,44 @@ img {
 }
 
 body {
-  /* background-color: var(--background-main-color); */
-  background-image: url(/images/login-background.jpg);
-  background-repeat: no-repeat;
-  background-clip: content-box;
+  /*background-color: var(--background-main-color);
+  */
 }
+.container {
+  width: 100%;
+  height: 100vh;
+  background-image: url(../images/IMG_6452.PNG);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .login-container {
   min-width: 300px;
   max-width: fit-content;
   margin: 10px auto;
-  margin-top: 200px;
   display: flex;
   justify-content: center;
   align-content: center;
   flex-wrap: wrap;
   flex-direction: column;
   text-align: center;
+  margin-top: 150px;
   border: 2px solid var(--front-main-color);
   padding: 20px;
   border-radius: var(--radius-deg);
   -webkit-border-radius: var(--radius-deg);
   -moz-border-radius: var(--radius-deg);
   -ms-border-radius: var(--radius-deg);
-  -o-border-radius: var(--radius-deg);
-  background-color: var(--background-main-color);
-  backdrop-filter: blur(40px);
+  background-color: rgba(0, 0, 0, 0.182);
+  box-shadow: 0 0 30px 5px black;
+  backdrop-filter: blur(15px);
 }
 .login-title {
   color: var(--font-color);
   font-size: var(--large-font-size);
+  text-shadow: 3px 4px 10px black;
 }
-.username-container .password-container {
+.email-container .password-container {
   display: block;
   width: 100%;
 }
@@ -72,7 +83,7 @@ body {
   color: var(--font-color);
   font-size: 20px;
 }
-.username,
+.email,
 .password {
   background-color: var(--front-main-color);
   padding: 15px;
@@ -83,11 +94,12 @@ body {
   -ms-border-radius: var(--radius-deg);
   -o-border-radius: var(--radius-deg);
   border: 1px solid var(--front-main-color);
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.189);
+  /* box-shadow: 0 0 5px 0px white; */
   color: var(--font-color);
   width: 70%;
 }
-.login-container .username:hover,
+.login-container .email:hover,
 .password:hover {
   transition-duration: 1s;
   border: 1px solid var(--font-color);
@@ -96,6 +108,7 @@ body {
   color: white;
   opacity: 0.7;
   font-size: var(--small-font-size);
+  font-family: var(--main-font);
 }
 form * {
   margin: 10px;
@@ -108,11 +121,12 @@ form .login-btn {
   -ms-border-radius: var(--radius-deg);
   -o-border-radius: var(--radius-deg);
   background-color: transparent;
-  color: var(--front-main-color);
+  color: black;
   border: 1px solid var(--front-main-color);
+  box-shadow: 0px 0px 5px black;
 }
 form .login-btn:hover {
-  transition-duration: 0.8s;
+  transition-duration: 0.5s;
   background-color: var(--front-main-color);
   color: var(--font-color);
 }
@@ -126,4 +140,67 @@ form .login-btn:hover {
 }
 .login-container p a {
   color: var(--front-main-color);
+  text-shadow: 3px 2px 4px black;
+}
+
+/* loading animation */
+
+.loader {
+  background-color: var(--background-main-color);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.8s;
+}
+
+.loader div {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--front-main-color);
+  border: 1px solid var(--front-main-color);
+  margin-left: 5px;
+  animation-name: loading2;
+  animation-duration: 0.8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.loader .one {
+  animation-delay: 0s;
+}
+
+.loader .two {
+  animation-delay: 0.3s;
+}
+
+.loader .three {
+  animation-delay: 0.6s;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes loading2 {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  100% {
+    opacity: 0.2;
+    transform: translateY(10px);
+  }
 }
