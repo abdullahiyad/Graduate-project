@@ -1,8 +1,8 @@
 /* start global varibales */
 :root {
   --main-font: "Merienda", cursive;
-  --background-main-color: #333;
-  --front-main-color: #ff7000;
+  --background-main-color: white;
+  --front-main-color: black;
   --font-color: white;
   --large-font-size: 30px;
   --small-font-size: 14px;
@@ -204,3 +204,5 @@ form .login-btn:hover {
     transform: translateY(10px);
   }
 }
+
+/* end loading animation */
