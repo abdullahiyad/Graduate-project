@@ -47,6 +47,9 @@ body {
   background-image: url(../images/IMG_6452.PNG);
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-container {
@@ -59,7 +62,6 @@ body {
   flex-wrap: wrap;
   flex-direction: column;
   text-align: center;
-  margin-top: 150px;
   border: 2px solid var(--front-main-color);
   padding: 20px;
   border-radius: var(--radius-deg);

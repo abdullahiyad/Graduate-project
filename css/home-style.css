@@ -276,7 +276,9 @@
 .home-container .home-right {
   width: 50%;
   height: 100%;
-  background-color: #ff7000;
+  background-image: url(../images/screen.PNG);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 /* end home section */

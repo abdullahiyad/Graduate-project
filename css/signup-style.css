@@ -48,10 +48,13 @@ body {
   background-image: url(../images/IMG_6452.PNG);
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .signup-container {
-  min-width: 300px;
+  min-width: 280px;
   max-width: fit-content;
   margin: 10px auto;
   display: flex;
@@ -59,7 +62,6 @@ body {
   align-content: center;
   flex-wrap: wrap;
   flex-direction: column;
-  margin-top: 50px;
   text-align: center;
   border: 2px solid var(--front-main-color);
   padding: 20px;
