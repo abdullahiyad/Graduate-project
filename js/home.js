@@ -9,3 +9,11 @@ linkIcon.addEventListener("click", function () {
     linkIcon.classList.add("clicked");
   }
 });
+
+/* loading */
+let loading = document.querySelector(".loader");
+window.addEventListener("load", function () {
+  loading.style.display = "none";
+});
+
+/* loading end */
