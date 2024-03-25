@@ -6,7 +6,8 @@ const cold_drinks = new cold_schema({
     price:{type: Number,require:true},
     status: {type:String,default:"Available"},
     image: {type: String,require:true},
-    givenScore: {type: Number,default:0}
+    givenScore: {type: Number,default:0},
+    description:{type: String,require:true,max: 350}
 });
 
 const ColdDrinks = mongoose.model('ColdDrinks',cold_drinks);
