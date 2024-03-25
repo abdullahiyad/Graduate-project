@@ -98,7 +98,7 @@ html {
   color: var(--font-color);
 }
 /* for  phones and tablets screens */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .header .header-container {
     display: flex;
     justify-content: space-between;
@@ -190,7 +190,7 @@ html {
   }
 }
 /* for large screens */
-@media (min-width: 769px) {
+@media (min-width: 801px) {
   .header-container {
     padding: 0 5%;
     display: flex;
