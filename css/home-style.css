@@ -305,7 +305,7 @@ html {
   .home-container .home-right {
     width: 50%;
     height: 100%;
-    background-image: url(../images/homee.jpg);
+    background-image: url('/images/homee.jpg');
     background-size: cover;
     background-repeat: no-repeat;
   }
@@ -367,7 +367,7 @@ html {
   flex-direction: row;
 }
 .about-section .image-container {
-  background-image: url(../images/info.jpg);
+  background-image: url('/images/info.jpg');
   width: 30%;
   height: 100%;
   border-radius: 20px;
