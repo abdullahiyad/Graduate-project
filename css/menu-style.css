@@ -3,8 +3,9 @@
   --main-font: "Merienda";
   --main-background-color: white;
   --product-background-color: white;
-  --menu-background-color: #eee;
+  --menu-background-color: #ddd;
   --main-font-color: black;
+  --logo-font-size: 30px;
   --description-color: #777;
   --button-radius-deg: 20px;
   --button-color: #ff7000;
@@ -95,12 +96,12 @@ html {
 }
 .header .header-container .logo {
   font-family: var(--main-font);
-  font-size: var(--large-font-size);
+  font-size: var(--logo-font-size);
   font-weight: bold;
   color: var(--main-font-color);
 }
 /* for  phones and tablets screens */
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .header .header-container {
     display: flex;
     justify-content: space-between;
@@ -195,7 +196,7 @@ html {
   }
 }
 /* for large screens */
-@media (min-width: 769px) {
+@media (min-width: 861px) {
   .header-container {
     padding: 0 5%;
     display: flex;
@@ -327,16 +328,21 @@ html {
   border: 1px solid var(--product-background-color);
 }
 .menu .products .product .product-img {
-  background-image: url("../images/product1.png");
+  /* background-image: url("../images/product1.png"); */
 
   /* note : 
   img width: 500px
   img height: 375px
   */
-  background-repeat: no-repeat;
-  background-size: contain;
+  /* background-repeat: no-repeat;
+  background-size: contain; */
+  overflow: hidden;
   width: 100%;
   height: 60%;
+}
+.product-img img {
+  width: 228.4px;
+  height: 179.04px;
 }
 .product .product-info {
   width: 100%;
