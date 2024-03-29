@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
     <!-- connect css file -->
-    <link rel="stylesheet" type="text/css" href="../css/login-style.css"/>
+    <link rel="stylesheet" href="/css/login-style.css"/>
      <!-- fontAwesome -->
-     <link rel="stylesheet" href="../css/fontawesome/css/all.min.css" />
+     <link rel="stylesheet" href="/css/fontawesome/css/all.min.css" />
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,13 +16,13 @@
       rel="stylesheet"
     />
     <!-- icon -->
-    
+    <link rel="icon" href="/images/home.ico" />
   </head>
   <body>
     <div class="container">
       <div class="login-container">
         <h2 class="login-title">YKPO Cafe</h2>
-        <form class="login-form" method="post">
+        <form class="login-form" action="/login" method="post">
           <div class="email-container">
             <i class="fa-solid fa-user"></i>
             <input
@@ -47,7 +47,7 @@
           </div>
           <input type="submit" value="Login" class="login-btn" />
         </form>
-        <p>Doesn't have account ? <a href="signup.html">Signup</a></p>
+        <p>Doesn't have account ? <a href="signup">Signup</a></p>
       </div>
     </div>
     <div class="loader">
@@ -56,6 +56,6 @@
       <div class="three"></div>
     </div>
     <!-- connect javascript file -->
-    <script src="../js/login.js"></script>
+    <script src="/js/login.js"></script>
   </body>
 </html>

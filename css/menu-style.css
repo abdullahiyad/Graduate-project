@@ -328,7 +328,11 @@ html {
   border: 1px solid var(--product-background-color);
 }
 .menu .products .product .product-img {
+<<<<<<< HEAD
   /* background-image: url("../images/product1.png"); */
+=======
+  background-image: url("/images/product1.png");
+>>>>>>> b34b8ee93c9157533113a644768849229e00429b
 
   /* note : 
   img width: 500px
