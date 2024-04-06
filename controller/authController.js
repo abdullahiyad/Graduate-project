@@ -2,13 +2,11 @@ const user = require("../nodejs/Database/models/users");
 let errors = {name:'',phone:'',email:'',password:''}
 
 const handleErrors = (err) => {
-    console.log(err.message, err.code);
     if(err.code === 11000){
         errors.email = 'AIU';
         errors.phone = 'AIU';
         return errors;
     }
-    
     if(err.message.includes('user validation failed')){
         Object.values(err.errors).forEach(({properties}) => {
             errors [properties.path] = properties.message;
@@ -65,10 +63,9 @@ module.exports.signup_post = async (req, res) => {
     const users = await user.create({ name, phone, email, password });
     res.status(201).json(users);
   } catch (err) {
-    console.log(err);
-    res.status(400).send("User doesn't created");
+    const errors = handleErrors(err);
+    res.status(400).send(errors);
   }
-
   res.send("new signup");
 };
 module.exports.login_post = async (req, res) => {
