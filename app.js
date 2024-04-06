@@ -5,6 +5,7 @@ const path = require('path');
 const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = 3000;
+
 //MiddleWare:
 app.use(express.urlencoded({extended:true}));
 app.use(express.json()); 
