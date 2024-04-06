@@ -1,4 +1,17 @@
+:root {
+  --main-font: "Merienda", cursive;
+  --background-main-color: white;
+  --front-main-color: #ff7000;
+  --font-color: black;
+  --large-font-size: 30px;
+  --small-font-size: 16px;
+  --radius-deg: 30px;
+  --large-home-font: 65px;
+  --small-home-font: 55px;
+}
+
 /* start footer section */
+
 .footer {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));

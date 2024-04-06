@@ -1,3 +1,17 @@
+:root {
+  --main-font: "Merienda";
+  --main-background-color: white;
+  --product-background-color: white;
+  --menu-background-color: #ddd;
+  --main-font-color: black;
+  --logo-font-size: 30px;
+  --description-color: #777;
+  --button-radius-deg: 20px;
+  --button-color: #ff7000;
+  --product-font-size: 18px;
+  --product-radius-deg: 15px;
+  --product-font: "Times New Roman", Times, serif;
+}
 .header {
   padding: 20px;
   background-color: var(--main-background-color);

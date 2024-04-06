@@ -18,11 +18,10 @@ window.addEventListener("load", function () {
 /* loading end */
 
 /* home links list */
-console.log(window.innerWidth);
+
 let link = document.querySelectorAll(".links li");
 link.forEach((element) => {
   if (window.innerWidth <= 800) {
-    console.log(window.innerWidth);
     element.addEventListener("click", function () {
       if (linkIcon.classList.contains("clicked")) {
         linkList.style.display = "none";
