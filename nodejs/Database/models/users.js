@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
-const {isEmail,isMobilePhone, isNumeric, isStrongPassword, isAlpha,} = require("validator");
-
+const {isEmail, isNumeric, isStrongPassword,} = require("validator");
+const bcrypt = require('bcrypt');
 const user_schema = new mongoose.Schema({
     name: {
         type:String,
-        required:true,
-        validate:[isAlpha,"The name must has only letters"],
+        required:[true,"Please enter your name"],
         minlength: 2,
     },
     phone: {
@@ -13,9 +12,7 @@ const user_schema = new mongoose.Schema({
         required:[true,"Please enter your phone number"],
         unique: [true,"This phone number is already used"],
         minlength:[10,"Phone number must has 10 numbers"],
-        validate:[isMobilePhone,"please enter a valid phone number"],
         validate:[isNumeric,"Phone number must have just a number"],
-
     },
     email: {
         type:String,
@@ -44,7 +41,13 @@ const user_schema = new mongoose.Schema({
     }
 });
 
-const user = mongoose.model('user',user_schema);
+//after store in db
+user_schema.pre('save', async function (next){
+    const added = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, added);
+    next();
+});
 
+const user = mongoose.model('user',user_schema);
 module.exports = user;
  

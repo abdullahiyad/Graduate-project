@@ -14,7 +14,6 @@ const handleErrors = (err) => {
             errors [properties.path] = properties.message;
         })
     }
-
     return errors;
 } 
 
@@ -25,9 +24,13 @@ module.exports.login_get = (req,res) =>{
     res.render('login');
 }
 module.exports.signup_post = async (req,res) =>{
-    const {name,phone,email,password} = req.body;
+    const name = req.body.name;
+    const phone = req.body.phone;
+    const email = req.body.email;
+    const password = req.body.password;
+    console.log('Name: ',name,"\nphone:",phone);
     try {
-        const users = await user.create({name,phone,email,password});
+        const users = await user.create(name,phone,email,password);
         res.status(201).json(users);
     } catch (err) {
         handleErrors(err);
@@ -35,7 +38,7 @@ module.exports.signup_post = async (req,res) =>{
     }
 }
 module.exports.login_post = async (req,res) =>{
-    const { email, password } = req.body;
+    const { email, password } = await req.body;
     console.log(email, password);
     res.send('user login');
 }

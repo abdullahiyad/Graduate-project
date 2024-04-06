@@ -11,4 +11,5 @@ router.get('/home',authController.home_get);
 router.post('/home',authController.home_post);
 router.get('/menu',authController.menu_get);
 router.post('/menu',authController.menu_post);
+
 module.exports = router;
