@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/header-style.css" />
     <link rel="stylesheet" href="../css/footer-style.css">
     <link rel="stylesheet" href="../css/loading-style.css" />
-    <link rel="stylesheet" href="../css/menu.css" />
+    <link rel="stylesheet" href="/css/menu-style.css" />
 
     <!-- fontawesome -->
     <link rel="stylesheet" href="../css/fontawesome/css/all.min.css" />
@@ -32,14 +32,10 @@
                     <li><a href="menu.html">Menu</a></li>
                     <li><a href="home.html">About</a></li>
                     <li><a href="reservation.html">Book Table</a></li>
-                    <li class="login-phone-btn"><a href="login.html">Login</a></li>
-                    <li class="cart-phone-btn"><a href="cart.html"><i class="fa-solid fa-cart-shopping"> </i> Cart </a>
-                    </li>
-
                 </ul>
             </div>
             <div class="right-header">
-                <a href="cart.html" class="cart-icon"> <i class="fa-solid fa-cart-shopping"></i></a>
+                <a href="cart.ejs" class="cart-icon"> <i class="fa-solid fa-cart-shopping"></i></a>
                 <a href="login.html" class="login-icon">
                     <i class="fa-regular fa-circle-user login-icon"></i>
                 </a>
@@ -73,208 +69,197 @@
                         <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
                             officiis exercitationem nesciunt accusamus .</p>
                     </div>
-
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
                     </div>
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
-                    </div>
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
-                    </div>
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
-                    </div>
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
-                    </div>
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
-                    </div>
-                    <div class="product hot-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
-                    </div>
-
                 </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product hot-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+
             </div>
-            <div class="cold-drinks menu-section">
-                <h4>Cold Drinks <i class="fa-solid fa-martini-glass-empty"></i></h4>
-                <div class="products">
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+        </div>
+        <div class="cold-drinks menu-section">
+            <h4>Cold Drinks <i class="fa-solid fa-martini-glass-empty"></i></h4>
+            <div class="products">
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
                     </div>
-                    <div class="product cold-drinks">
-                        <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
-                        <div class="product-info">
-                            <p class="prodcut-title">cappuccino</p>
-                            <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                Nostrum
-                                officiis exercitationem nesciunt accusamus .</p>
-                        </div>
-                        <div class="price">
-                            <p>29.99 $</p>
-                            <button class="atc">Add To Cart</button>
-                        </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
                     </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
+                <div class="product cold-drinks">
+                    <div class="product-img"><img src="../images/Daco_1494767.png" alt=""></div>
+                    <div class="product-info">
+                        <p class="prodcut-title">cappuccino</p>
+                        <p class="product-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+                            officiis exercitationem nesciunt accusamus .</p>
+                    </div>
+                    <div class="price">
+                        <p>29.99 $</p>
+                        <button>Add To Cart</button>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -445,20 +430,8 @@
                 </div>
             </div>
         </div>
-        <!-- end menu -->
     </div>
-    <!-- start cart tag -->
-    <div class="cart-tap">
-        <h1 class="cart-header">Shopping Cart</h1>
-        <div class="list-cart">
-
-        </div>
-        <div class="btn">
-            <button class="close">Close</button>
-            <button class="checkout">Check out</button>
-        </div>
-    </div>
-    <!-- end cart tag -->
+    <!-- end menu -->
 
     <!-- start footer -->
     <div class="footer">
@@ -499,6 +472,7 @@
         <div class="three"></div>
     </div>
     <!-- end preloading -->
+
     <!-- connect javascript file -->
     <script src="/js/menu.js"></script>
 </body>
