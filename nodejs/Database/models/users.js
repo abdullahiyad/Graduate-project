@@ -41,12 +41,30 @@ const user_schema = new mongoose.Schema({
     }
 });
 
-//after store in db
+//before store in db
 user_schema.pre('save', async function (next){
     const added = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, added);
     next();
 });
+//Static for Login
+
+user_schema.static.login = async function(email, password){
+    const user = await this.findOne({ email });
+    if(user){
+        const auth = await bcrypt.compare(password, user.password);
+        if(auth){
+            return user;
+        }
+        throw Error('Password error');
+    }
+    throw Error('Incorrect email');
+}   
+
+
+
+
+
 
 const user = mongoose.model('user',user_schema);
 
