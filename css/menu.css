@@ -2,8 +2,8 @@
 :root {
   --main-font: "Merienda";
   --main-background-color: white;
-  --product-background-color: white;
-  --menu-background-color: #ddd;
+  --product-background-color: #ffffff;
+  --menu-background-color: rgb(246 246 249);
   --main-font-color: black;
   --logo-font-size: 30px;
   --description-color: #777;
@@ -87,6 +87,7 @@ button {
   padding: 10px;
   text-transform: capitalize;
   border: 1px solid var(--product-background-color);
+  box-shadow: 0 32px 48px rgb(132 139 200 / 18%);
 }
 .menu .products .product .product-img {
   overflow: hidden;
