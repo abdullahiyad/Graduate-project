@@ -7,6 +7,7 @@ const app = express();
 const PORT = 3000;
 
 //MiddleWare:
+app.use(cookie());
 app.use(express.urlencoded({extended:true}));
 app.use(express.json()); 
 app.use('/css',express.static('css'));
