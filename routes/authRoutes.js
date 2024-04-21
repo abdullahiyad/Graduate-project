@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const authController = require("../controller/authController");
-const { checkAuth,  isLoggedIn } = require("../middleware/authMiddlewares");
+const {isLoggedIn } = require("../middleware/authMiddlewares");
 
 const router = Router();
 

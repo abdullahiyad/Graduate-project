@@ -43,29 +43,29 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 module.exports.login_post = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const userLogin = await user.login(email, password);
-    res.status(200).json({ user: userLogin._id }).redirect("/home");
-  } catch (err) {
-    res.status(400).json({});
-  }
-
+  // const { email, password } = req.body;
   // try {
-  //   const check = await user.findOne({email: req.body.email});
-  //   if(!check){
-  //     console.log("Can't find user");
-  //   }else{
-  //     const isPassMatch = await bcrypt.compare(req.body.password,check.password);
-  //     if(isPassMatch){
-  //       res.redirect('/home');
-  //     }else{
-  //       res.send('Password error');
-  //     }
-  //   }
-  // } catch {
-  //   console.log('wrong details');
+  //   const userLogin = await user.login(email, password);
+  //   res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
+  // } catch (err) {
+  //   res.status(400).json({});
   // }
+
+  try {
+    const check = await user.findOne({email: req.body.email});
+    if(!check){
+      console.log("Can't find user");
+    }else{
+      const isPassMatch = await bcrypt.compare(req.body.password,check.password);
+      if(isPassMatch){
+        res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
+      }else{
+        res.send('Password or Email error');
+      }
+    }
+  } catch {
+    console.log('wrong details');
+  }
 };
 module.exports.home_get = (req, res) => {
   res.render("home");
