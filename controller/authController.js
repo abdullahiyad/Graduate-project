@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const user = require("../nodejs/Database/models/users");
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
-
+const multer = require("multer");
 const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
 const handleErrors = (err) => {
@@ -34,7 +34,7 @@ module.exports.signup_post = async (req, res) => {
     const users = await user.create({ name, phone, email, password });
     const token =  createToken(users._id); 
     
-    res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home"); // he has the cookie session in his browser and he isn't logged in??
+    res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
     
   } catch (err) {
     console.log(err);
@@ -43,14 +43,6 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 module.exports.login_post = async (req, res) => {
-  // const { email, password } = req.body;
-  // try {
-  //   const userLogin = await user.login(email, password);
-  //   res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
-  // } catch (err) {
-  //   res.status(400).json({});
-  // }
-
   try {
     const check = await user.findOne({email: req.body.email});
     if(!check){
@@ -58,13 +50,14 @@ module.exports.login_post = async (req, res) => {
     }else{
       const isPassMatch = await bcrypt.compare(req.body.password,check.password);
       if(isPassMatch){
+        const token =  createToken();
         res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
       }else{
         res.send('Password or Email error');
       }
     }
-  } catch {
-    console.log('wrong details');
+  } catch{
+    console.log("err");
   }
 };
 module.exports.home_get = (req, res) => {
@@ -79,3 +72,30 @@ module.exports.menu_get = (req, res) => {
 module.exports.menu_post = (req, res) => {
   res.send("This is menu page");
 };
+module.exports.upload_get = (req, res) => {
+  res.render("upload");
+};
+module.exports.upload_post = async (req, res) => {
+  const storage = multer.memoryStorage();
+  const upload = multer({ storage: storage }); 
+  try {
+    if (!req.file) {
+      return res.status(400).send('No file uploaded.');
+    }
+
+    const image = new Image({
+      name: req.file.originalname,
+      data: req.file.buffer,
+      contentType: req.file.mimetype
+    });
+
+    await image.save();
+
+    res.status(201).send('Image uploaded successfully.');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+
+};
+
