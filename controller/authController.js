@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const user = require("../nodejs/Database/models/users");
+const imageModel = require("../nodejs/Database/models/image.model")
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
 const multer = require("multer");
@@ -71,31 +72,5 @@ module.exports.menu_get = (req, res) => {
 };
 module.exports.menu_post = (req, res) => {
   res.send("This is menu page");
-};
-module.exports.upload_get = (req, res) => {
-  res.render("upload");
-};
-module.exports.upload_post = async (req, res) => {
-  const storage = multer.memoryStorage();
-  const upload = multer({ storage: storage }); 
-  try {
-    if (!req.file) {
-      return res.status(400).send('No file uploaded.');
-    }
-
-    const image = new Image({
-      name: req.file.originalname,
-      data: req.file.buffer,
-      contentType: req.file.mimetype
-    });
-
-    await image.save();
-
-    res.status(201).send('Image uploaded successfully.');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-
 };
 
