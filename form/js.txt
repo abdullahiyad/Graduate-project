@@ -4,3 +4,4 @@ let dashboard = document.querySelector(".dashboard-container");
 listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
+
