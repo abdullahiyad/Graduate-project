@@ -5,7 +5,7 @@ listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
 
-// add user to page
+//function to add user to page
 let tableBody = document.querySelector("table tbody");
 function addUser(name, email, phone, state) {
   const newUser = document.createElement("tr");
@@ -69,14 +69,6 @@ let saveBtn = document.querySelector(".save-btn");
 //edit buttin
 editUserBtn.addEventListener("click", () => {
   nameFiled.style = `
-    pointer-events: painted;
-    border:1px solid black;
-    `;
-  emailFiled.style = `
-    pointer-events: painted;
-    border:1px solid black;
-    `;
-  phoneFiled.style = `
     pointer-events: painted;
     border:1px solid black;
     `;
