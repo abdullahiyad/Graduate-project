@@ -73,4 +73,9 @@ module.exports.menu_get = (req, res) => {
 module.exports.menu_post = (req, res) => {
   res.send("This is menu page");
 };
-
+module.exports.admin_get = (req, res) => {
+  res.render("admin-dashboard");
+};
+module.exports.admin_post = (req, res) => {
+  res.send("This is menu page");
+};

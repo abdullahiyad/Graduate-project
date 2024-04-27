@@ -29,7 +29,7 @@ const user_schema = new mongoose.Schema({
     },
     status: {
         type:String,
-        default:"person"
+        default:"user"
     },
     profilePic: {
         type:String,
@@ -38,7 +38,7 @@ const user_schema = new mongoose.Schema({
     score: {
         type:Number,
         default:0
-    }
+    },
 });
 
 //before store in db
@@ -59,12 +59,7 @@ user_schema.static.login = async function(email, password){
         throw Error('Password error');
     }
     throw Error('Incorrect email');
-}   
-
-
-
-
-
+}
 
 const user = mongoose.model('user',user_schema);
 

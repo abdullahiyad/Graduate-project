@@ -12,5 +12,7 @@ router.get('/home' , authController.home_get);
 router.post('/home' ,authController.home_post);
 router.get('/menu', authController.menu_get);
 router.post('/menu',  authController.menu_post);
+router.get('/admin/dashboard',authController.admin_get);
+router.post('/admin/dashboard',authController.admin_post);
 
 module.exports = router;

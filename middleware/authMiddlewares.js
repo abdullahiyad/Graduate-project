@@ -3,7 +3,6 @@ const User = require('../nodejs/Database/models/users')
 
 module.exports.checkAuth = (req, res, next) => {
     const token = req.cookies.jwt;
-
     if(token) {
         jwt.verify(token, 'OdayIsNerd', (err, DToken) => {
             if(err) {
@@ -15,12 +14,10 @@ module.exports.checkAuth = (req, res, next) => {
     }else {
         res.redirect('/login');
     }
-} 
-
+}
 
 module.exports.isLoggedIn = (req, res, next) => {
     const token = req.cookies.jwt;
-
     if(token) {
         jwt.verify(token, 'OdayIsNerd', (err, DToken) => {
             if(!err) {
@@ -29,5 +26,12 @@ module.exports.isLoggedIn = (req, res, next) => {
         });
     }
     next();
-} 
+}
+
+module.exports.isAdmin = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if(token){
+        
+    }
+}
 
