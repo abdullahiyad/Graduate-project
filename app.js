@@ -5,11 +5,11 @@ const imageModel = require("./nodejs/Database/models/image.model");
 const path = require("path");
 const authRoutes = require("./routes/authRoutes");
 const { mongo } = require("mongoose");
-const { MongoClient, GridFSBucket } = require('mongodb');
-const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
+const { MongoClient, GridFSBucket } = require("mongodb");
+const multer = require("multer");
+// const { GridFsStorage } = require('multer-gridfs-storage');
 const app = express();
-require("dotenv").config();
+// require("dotenv").config();
 const PORT = 3000;
 //const db = client.db(dbName);
 //const bucket = new mongodb.GridFSBucket(db);
@@ -29,48 +29,35 @@ app.use(authRoutes);
 
 const url = process.env.MONGO_DB_URL;
 
-const storage = new GridFsStorage({
-  url,
-  file: (req, file) =>{
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
-      return{
-        bucketName: "photo",
-        fileName: `${Date.now()}_${file.originalname}`,
-      };
-    } else {
-      console.log("this file type not supported");
-    }
-  }
-});
+// const storage = new GridFsStorage({
+//   url,
+//   file: (req, file) => {
+//     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+//       return {
+//         bucketName: "photo",
+//         fileName: `${Date.now()}_${file.originalname}`,
+//       };
+//     } else {
+//       console.log("this file type not supported");
+//     }
+//   },
+// });
 
-const upload = multer({storage});
+// const upload = multer({ storage });
 
-app.post('/upload/image', upload.single('file'), (req, res)=>{
-  res.send({
-    message: "Uploaded",
-    id: file.id,
-    name: file.fileName,
-    contentType: file.contentType,
-  });
-});
-
-
-
-
-
-
-
-
-
-
-
+// app.post("/upload/image", upload.single("file"), (req, res) => {
+//   res.send({
+//     message: "Uploaded",
+//     id: file.id,
+//     name: file.fileName,
+//     contentType: file.contentType,
+//   });
+// });
 
 const server = app.listen(process.env.PORT || PORT, function () {
-  const port = server.address().port
-  console.log("App started at port:", port)
-})
-
-
+  const port = server.address().port;
+  console.log("App started at port:", port);
+});
 
 // app.listen(PORT, () => {
 //   console.log(`Server is running on http://localhost:${PORT}`);
