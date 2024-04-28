@@ -282,6 +282,7 @@ table .edit {
 
 /* end customers container section */
 /* start details page */
+
 .details-page {
   opacity: 0%;
   z-index: -1;
@@ -295,17 +296,19 @@ table .edit {
   opacity: 100%;
   z-index: 1;
   transition: 0.3s;
-  width: 30%;
+  width: 400px;
   height: 500px;
   position: fixed;
-  transform: translate(140%, -140%);
+  top: 50%;
+  left: 50%;
   background-color: var(--color-white);
   border-radius: var(--border-radius-3);
   box-shadow: var(--box-shadow);
-  -webkit-transform: translate(140%, -140%);
-  -moz-transform: translate(140%, -140%);
-  -ms-transform: translate(140%, -140%);
-  -o-transform: translate(140%, -140%);
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
   -webkit-border-radius: var(--border-radius-3);
   -moz-border-radius: var(--border-radius-3);
   -ms-border-radius: var(--border-radius-3);
@@ -314,6 +317,12 @@ table .edit {
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
+}
+@media (max-width: 450px) {
+  .active-page {
+    width: 350px;
+    font-size: 15px;
+  }
 }
 .active-page form {
   width: 100%;

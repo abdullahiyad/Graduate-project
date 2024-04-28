@@ -87,38 +87,40 @@
             </table>
         </div>
     </div>
-    <div class="details-page">
-        <form class="details-form" action="" method="none">
-            <div class="name-container input-field-container">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" name="name" class="name input-style" placeholder="Name" autocomplete="off"
-                    required />
-            </div>
-            <div class="username-container input-field-container">
-                <i class="fa-solid fa-envelope"></i>
-                <input type="email" name="email" class="email input-style" placeholder="Email" autocomplete="off"
-                    required />
-            </div>
-            <div class="email-container input-field-container">
-                <i class="fa-solid fa-phone"></i>
-                <input type="text" name="phone" class="phone input-style" placeholder="Phone Number 05xxxxxxxx"
-                    autocomplete="off" required />
-            </div>
-            <div class="status-container input-field-container">
-                <i class="fa-solid fa-user-tie"></i>
-                <select name="state" id="select-state" class="state input-style">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </div>
-            <div class="buttons">
-                <input type="button" value="Delete" class="delete-btn">
-                <input type="button" value="Edit" class="edit-btn">
-                <input type="button" value="Done" class="done-btn">
-                <input type="submit" value="Save" class="save-btn" />
-                <input type="button" value="Cancle" class="cancle-btn">
-            </div>
-        </form>
+    <div class="page-details-container">
+        <div class="details-page">
+            <form class="details-form" action="" method="none">
+                <div class="name-container input-field-container">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" name="name" class="name input-style" placeholder="Name" autocomplete="off"
+                        required />
+                </div>
+                <div class="username-container input-field-container">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="email" class="email input-style" placeholder="Email" autocomplete="off"
+                        required />
+                </div>
+                <div class="email-container input-field-container">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="text" name="phone" class="phone input-style" placeholder="Phone Number 05xxxxxxxx"
+                        autocomplete="off" required />
+                </div>
+                <div class="status-container input-field-container">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <select name="state" id="select-state" class="state input-style">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="buttons">
+                    <input type="button" value="Delete" class="delete-btn">
+                    <input type="button" value="Edit" class="edit-btn">
+                    <input type="button" value="Done" class="done-btn">
+                    <input type="submit" value="Save" class="save-btn" />
+                    <input type="button" value="Cancle" class="cancle-btn">
+                </div>
+            </form>
+        </div>
     </div>
     <!-- start preloading -->
     <div class="loader">
