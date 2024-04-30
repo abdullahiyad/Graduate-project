@@ -12,7 +12,17 @@ router.get('/home' , authController.home_get);
 router.post('/home' ,authController.home_post);
 router.get('/menu', authController.menu_get);
 router.post('/menu',  authController.menu_post);
-router.get('/admin/dashboard',authController.admin_get);
-router.post('/admin/dashboard',authController.admin_post);
+router.get('/admin/dashboard',authController.dashboard_get);
+router.post('/admin/dashboard',authController.dashboard_post);
+
+router.get('/admin/customer',authController.customer_get);
+router.get('/admin/customer/api',authController.customer_data_get);
+
+router.post('/admin/customer',authController.customer_post);//this for create user
+router.put('/admin/customer',authController.customer_put );//this for update data of user 
+router.delete('/admin/customer',authController.customer_delete);//this for delete user.
+
+router.post('/admin/products',authController.products_post);
+router.get('/admin/products',authController.products_get);
 
 module.exports = router;

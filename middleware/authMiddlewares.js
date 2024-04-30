@@ -30,7 +30,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 module.exports.isAdmin = (req, res, next) => {
     const token = req.cookies.jwt;
-    if(token){
+    if(token) {
         
     }
 }

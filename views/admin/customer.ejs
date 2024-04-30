@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="../css/loading-style.css" />
     <link rel="stylesheet" href="/css/admin-customers.css" />
 
-    <!-- fontawesome -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="/css/fontawesome/css/all.min.css" />
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -36,8 +36,8 @@
     <div class="customer-container">
         <div class="aside">
             <ul>
-                <li class="dashboard"><a href="admin-dashboard.ejs"><i class="fa-solid fa-house"></i> dashboard</a></li>
-                <li class="customers"><a href=""><i class="fa-regular fa-user"></i> customers</a></li>
+                <li class="dashboard"><a href="dashboard"><i class="fa-solid fa-house"></i> dashboard</a></li>
+                <li class="customers"><a href="customer"><i class="fa-regular fa-user"></i> customers</a></li>
                 <li class="orders"><a href=""><i class="fa-solid fa-scroll"></i> orders</a></li>
                 <li class="messages"><a href=""><i class="fa-regular fa-envelope"></i> messages</a></li>
                 <li class="products"><a href=""><i class="fa-solid fa-utensils"></i> products</a></li>
@@ -47,42 +47,19 @@
             <button class="logout">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
         </div>
         <div class="content">
-            <h1 class="customer-title">
-                customers
-            </h1>
+            <h1 class="customer-title">Customers</h1>
             <table>
                 <thead>
                     <tr>
-                        <th>customers name</th>
-                        <th>email</th>
-                        <th>phone</th>
-                        <th>state</th>
-                        <th>more</th>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>More</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="name">ahmad mohammed</td>
-                        <td class="email">abdullah@gmail.com</td>
-                        <td class="phone">+970568453235</td>
-                        <td class="state">Admin</td>
-                        <td class="edit">edit</td>
-                    </tr>
-                    <tr>
-                        <td class="name">ahmad mohammed</td>
-                        <td class="email">abdullah@gmail.com</td>
-                        <td class="phone">+970568453235</td>
-                        <td class="state">user</td>
-                        <td class="edit">edit</td>
-                    </tr>
-                    <tr>
-                        <td class="name">hooda mohammed</td>
-                        <td class="email">abdullah@gmail.com</td>
-                        <td class="phone">+970568453235</td>
-                        <td class="state">user</td>
-                        <td class="edit">edit</td>
-                    </tr>
-
+                    <!-- Dynamically populated user data will be inserted here -->
                 </tbody>
             </table>
         </div>
@@ -117,12 +94,12 @@
                     <input type="button" value="Edit" class="edit-btn">
                     <input type="button" value="Done" class="done-btn">
                     <input type="submit" value="Save" class="save-btn" />
-                    <input type="button" value="Cancle" class="cancle-btn">
+                    <input type="button" value="Cancel" class="cancel-btn">
                 </div>
             </form>
         </div>
     </div>
-    <!-- start preloading -->
+    <!-- start preloading -->   
     <div class="loader">
         <div class="one"></div>
         <div class="two"></div>
@@ -130,6 +107,7 @@
     </div>
     <!-- end preloading -->
     <script src="/js/admin-customers.js"></script>
+ 
 </body>
 
 </html>
