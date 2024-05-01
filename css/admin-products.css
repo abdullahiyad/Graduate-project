@@ -328,14 +328,40 @@ select {
   cursor: pointer;
   text-transform: capitalize;
 }
-@media (max-width: 750px) {
+@media (max-width: 800px) {
   .product-item,
   .product-item button,
   .product-item select {
     font-size: 12px;
   }
+  .product-item .part input,
+  .product-item label,
+  .product-item span,
+  .product-item select,
+  .product-item {
+    font-size: 8px;
+  }
   .product-item img {
     width: 60px;
+  }
+}
+
+.new-product-btn {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  font-size: 60px;
+  background-color: transparent;
+  color: orangered;
+  bottom: 40px;
+  right: 40px;
+  cursor: pointer;
+}
+@media (max-width: 500px) {
+  .new-product-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
   }
 }
 
@@ -404,6 +430,23 @@ select {
   background-color: rgba(255, 0, 0, 0.652);
   color: white;
 }
+@media (max-width: 800px) {
+  .more-details,
+  .more-details button,
+  .more-details select {
+    font-size: 12px;
+  }
+  .more-details .part input,
+  .more-details label,
+  .more-details span,
+  .more-details select,
+  .more-details {
+    font-size: 8px;
+  }
+  .more-details img {
+    width: 60px;
+  }
+}
 .on-edit input,
 .on-edit .product-desc input,
 .on-edit select {
@@ -424,7 +467,7 @@ select {
 /* end products container section */
 /* start details page */
 
-.details-page {
+.new-product{
   opacity: 0%;
   z-index: -1;
   transition: 0.5s;
@@ -437,7 +480,7 @@ select {
   opacity: 100%;
   z-index: 1;
   transition: 0.3s;
-  width: 400px;
+  width: 500px;
   height: 500px;
   position: fixed;
   top: 50%;
@@ -454,10 +497,13 @@ select {
   -moz-border-radius: var(--border-radius-3);
   -ms-border-radius: var(--border-radius-3);
   -o-border-radius: var(--border-radius-3);
-  -webkit-transition: 0.3s;
-  -moz-transition: 0.3s;
-  -ms-transition: 0.3s;
-  -o-transition: 0.3s;
+  font-family: var(--statics-font);
+  font-weight: bold;
+  
+  
+}
+.active-page h2{
+  text-align: center;
 }
 @media (max-width: 450px) {
   .active-page {
@@ -474,6 +520,8 @@ select {
   flex-direction: column;
   flex-wrap: no-wrap;
   align-content: center;
+  z-index: 2;
+  
 }
 
 .hide-content {
@@ -488,34 +536,36 @@ select {
   width: 95%;
   height: 90px;
   background-color: var(--color-white);
-  pointer-events: none;
   font-size: 20px;
+  z-index: 5;
+  color: black;
 }
-.active-page i {
-  font-size: 30px;
+.active-page label {
+  font-size: 18px;
 }
 .active-page input {
   width: 78%;
   height: 60px;
-  font-size: 25px;
+  font-size: 20px;
+  border-bottom: 1px solid black;
+  text-overflow: ellipsis;
+
 }
 .active-page select {
   width: 78%;
-  font-size: 25px;
+  font-size: 20px;
   color: var(--color-dark);
+  border: 1px solid black;
 }
-.active-page .buttons {
-  width: 100%;
-  height: 100px;
+.active-page .buttons{
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  pointer-events: painted;
 }
+
 .active-page .buttons input {
-  width: 25%;
-  height: 50px;
+  width: 20%;
+  height: 40px;
   border-radius: var(--border-radius-3);
   font-size: 15px;
   cursor: pointer;
@@ -524,13 +574,20 @@ select {
   -ms-border-radius: var(--border-radius-3);
   -o-border-radius: var(--border-radius-3);
 }
-.active-page .buttons .delete-btn {
-  background-color: rgba(255, 0, 0, 0.734);
+.active-page .buttons .add-btn {
+  background-color: orangered;
   color: white;
   font-weight: bold;
-}
-.buttons .save-btn,
-.product-btn {
-  display: none;
-}
-/* end details page */
+  outline: none;
+  border: none;
+} 
+.active-page .buttons .form-cancel-btn {
+  background-color: rgba(255, 0, 0, 0.791);
+  outline: none;
+  border: none;
+  color: white;
+  font-weight: bold;
+  
+} 
+
+/* end details page

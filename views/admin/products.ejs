@@ -140,41 +140,48 @@
                         </div>
                     </form>
                 </div>
-
+                <button class="new-product-btn"><i class="fa-solid fa-circle-plus"></i></button>
             </div>
         </div>
     </div>
-    <div class="page-details-container">
-        <div class="details-page">
-            <form class="details-form" action="" method="none">
+    <div class="new-product-container ">
+        <div class="new-product">
+
+            <form class="product-form" action="" method="">
+                <h2>Add new product</h2>
                 <div class="name-container input-field-container">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" name="name" class="name input-style" placeholder="Name" autocomplete="off"
-                        required />
-                </div>
-                <div class="username-container input-field-container">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="email" name="email" class="email input-style" placeholder="Email" autocomplete="off"
-                        required />
-                </div>
-                <div class="email-container input-field-container">
-                    <i class="fa-solid fa-phone"></i>
-                    <input type="text" name="phone" class="phone input-style" placeholder="Phone Number 05xxxxxxxx"
+                    <label>name</label>
+                    <input type="text" name="product-name" class="product-name input-style" placeholder="Product Name"
                         autocomplete="off" required />
                 </div>
-                <div class="status-container input-field-container">
-                    <i class="fa-solid fa-user-tie"></i>
-                    <select name="state" id="select-state" class="state input-style">
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
+                <div class="description-container input-field-container">
+                    <label>description</label>
+                    <input type="text" name="product-desc" class="product-desc input-style"
+                        placeholder="Product description" autocomplete="off" required />
+                </div>
+                <div class="price-container input-field-container">
+                    <label>price</label>
+                    <input type="number" min="0" value="0" name="product-desc" class="product-desc input-style"
+                        placeholder="Product Name" autocomplete="off" required />
+                </div>
+                <div class="type-container input-field-container">
+                    <label>type</label>
+                    <select name="product-type" id="#type">
+                        <option value="hot-drinks" selected>hot drinks</option>
+                        <option value="cold-drinks">cold drinks</option>
+                        <option value="food">food</option>
+                        <option value="dessert">desssert</option>
                     </select>
                 </div>
+                <div class="image-container input-field-container">
+                    <label>image</label>
+                    <input type="file" name="product-name" class="product-name input-style" placeholder="Product Name"
+                        autocomplete="off" required />
+                </div>
+
                 <div class="buttons">
-                    <input type="button" value="Delete" class="delete-btn">
-                    <input type="button" value="Edit" class="edit-btn">
-                    <input type="button" value="Done" class="done-btn">
-                    <input type="submit" value="Save" class="save-btn" />
-                    <input type="button" value="cancel" class="cancel-btn">
+                    <input type="submit" value="Add" class="add-btn" />
+                    <input type="button" value="cancel" class="form-cancel-btn">
                 </div>
             </form>
         </div>

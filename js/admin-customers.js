@@ -91,7 +91,7 @@ editUserBtn.addEventListener("click", () => {
   saveBtn.style.display = "block";
 });
 //cancel button
-cancleBtn.addEventListener("click", () => {
+cancelBtn.addEventListener("click", () => {
   nameFiled.style = `
     pointer-events: none;
     border:1px solid none;
