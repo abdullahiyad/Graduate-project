@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- connect css files -->
+    <link rel="stylesheet" href="../css/header-style.css" />
+    <link rel="stylesheet" href="../css/footer-style.css">
+    <link rel="stylesheet" href="../css/loading-style.css" />
+    <link rel="stylesheet" href="/css/admin-products.css" />
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="/css/fontawesome/css/all.min.css" />
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet" />
+    <link rel="icon" href="/images/home.ico" />
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <!-- start header -->
+    <div class="header">
+        <div class="header-container">
+            <i class="fa-solid fa-bars" id="menu-icon"></i>
+            <span class="logo">YKPO Cafe</span>
+            <div class="right-header">
+                <div class="user-name">hey <span class="name">Admin</span></div>
+                <img class="user-img" src="/images/nigga.jpg" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- end header -->
+    <div class="product-container">
+        <div class="aside">
+            <ul>
+                <li class="dashboard"><a href="admin-dashboard.ejs"><i class="fa-solid fa-house"></i> dashboard</a></li>
+                <li class="customers"><a href=""><i class="fa-regular fa-user"></i> customers</a></li>
+                <li class="orders"><a href=""><i class="fa-solid fa-scroll"></i> orders</a></li>
+                <li class="messages"><a href=""><i class="fa-regular fa-envelope"></i> messages</a></li>
+                <li class="products"><a href=""><i class="fa-solid fa-utensils"></i> products</a></li>
+                <li class="profile"><a href=""><i class="fa-solid fa-user"></i> your profile</a></li>
+
+            </ul>
+            <button class="logout">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+        <div class="content">
+            <h1 class="product-title">
+                products
+            </h1>
+            <div class="products-table">
+
+                <div class="product-item">
+                    <form action="" method="none">
+                        <div class="product-id">1</div>
+
+                        <div class="product-img part edit-class on-edit" name="product-img">
+                            <label for="product-img">product Image :</label>
+                            <img src="/images/Daco_1494767.png" alt="">
+                            <input type="file" id="choose-file" name="choose-file" accept="image/*">
+                            <p class="note">*chose new image if you want change the current
+                                image*</p>
+
+                        </div>
+                        <div class="part s">
+                            <label>product name :</label>
+                            <input type="text" class="product-title" value="Product name">
+                        </div>
+                        <div class="part ">
+                            <label>product price :</label>
+                            $<input type="text" class="product-price" value="30">
+                        </div>
+                        <div class="part product-desc">
+                            <label>product description :</label>
+                            <input type="text" class="product-desc-input" value="hello world">
+                        </div>
+                        <div class="part">
+                            <label>product category :</label>
+                            <div class="product-type"><select name="products-type" id="products-type">
+                                    <option value="hotDrinks">hot drinks</option>
+                                    <option value="coldDrinks">cold drinks</option>
+                                    <option value="food">food</option>
+                                    <option value="dessert">desserts</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="edit">more</div>
+                        <div class="product-btns part">
+                            <input type="button" value="Delete" class="delete-btn">
+                            <input type="button" value="Edit" class="edit-btn">
+                            <input type="button" value="Done" class="done-btn">
+                            <input type="submit" value="Save" class="save-btn" />
+                            <input type="button" value="cancel" class="cancel-btn">
+                        </div>
+                    </form>
+                </div>
+                <div class="product-item">
+                    <form action="" method="none">
+                        <div class="product-id">1</div>
+
+                        <div class="product-img part edit-class on-edit" name="product-img">
+                            <label for="product-img">product Image :</label>
+                            <img src="/images/Daco_1494767.png" alt="">
+                            <input type="file" id="choose-file" name="choose-file" accept="image/*">
+                            <p class="note">*chose new image if you want change the current
+                                image*</p>
+
+                        </div>
+                        <div class="part s">
+                            <label>product name :</label>
+                            <input type="text" class="product-title" value="Product name">
+                        </div>
+                        <div class="part ">
+                            <label>product price :</label>
+                            $<input type="text" class="product-price" value="30">
+                        </div>
+                        <div class="part product-desc">
+                            <label>product description :</label>
+                            <input type="text" class="product-desc-input" value="hello world">
+                        </div>
+                        <div class="part">
+                            <label>product category :</label>
+                            <div class="product-type"><select name="products-type" id="products-type">
+                                    <option value="hotDrinks">hot drinks</option>
+                                    <option value="coldDrinks">cold drinks</option>
+                                    <option value="food">food</option>
+                                    <option value="dessert">desserts</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="edit">more</div>
+                        <div class="product-btns part">
+                            <input type="button" value="Delete" class="delete-btn">
+                            <input type="button" value="Edit" class="edit-btn">
+                            <input type="button" value="Done" class="done-btn">
+                            <input type="submit" value="Save" class="save-btn" />
+                            <input type="button" value="cancel" class="cancel-btn">
+                        </div>
+                    </form>
+                </div>
+                <button class="new-product-btn"><i class="fa-solid fa-circle-plus"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="new-product-container ">
+        <div class="new-product">
+
+            <form class="product-form" action="" method="">
+                <h2>Add new product</h2>
+                <div class="name-container input-field-container">
+                    <label>name</label>
+                    <input type="text" name="product-name" class="product-name input-style" placeholder="Product Name"
+                        autocomplete="off" required />
+                </div>
+                <div class="description-container input-field-container">
+                    <label>description</label>
+                    <input type="text" name="product-desc" class="product-desc input-style"
+                        placeholder="Product description" autocomplete="off" required />
+                </div>
+                <div class="price-container input-field-container">
+                    <label>price</label>
+                    <input type="number" min="0" value="0" name="product-desc" class="product-desc input-style"
+                        placeholder="Product Name" autocomplete="off" required />
+                </div>
+                <div class="type-container input-field-container">
+                    <label>type</label>
+                    <select name="product-type" id="#type">
+                        <option value="hot-drinks" selected>hot drinks</option>
+                        <option value="cold-drinks">cold drinks</option>
+                        <option value="food">food</option>
+                        <option value="dessert">desssert</option>
+                    </select>
+                </div>
+                <div class="image-container input-field-container">
+                    <label>image</label>
+                    <input type="file" name="product-name" class="product-name input-style" placeholder="Product Name"
+                        autocomplete="off" required />
+                </div>
+
+                <div class="buttons">
+                    <input type="submit" value="Add" class="add-btn" />
+                    <input type="button" value="cancel" class="form-cancel-btn">
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- start preloading -->
+    <div class="loader">
+        <div class="one"></div>
+        <div class="two"></div>
+        <div class="three"></div>
+    </div>
+    <!-- end preloading -->
+    <script src="/js/admin-products.js"></script>
+</body>
+
+</html>
