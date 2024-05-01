@@ -1,5 +1,7 @@
 const express = require('express');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { LocalStorage } = require('node-localstorage');
+const localStorage = new LocalStorage('./scratch');
 const user = require("../nodejs/Database/models/users");
 const multer = require("multer");
 const products = require('../nodejs/Database/models/products');
@@ -7,6 +9,8 @@ const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
+const secretKey = 'OdayIsNerd';
+let userState;
 const handleErrors = (err) => {
   if (err.code === 11000) {
     errors.email = "AIU";
@@ -22,7 +26,7 @@ const handleErrors = (err) => {
 };
 
 const createToken = (id) => {
-  return jwt.sign({id}, 'OdayIsNerd', {expiresIn: maxAge});
+  return jwt.sign({id}, secretKey, {expiresIn: maxAge});
 }
 module.exports.signup_get = (req, res) => {
   res.render("signup");
@@ -34,10 +38,8 @@ module.exports.signup_post = async (req, res) => {
   const { name, phone, email, password } = req.body;
   try {
     const users = await user.create({ name, phone, email, password });
-    const token =  createToken(users._id); 
-    
+    const token =  createToken(users._id);
     res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
-    
   } catch (err) {
     console.log(err);
     const errors = handleErrors(err);
@@ -47,19 +49,21 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_post = async (req, res) => {
   try {
     const check = await user.findOne({email: req.body.email});
+    userState = check.status;
+    localStorage.setItem("status", userState);
     if(!check){
       console.log("Can't find user");
     }else{
       const isPassMatch = await bcrypt.compare(req.body.password,check.password);
-      if(isPassMatch){
+      if(isPassMatch && userState === 'admin'){
         const token =  createToken();
-        res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
-      }else{
+        res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/admin/dashboard");
+      } else {
         res.send('Password or Email error');
       }
     }
-  } catch{
-    console.log("err");
+  } catch (err){
+    console.log(err);
   }
 };
 module.exports.home_get = (req, res) => {
@@ -68,9 +72,6 @@ module.exports.home_get = (req, res) => {
 module.exports.home_post = (req, res) => {
   res.send("This is home page");
 };
-
-
-
 module.exports.menu_get = (req, res) => {
   res.render("menu");
 };
@@ -90,9 +91,9 @@ module.exports.customer_data_get = async (req, res) => {
   try {
     const users = await user.find();
     res.json({users});
-} catch (err) {
+  } catch (err) {
     res.status(500).json({ message: err.message });
-}
+  }
 };
 //this code takes all users needed
 module.exports.customer_post = (req, res) => {
@@ -115,3 +116,10 @@ module.exports.products_post = async (req, res) => {
 module.exports.products_get = async (req, res) => {
   res.render('product');
 }
+
+module.exports.logout_Del_Cookie = async (req, res) => {
+  localStorage.removeItem('status');
+  res.clearCookie('jwt');
+  res.redirect('/home');
+}
+

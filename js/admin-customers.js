@@ -4,7 +4,6 @@ let dashboard = document.querySelector(".dashboard-container");
 listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 }); 
-console.log('AnyThing');
 //function to add user to page
 document.addEventListener('DOMContentLoaded', function() {
   // Function to add user to the table
@@ -36,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .catch(error => console.error('Error fetching user data:', error));
 });
-
 //get details and shwo details page
 let detailsPage = document.querySelector(".details-page");
 let content = document.querySelector(".content");
@@ -140,4 +138,13 @@ saveBtn.addEventListener("click", () => {
   content.classList.toggle("hide-content");
   detailsPage.classList.toggle("active-page");
 });
-//delete button
+//Logout Button
+window.logout = function() {
+  fetch('/admin/customer/logout', {
+    method: 'POST' // Change the method to POST
+  }).then((result) => {
+    console.log('logout success');
+  }).catch((err) => {
+    console.log(err);
+  });
+}

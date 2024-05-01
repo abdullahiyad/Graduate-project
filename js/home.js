@@ -33,3 +33,14 @@ link.forEach((element) => {
     });
   }
 });
+
+window.redir = function() {
+  const status = localStorage.getItem('status');
+  const logIcon = document.getElementById(loginIc);
+  if(status === 'admin'){
+    logIcon.href = 'admin/dashboard';
+  }
+  if(status === 'user'){
+    logIcon.href = 'user';
+  }
+}

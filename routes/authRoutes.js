@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const authController = require("../controller/authController");
 const {isLoggedIn } = require("../middleware/authMiddlewares");
-
 const router = Router();
 
 router.get('/signup',isLoggedIn, authController.signup_get);
@@ -25,4 +24,6 @@ router.delete('/admin/customer',authController.customer_delete);//this for delet
 router.post('/admin/products',authController.products_post);
 router.get('/admin/products',authController.products_get);
 
+router.post('/admin/customer/logout', authController.logout_Del_Cookie);
+router.post('/admin/dashboard/logout', authController.logout_Del_Cookie);
 module.exports = router;

@@ -34,6 +34,7 @@
     </div>
     <!-- end header -->
     <div class="customer-container">
+        <!-- <form action="/admin/customer/logout"> -->
         <div class="aside">
             <ul>
                 <li class="dashboard"><a href="dashboard"><i class="fa-solid fa-house"></i> dashboard</a></li>
@@ -42,10 +43,10 @@
                 <li class="messages"><a href=""><i class="fa-regular fa-envelope"></i> messages</a></li>
                 <li class="products"><a href=""><i class="fa-solid fa-utensils"></i> products</a></li>
                 <li class="profile"><a href=""><i class="fa-solid fa-user"></i> your profile</a></li>
-
             </ul>
-            <button class="logout">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button onclick="logout()" class="logout">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
         </div>
+        <!-- </form> -->
         <div class="content">
             <h1 class="customer-title">Customers</h1>
             <table>
@@ -59,7 +60,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dynamically populated user data will be inserted here -->
                 </tbody>
             </table>
         </div>
@@ -107,7 +107,6 @@
     </div>
     <!-- end preloading -->
     <script src="/js/admin-customers.js"></script>
- 
 </body>
 
 </html>

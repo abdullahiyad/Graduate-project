@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../nodejs/Database/models/users')
-
+const secretKey = 'OdayIsNerd';
 module.exports.checkAuth = (req, res, next) => {
     const token = req.cookies.jwt;
     if(token) {
-        jwt.verify(token, 'OdayIsNerd', (err, DToken) => {
+        jwt.verify(token, secretKey, (err, DToken) => {
             if(err) {
                 res.redirect('/login');
             }else {
@@ -19,7 +19,7 @@ module.exports.checkAuth = (req, res, next) => {
 module.exports.isLoggedIn = (req, res, next) => {
     const token = req.cookies.jwt;
     if(token) {
-        jwt.verify(token, 'OdayIsNerd', (err, DToken) => {
+        jwt.verify(token, secretKey, (err, DToken) => {
             if(!err) {
                 res.redirect('/home');
             }
@@ -27,11 +27,3 @@ module.exports.isLoggedIn = (req, res, next) => {
     }
     next();
 }
-
-module.exports.isAdmin = (req, res, next) => {
-    const token = req.cookies.jwt;
-    if(token) {
-        
-    }
-}
-
