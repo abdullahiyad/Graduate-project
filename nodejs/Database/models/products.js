@@ -7,7 +7,7 @@ const product_schema = new Schema({
     type:{type:String,require:true},
     image: {type: String,require:true},
     givenScore: {type: Number,default:0},
-    description:{type: String,require:true,max: 350}
+    description:{type: String,require:true}
 });
 
 const Product = mongoose.model('Product',product_schema);

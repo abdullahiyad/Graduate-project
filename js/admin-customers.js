@@ -4,29 +4,38 @@ let dashboard = document.querySelector(".dashboard-container");
 listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
-
+console.log("AnyThing");
 //function to add user to page
-let tableBody = document.querySelector("table tbody");
-function addUser(name, email, phone, state) {
-  const newUser = document.createElement("tr");
-  const userNmae = document.createElement("td");
-  const userEmail = document.createElement("td");
-  const userPhone = document.createElement("td");
-  const userState = document.createElement("td");
-  const userDetails = document.createElement("td");
-  userNmae.classList = "name";
-  userEmail.classList = "email";
-  userState.classList = "state";
-  userPhone.classList = "phone";
-  userDetails.classList = "edit";
-  userNmae.textContent = name;
-  userEmail.textContent = email;
-  userPhone.textContent = phone;
-  userState.textContent = state;
-  userDetails.textContent = "Edit";
-  newUser.append(userNmae, userEmail, userPhone, userState, userDetails);
-  tableBody.appendChild(newUser);
-}
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to add user to the table
+  function addUser(name, email, phone, state) {
+    const tableBody = document.querySelector(".content tbody");
+    const newUser = document.createElement("tr");
+    newUser.innerHTML = `
+      <td class="name">${name}</td>
+      <td class="email">${email}</td>
+      <td class="phone">${phone}</td>
+      <td class="state">${state}</td>
+      <td class="edit">edit</td>
+      `;
+    tableBody.appendChild(newUser);
+  }
+  // Fetch user data from backend and populate the table
+  fetch("/admin/customer/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      return data;
+    })
+    .then((data) => {
+      data.users.forEach((user) => {
+        addUser(user.name, user.phone, user.email, user.status);
+      });
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
+});
 
 //get details and shwo details page
 let detailsPage = document.querySelector(".details-page");
@@ -82,7 +91,7 @@ editUserBtn.addEventListener("click", () => {
   saveBtn.style.display = "block";
 });
 //cancel button
-cancelBtn.addEventListener("click", () => {
+cancleBtn.addEventListener("click", () => {
   nameFiled.style = `
     pointer-events: none;
     border:1px solid none;
