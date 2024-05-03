@@ -140,12 +140,14 @@ saveBtn.addEventListener("click", () => {
   detailsPage.classList.toggle("active-page");
 });
 //Logout Button
-window.logout = function() {
-  fetch('/admin/customer/logout', {
-    method: 'POST' // Change the method to POST
-  }).then((result) => {
-    console.log('logout success');
-  }).catch((err) => {
-    console.log(err);
-  });
-}
+window.logout = function () {
+  fetch("/admin/customer/logout", {
+    method: "POST", // Change the method to POST
+  })
+    .then((result) => {
+      console.log("logout success");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
