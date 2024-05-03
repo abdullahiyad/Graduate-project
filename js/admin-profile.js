@@ -1,6 +1,6 @@
 //to show the links list in medium and small screens
 let listIcon = document.querySelector("#menu-icon");
-let dashboard = document.querySelector(".dashboard-container");
+let dashboard = document.querySelector(".profile-container");
 listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });

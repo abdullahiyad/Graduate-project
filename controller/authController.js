@@ -1,15 +1,13 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const { LocalStorage } = require('node-localstorage');
-const localStorage = new LocalStorage('./scratch');
+const express = require("express");
+const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
 const multer = require("multer");
-const products = require('../nodejs/Database/models/products');
+const products = require("../nodejs/Database/models/products");
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
-const secretKey = 'OdayIsNerd';
+const secretKey = "OdayIsNerd";
 let userState;
 const handleErrors = (err) => {
   if (err.code === 11000) {
@@ -26,8 +24,8 @@ const handleErrors = (err) => {
 };
 
 const createToken = (id) => {
-  return jwt.sign({id}, secretKey, {expiresIn: maxAge});
-}
+  return jwt.sign({ id }, secretKey, { expiresIn: maxAge });
+};
 module.exports.signup_get = (req, res) => {
   res.render("signup");
 };
@@ -38,8 +36,11 @@ module.exports.signup_post = async (req, res) => {
   const { name, phone, email, password } = req.body;
   try {
     const users = await user.create({ name, phone, email, password });
-    const token =  createToken(users._id);
-    res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/home");
+    const token = createToken(users._id);
+    res
+      .status(201)
+      .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+      .redirect("/home");
   } catch (err) {
     console.log(err);
     const errors = handleErrors(err);
@@ -48,21 +49,26 @@ module.exports.signup_post = async (req, res) => {
 };
 module.exports.login_post = async (req, res) => {
   try {
-    const check = await user.findOne({email: req.body.email});
-    userState = check.status;
-    localStorage.setItem("status", userState);
-    if(!check){
+    const check = await user.findOne({ email: req.body.email });
+
+    if (!check) {
       console.log("Can't find user");
-    }else{
-      const isPassMatch = await bcrypt.compare(req.body.password,check.password);
-      if(isPassMatch && userState === 'admin'){
-        const token =  createToken();
-        res.status(201).cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 }).redirect("/admin/dashboard");
+    } else {
+      const isPassMatch = await bcrypt.compare(
+        req.body.password,
+        check.password
+      );
+      if (isPassMatch && userState === "admin") {
+        const token = createToken();
+        res
+          .status(201)
+          .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+          .redirect("/admin/dashboard");
       } else {
-        res.send('Password or Email error');
+        res.send("Password or Email error");
       }
     }
-  } catch (err){
+  } catch (err) {
     console.log(err);
   }
 };
@@ -85,12 +91,12 @@ module.exports.dashboard_post = (req, res) => {
   res.send("This is dashboard page");
 };
 module.exports.customer_get = async (req, res) => {
-  res.render('admin/customer');
+  res.render("admin/customer");
 };
 module.exports.customer_data_get = async (req, res) => {
   try {
     const users = await user.find();
-    res.json({users});
+    res.json({ users });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -101,25 +107,31 @@ module.exports.customer_post = (req, res) => {
 };
 module.exports.customer_put = (req, res) => {
   res.send("This for update users");
-}
+};
 module.exports.customer_delete = (req, res) => {
   res.send("This for update users");
-}
+};
 module.exports.products_post = async (req, res) => {
   const { name, price, type, image, givenScore, description } = req.body;
   try {
-    const product = await products.create({ name, price, picture, type, image, givenScore, description });
+    const product = await products.create({
+      name,
+      price,
+      picture,
+      type,
+      image,
+      givenScore,
+      description,
+    });
   } catch (err) {
     res.status(400).send(errors);
   }
-}
+};
 module.exports.products_get = async (req, res) => {
-  res.render('product');
-}
+  res.render("product");
+};
 
 module.exports.logout_Del_Cookie = async (req, res) => {
-  localStorage.removeItem('status');
-  res.clearCookie('jwt');
-  res.redirect('/home');
-}
-
+  res.clearCookie("jwt");
+  res.redirect("/home");
+};
