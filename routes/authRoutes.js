@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const authController = require("../controller/authController");
-const {isLoggedIn } = require("../middleware/authMiddlewares");
+const {isLoggedIn, upload} = require("../middleware/authMiddlewares");
 const router = Router();
 
 router.get('/signup',isLoggedIn, authController.signup_get);
@@ -21,8 +21,10 @@ router.post('/admin/customer',authController.customer_post);//this for create us
 router.put('/admin/customer',authController.customer_put );//this for update data of user 
 router.delete('/admin/customer',authController.customer_delete);//this for delete user.
 
-router.post('/admin/products',authController.products_post);
 router.get('/admin/products',authController.products_get);
+router.get('/admin/products/api',authController.products_data_get);
+router.get('/menu/api',authController.menu_data_get);
+router.post('/admin/products',upload.single('product-image'),authController.products_post);
 
 router.post('/admin/customer/logout', authController.logout_Del_Cookie);
 router.post('/admin/dashboard/logout', authController.logout_Del_Cookie);

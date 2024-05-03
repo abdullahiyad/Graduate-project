@@ -47,6 +47,7 @@ let email;
 let editBtns = document.querySelectorAll(".edit");
 editBtns.forEach((ele) => {
   ele.addEventListener("click", () => {
+    console.log('test');
     nameFiled.value =
       ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
     emailFiled.value =

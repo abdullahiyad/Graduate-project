@@ -1,12 +1,46 @@
 let cartIcon = document.querySelector(".cart-icon");
 let cartCloseBtn = document.querySelector(".cart-tap .close");
 let body = document.querySelector("body");
-
+const elem = document.querySelector('product-img123');
 cartIcon.addEventListener("click", () => {
   body.classList.toggle("activeTabCart");
 });
 cartCloseBtn.addEventListener("click", () => {
   body.classList.toggle("activeTabCart");
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to add product to the class named product-form
+  function addProduct(imageData, name, price, type, description) {
+    console.log(imageData, name, price, type, description);
+  }
+
+  // Fetch product data from the backend and populate the table
+  fetch("/menu/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    })
+    .then((data) => {
+      data.products.forEach((product) => {
+        addProduct(product.image.data, product.name, product.price, product.type, product.description);
+      });
+    })
+    .catch((error) => console.error("Error fetching product data:", error));
+
+  // Function to convert ArrayBuffer to Base64-encoded string
+  function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return 'data:image/png;base64,' + window.btoa(binary);
+  }
 });
 
 //function to create cart tap elements and add it to cart list

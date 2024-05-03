@@ -3,15 +3,16 @@ const jwt = require('jsonwebtoken');
 const { LocalStorage } = require('node-localstorage');
 const localStorage = new LocalStorage('./scratch');
 const user = require("../nodejs/Database/models/users");
-const multer = require("multer");
-const products = require('../nodejs/Database/models/products');
+const Product = require('../nodejs/Database/models/products');
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
+const product = require('../nodejs/Database/models/products');
 const maxAge = 2 * 24 * 60 * 60;
 const secretKey = 'OdayIsNerd';
 let userState;
 const handleErrors = (err) => {
+  console.log('I am in the HandleError api');
   if (err.code === 11000) {
     errors.email = "AIU";
     errors.phone = "AIU";
@@ -35,6 +36,7 @@ module.exports.login_get = (req, res) => {
   res.render("login");
 };
 module.exports.signup_post = async (req, res) => {
+  console.log('I am in the Signup api');
   const { name, phone, email, password } = req.body;
   try {
     const users = await user.create({ name, phone, email, password });
@@ -47,6 +49,7 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 module.exports.login_post = async (req, res) => {
+  console.log('I am in the login api');
   try {
     const check = await user.findOne({email: req.body.email});
     userState = check.status;
@@ -75,8 +78,17 @@ module.exports.home_post = (req, res) => {
 module.exports.menu_get = (req, res) => {
   res.render("menu");
 };
-module.exports.menu_post = (req, res) => {
-  res.send("This is menu page");
+module.exports.menu_data_get = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json({products});
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Error fetching products' });
+  }
+};
+module.exports.menu_post = async (req, res) => {
+  console.log('This is the post method');
 };
 module.exports.dashboard_get = (req, res) => {
   res.render("admin/dashboard");
@@ -105,20 +117,46 @@ module.exports.customer_put = (req, res) => {
 module.exports.customer_delete = (req, res) => {
   res.send("This for update users");
 }
+const fs = require('fs');
+
 module.exports.products_post = async (req, res) => {
-  const { name, price, type, image, givenScore, description } = req.body;
+  console.log('I am in the product API');
+  const name = req.body['product-name'];
+  const price = req.body['product-price'];
+  const type = req.body['product-type'];
+  const description = req.body['product-desc'];
+  //console.log(base64Image);
+  const image = {
+    data: req.file.buffer,
+    contentType: req.file.mimetype
+  }
   try {
-    const product = await products.create({ name, price, picture, type, image, givenScore, description });
+    const givenScore = (parseInt(price, 10))/10;
+    let prod = new Product({name: name, price: price, type: type, image: image, givenScore: givenScore, description: description});  
+  await prod.save();
+  res.redirect('products');
   } catch (err) {
-    res.status(400).send(errors);
+    console.log(err);
+    res.send(err);
   }
 }
+
 module.exports.products_get = async (req, res) => {
-  res.render('product');
+  res.render('admin/products');
+}
+
+//this function to get data from database for products
+module.exports.products_data_get = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json({ products });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    res.status(500).json({ error: 'Error fetching products' });
+  }
 }
 
 module.exports.logout_Del_Cookie = async (req, res) => {
-  localStorage.removeItem('status');
   res.clearCookie('jwt');
   res.redirect('/home');
 }

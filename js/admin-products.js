@@ -6,6 +6,31 @@ listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  // Function to add product to the class named product-form
+  function addProduct(image, name, price, type, description) {
+    //Here write a code to print products to the web page
+  }
+
+  fetch("/admin/products/api")
+    .then(async (response) => {
+      console.log("in the API fetch");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      return data;
+    })
+    .then((data) => {
+      data.products.forEach((product) => {
+        addProduct(product.image, product.name, product.price, product.type, product.description);
+      });
+    })
+    .catch((error) => console.error("Error fetching product data:", error));
+});
+
+
+
 let moreDetialsBtn = document.querySelectorAll(".edit");
 let closeDetialsBtn = document.querySelectorAll(".done-btn");
 let deleteDetialsBtn = document.querySelectorAll(".delete-btn");
@@ -46,16 +71,22 @@ editProductBtn.forEach((ele) => {
 });
 
 let addProductBtn = document.querySelector(".new-product-btn");
-let productForm = document.querySelector(".new-product");
+let productFormDiv = document.querySelector(".new-product");
+let productForm = document.querySelector(".product-form");
 let content = document.querySelector(".content");
 let cancelFormBtn = document.querySelector(".form-cancel-btn");
 
+
+
+
+
 addProductBtn.addEventListener("click", () => {
-  productForm.classList.toggle("active-page");
+  productFormDiv.classList.toggle("active-page");
   content.classList.toggle("hide-content");
 });
 cancelFormBtn.addEventListener("click", () => {
   console.log("hi");
-  productForm.classList.toggle("active-page");
+  productFormDiv.classList.toggle("active-page");
   content.classList.toggle("hide-content");
 });
+
