@@ -254,6 +254,11 @@ form.user-info {
   align-items: center;
   gap: 20px;
   pointer-events: none;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
 }
 form.user-info .change-password {
   display: flex;
@@ -261,9 +266,10 @@ form.user-info .change-password {
   align-items: center;
   pointer-events: painted !important;
 }
-.change-password button {
+.change-password .change-pass-btn {
   border: 1px solid black;
   padding: 10px 20px;
+  font-size: 18px;
   border-radius: var(--border-radius-3);
   -webkit-border-radius: var(--border-radius-3);
   -moz-border-radius: var(--border-radius-3);
@@ -276,18 +282,34 @@ form.user-info .change-password {
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
+  pointer-events: painted;
 }
-.change-password button:hover {
+.change-password .change-pass-btn:hover {
   background-color: var(--color-dark);
   color: var(--color-white);
 }
-.change-password button:hover a {
-  color: var(--color-white);
+
+.password-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  display: none;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
 }
-.change-password a {
-  color: var(--color-dark);
-  font-size: 18px;
-  cursor: pointer;
+.change {
+  display: block;
+}
+.change input {
+  border: 1px solid black;
+  pointer-events: painted;
+  width: 50%;
+}
+span.change {
+  display: none;
 }
 
 .output .part {
@@ -301,10 +323,12 @@ form.user-info .change-password {
 }
 .output .btns {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 90%;
+  gap: 10px;
 }
 .output .btns input {
   pointer-events: painted;
