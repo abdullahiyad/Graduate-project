@@ -27,7 +27,7 @@ function updateInfo(name, email, phone) {
   emailField.value = email;
   phoneField.value = phone;
 }
-updateInfo("ali", "aa@gmial.com", "321564646");
+
 window.logout = function () {
   fetch("/admin/dashboard/logout", {
     method: "POST", // Change the method to POST
