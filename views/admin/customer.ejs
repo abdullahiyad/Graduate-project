@@ -44,7 +44,8 @@
                 <li class="products"><a href="products"><i class="fa-solid fa-utensils"></i> products</a></li>
                 <li class="profile"><a href="profile"><i class="fa-solid fa-user"></i> your profile</a></li>
             </ul>
-            <button onclick="logout()" class="logout">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button onclick="logout()" class="logout">logout <i
+                    class="fa-solid fa-arrow-right-from-bracket"></i></button>
         </div>
         <!-- </form> -->
         <div class="content">
@@ -61,11 +62,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
+                        <td class="name">${name}</td>
+                        <td class="email">${email}</td>
+                        <td class="phone">${phone}</td>
+                        <td class="state">${state}</td>
+                        <td class="edit">edit</td>
                     </tr>
                 </tbody>
             </table>

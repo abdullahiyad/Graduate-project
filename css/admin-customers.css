@@ -296,7 +296,7 @@ table .edit {
   opacity: 100%;
   z-index: 1;
   transition: 0.3s;
-  width: 400px;
+  width: 500px;
   height: 500px;
   position: fixed;
   top: 50%;
@@ -358,10 +358,19 @@ table .edit {
   height: 60px;
   font-size: 25px;
 }
+
 .active-page select {
   width: 78%;
   font-size: 25px;
   color: var(--color-dark);
+}
+@media (max-width: 600px) {
+  .active-page input {
+    font-size: 15px;
+  }
+  .active-page select {
+    font-size: 15px;
+  }
 }
 .active-page .buttons {
   width: 100%;
