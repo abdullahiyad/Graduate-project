@@ -55,3 +55,7 @@ module.exports.upload = multer({
     },
 });
 
+
+module.exports.CheckEmail = () => {
+    
+}

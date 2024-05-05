@@ -8,11 +8,24 @@ listIcon.addEventListener("click", () => {
 let cancelBtn = document.querySelector(".cancel-btn");
 let editBtn = document.querySelector(".edit-btn");
 let profile = document.querySelector(".user-info");
-
-
-
-
-
+console.log("inside js file");
+fetch("/admin/profile/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      return data;
+    })
+    .then((data) => {
+      data.users.forEach((user) => {
+        console.log(user.name);
+        console.log(user.email);
+        console.log(user.phone);  
+        updateInfo("this is new Name", 'user.email', 'user.phone');
+      });
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
 
 editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");

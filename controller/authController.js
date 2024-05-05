@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
+const Product = require("../nodejs/Database/models/products");
 const multer = require("multer");
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
@@ -8,6 +9,7 @@ const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
 let userState;
+let userEmail;
 const handleErrors = (err) => {
   console.log("I am in the HandleError api");
   if (err.code === 11000) {
@@ -36,6 +38,7 @@ module.exports.signup_post = async (req, res) => {
   console.log("I am in the Signup api");
   const { name, phone, email, password } = req.body;
   try {
+    userEmail = req.body.email;
     const users = await user.create({ name, phone, email, password });
     const token = createToken(users._id);
     res
@@ -52,7 +55,7 @@ module.exports.login_post = async (req, res) => {
   console.log("I am in the login api");
   try {
     const check = await user.findOne({ email: req.body.email });
-
+    userEmail = req.body.email;
     if (!check) {
       console.log("Can't find user");
     } else {
@@ -167,6 +170,17 @@ module.exports.logout_Del_Cookie = async (req, res) => {
 module.exports.admin_profile_get = async (req, res) => {
   res.render("admin/profile");
 };
+
+module.exports.admin_profile_get_api = async (req, res) => {
+  try {
+
+    const users = await user.find();
+    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports.admin_profile_post = async (req, res) => {
   console.log("This is post method");
 };

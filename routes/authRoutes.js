@@ -34,7 +34,9 @@ router.post('/admin/customer/logout', authController.logout_Del_Cookie);
 router.post('/admin/dashboard/logout', authController.logout_Del_Cookie);
 
 router.get('/admin/profile', authController.admin_profile_get);
+router.get('/admin/profile/api',  authController.admin_profile_get_api);
 router.post('/admin/profile',  authController.admin_profile_post);
+
 
 
 module.exports = router;

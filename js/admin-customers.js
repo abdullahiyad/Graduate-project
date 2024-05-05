@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+      console.log('inside fetch');
       let data = await response.json();
       return data;
     })
