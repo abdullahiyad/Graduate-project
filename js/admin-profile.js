@@ -6,8 +6,21 @@ listIcon.addEventListener("click", () => {
 });
 
 let cancelBtn = document.querySelector(".cancel-btn");
+let saveBtn = document.querySelector(".save-btn");
 let editBtn = document.querySelector(".edit-btn");
 let profile = document.querySelector(".user-info");
+
+let changePasswordBtn = document.querySelector(".change-pass-btn");
+let passwordContainer = document.querySelectorAll(".password-container");
+
+changePasswordBtn.addEventListener("click", () => {
+  passwordContainer[0].classList.toggle("change");
+  passwordContainer[1].classList.toggle("change");
+  changePasswordBtn.classList.toggle("change");
+  cancelBtn.style.display = "block";
+  saveBtn.style.display = "block";
+});
+
 console.log("inside js file");
 fetch("/admin/profile/api")
     .then(async (response) => {
@@ -26,6 +39,7 @@ fetch("/admin/profile/api")
       });
     })
     .catch((error) => console.error("Error fetching user data:", error));
+
 
 editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
