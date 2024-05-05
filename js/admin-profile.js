@@ -23,6 +23,16 @@ cancelBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });
 
+let nameField = document.querySelector(".name");
+let emailField = document.querySelector(".email");
+let phoneField = document.querySelector(".phone");
+
+function updateInfo(name, email, phone) {
+  nameField.value = name;
+  emailField.value = email;
+  phoneField.value = phone;
+}
+
 window.logout = function () {
   fetch("/admin/dashboard/logout", {
     method: "POST", // Change the method to POST
