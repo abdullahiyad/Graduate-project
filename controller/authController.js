@@ -1,16 +1,11 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
-<<<<<<< HEAD
 const Product = require('../nodejs/Database/models/products');
-=======
 const multer = require("multer");
-const products = require("../nodejs/Database/models/products");
->>>>>>> 968a1e5002f3abfaa43087c8b893143219d7dbb6
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
-const product = require('../nodejs/Database/models/products');
 const maxAge = 2 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
 let userState;
@@ -127,49 +122,38 @@ module.exports.customer_put = (req, res) => {
 };
 module.exports.customer_delete = (req, res) => {
   res.send("This for update users");
-<<<<<<< HEAD
 }
-const fs = require('fs');
-
-=======
-};
->>>>>>> 968a1e5002f3abfaa43087c8b893143219d7dbb6
 module.exports.products_post = async (req, res) => {
   console.log('I am in the product API');
   const name = req.body['product-name'];
   const price = req.body['product-price'];
   const type = req.body['product-type'];
   const description = req.body['product-desc'];
-  //console.log(base64Image);
   const image = {
     data: req.file.buffer,
     contentType: req.file.mimetype
   }
   try {
-<<<<<<< HEAD
     const givenScore = (parseInt(price, 10))/10;
     let prod = new Product({name: name, price: price, type: type, image: image, givenScore: givenScore, description: description});  
   await prod.save();
   res.redirect('products');
-=======
-    const product = await products.create({
-      name,
-      price,
-      picture,
-      type,
-      image,
-      givenScore,
-      description,
-    });
->>>>>>> 968a1e5002f3abfaa43087c8b893143219d7dbb6
   } catch (err) {
     console.log(err);
     res.send(err);
   }
-<<<<<<< HEAD
 }
 
-module.exports.products_get = async (req, res) => {
+module.exports.admin_profile_get = (req, res) => {
+  res.render('admin/profile');
+}
+
+module.exports.admin_profile_post = (req, res) => {
+  console.log('This is post method');
+}
+
+
+module.exports.products_get = (req, res) => {
   res.render('admin/products');
 }
 
@@ -189,14 +173,7 @@ module.exports.logout_Del_Cookie = async (req, res) => {
   res.redirect('/home');
 }
 
-=======
-};
-module.exports.products_get = async (req, res) => {
-  res.render("product");
-};
-
 module.exports.logout_Del_Cookie = async (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/home");
 };
->>>>>>> 968a1e5002f3abfaa43087c8b893143219d7dbb6
