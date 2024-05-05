@@ -7,14 +7,29 @@ listIcon.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Function to add product to the class named product-form
+  // Function to convert ArrayBuffer to Base64-encoded string 
+  // Function to add product to the DOM
   function addProduct(image, name, price, type, description) {
-    //Here write a code to print products to the web page
+    const base64String = arrayBufferToBase64(image.data.data);
+    const imgElement = document.createElement('img');
+    imgElement.src = `data:image/png;base64,${base64String}`;
+    // You can also add other product details here if needed
+    console.log(imgElement);
+    console.log(name, price, type, description);
   }
 
+  function arrayBufferToBase64(buffer) {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+  // Fetch product data from the backend and populate the table
   fetch("/admin/products/api")
     .then(async (response) => {
-      console.log("in the API fetch");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -28,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error("Error fetching product data:", error));
 });
+
 
 
 

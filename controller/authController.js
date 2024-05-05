@@ -1,7 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
-const Product = require("../nodejs/Database/models/products");
 const multer = require("multer");
 const cookie = require("cookie-parser");
 let errors = { name: "", phone: "", email: "", password: "" };
@@ -123,50 +122,31 @@ module.exports.customer_put = (req, res) => {
 module.exports.customer_delete = (req, res) => {
   res.send("This for update users");
 };
-const fs = require("fs");
-
 module.exports.products_post = async (req, res) => {
-  console.log("I am in the product API");
-  const name = req.body["product-name"];
-  const price = req.body["product-price"];
-  const type = req.body["product-type"];
-  const description = req.body["product-desc"];
+  console.log('I am in the product API');
+  const name = req.body['product-name'];
+  const price = req.body['product-price'];
+  const type = req.body['product-type'];
+  const description = req.body['product-desc'];
   //console.log(base64Image);
   const image = {
     data: req.file.buffer,
     contentType: req.file.mimetype,
   };
   try {
-    const givenScore = parseInt(price, 10) / 10;
-    let prod = new Product({
-      name: name,
-      price: price,
-      type: type,
-      image: image,
-      givenScore: givenScore,
-      description: description,
-    });
-    await prod.save();
-    res.redirect("products");
-
-    const product = await products.create({
-      name,
-      price,
-      picture,
-      type,
-      image,
-      givenScore,
-      description,
-    });
+    const givenScore = (parseInt(price, 10))/10;
+    let prod = new Product({name: name, price: price, type: type, image: image, givenScore: givenScore, description: description});  
+  await prod.save();
+  res.redirect('products');
   } catch (err) {
     console.log(err);
     res.send(err);
   }
-};
+}
 
 module.exports.products_get = async (req, res) => {
-  res.render("admin/products");
-};
+  res.render('admin/products');
+}
 
 //this function to get data from database for products
 module.exports.products_data_get = async (req, res) => {
@@ -180,8 +160,12 @@ module.exports.products_data_get = async (req, res) => {
 };
 
 module.exports.logout_Del_Cookie = async (req, res) => {
-  res.clearCookie("jwt");
-  res.redirect("/home");
+  res.clearCookie('jwt');
+  res.redirect('/home');
+}
+
+module.exports.products_get = async (req, res) => {
+  res.render("product");
 };
 
 module.exports.logout_Del_Cookie = async (req, res) => {
