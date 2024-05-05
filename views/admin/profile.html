@@ -46,8 +46,28 @@
             <button class="logout" onclick="logout()">logout <i
                     class="fa-solid fa-arrow-right-from-bracket"></i></button>
         </div>
-        <div class="content">
-            <iframe src="/views/profile.html" frameborder="0"></iframe>
+        <div class="content body">
+            <form action="none" class="user-info output">
+                <h1 class="profile-title">your profile</h1>
+                <div class="name-container part">
+                    <label for="user-name">name :</label>
+                    <input type="text" class="name" name="user-name" value="ahmed mohammed">
+                </div>
+                <div class="email-container part">
+                    <label for="user-email">email :</label>
+                    <input type="email" class="email" name="user-email" value="abdullah@gmail.com">
+                </div>
+                <div class="phone-container part">
+                    <label for="user-phone">phone :</label>
+                    <input type="text" class="phone" name="user-phone" value="06549898494">
+                </div>
+                <div class="part btns">
+                    <input type="button" value="delete account" class="delete-btn">
+                    <input type="button" value="edit" class="edit-btn">
+                    <input type="submit" value="save" class="save-btn">
+                    <input type="button" value="cancel" class="cancel-btn">
+                </div>
+            </form>
 
         </div>
     </div>
