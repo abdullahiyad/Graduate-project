@@ -164,10 +164,12 @@ module.exports.logout_Del_Cookie = async (req, res) => {
   res.redirect('/home');
 }
 
-module.exports.products_get = async (req, res) => {
-  res.render("product");
+module.exports.admin_profile_get = async (req, res) => {
+  res.render("admin/profile");
 };
-
+module.exports.admin_profile_post = async (req, res) => {
+  console.log("This is post method");
+};
 module.exports.logout_Del_Cookie = async (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/home");
