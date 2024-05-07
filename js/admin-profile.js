@@ -31,16 +31,9 @@ fetch("/admin/profile/api")
       return data;
     })
     .then((data) => {
-      data.users.forEach((user) => {
-        console.log(user.name);
-        console.log(user.email);
-        console.log(user.phone);  
-        updateInfo("this is new Name", 'user.email', 'user.phone');
-      });
+      updateInfo(data.name, data.email, data.phone);
     })
     .catch((error) => console.error("Error fetching user data:", error));
-
-
 editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });
@@ -50,7 +43,7 @@ cancelBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });
 
-let nameField = document.querySelector(".name");
+let nameField = document.querySelector(".nameField");
 let emailField = document.querySelector(".email");
 let phoneField = document.querySelector(".phone");
 

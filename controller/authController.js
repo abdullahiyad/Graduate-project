@@ -8,10 +8,8 @@ let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
-let userState;
-let userEmail;
+var userState;
 const handleErrors = (err) => {
-  console.log("I am in the HandleError api");
   if (err.code === 11000) {
     errors.email = "AIU";
     errors.phone = "AIU";
@@ -35,10 +33,8 @@ module.exports.login_get = (req, res) => {
   res.render("login");
 };
 module.exports.signup_post = async (req, res) => {
-  console.log("I am in the Signup api");
   const { name, phone, email, password } = req.body;
   try {
-    userEmail = req.body.email;
     const users = await user.create({ name, phone, email, password });
     const token = createToken(users._id);
     res
@@ -52,10 +48,9 @@ module.exports.signup_post = async (req, res) => {
   }
 };
 module.exports.login_post = async (req, res) => {
-  console.log("I am in the login api");
   try {
     const check = await user.findOne({ email: req.body.email });
-    userEmail = req.body.email;
+    userState = check.status;
     if (!check) {
       console.log("Can't find user");
     } else {
@@ -64,13 +59,17 @@ module.exports.login_post = async (req, res) => {
         check.password
       );
       if (isPassMatch && userState === "admin") {
-        const token = createToken();
+        const token = createToken(check._id);
         res
           .status(201)
           .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
           .redirect("/admin/dashboard");
       } else {
-        res.send("Password or Email error");
+        const token = createToken(check._id);
+        res
+          .status(201)
+          .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+          .redirect("/home");
       }
     }
   } catch (err) {
@@ -80,8 +79,20 @@ module.exports.login_post = async (req, res) => {
 module.exports.home_get = (req, res) => {
   res.render("home");
 };
-module.exports.home_post = (req, res) => {
-  res.send("This is home page");
+module.exports.home_get_data = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return null;
+    }
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
+    const users = await user.find({_id: userId});
+    res.json({ users });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Error fetching products" });
+  }
 };
 module.exports.menu_get = (req, res) => {
   res.render("menu");
@@ -98,8 +109,20 @@ module.exports.menu_data_get = async (req, res) => {
 module.exports.menu_post = async (req, res) => {
   console.log("This is the post method");
 };
-module.exports.dashboard_get = (req, res) => {
-  res.render("admin/dashboard");
+
+module.exports.dashboard_get = async (req, res) => {
+  const token = req.cookies.jwt;
+  if (!token) {
+    return null;
+  }
+  const decodedToken = jwt.verify(token, secretKey);
+  const userId = decodedToken.id;
+  const User = await user.findOne({_id: userId});
+  if( User.status === 'user'){
+    res.send("You don't have access to this page");
+  }else{
+    res.render("admin/dashboard");
+  }
 };
 module.exports.dashboard_post = (req, res) => {
   res.send("This is dashboard page");
@@ -126,12 +149,10 @@ module.exports.customer_delete = (req, res) => {
   res.send("This for update users");
 };
 module.exports.products_post = async (req, res) => {
-  console.log('I am in the product API');
   const name = req.body['product-name'];
   const price = req.body['product-price'];
   const type = req.body['product-type'];
   const description = req.body['product-desc'];
-  //console.log(base64Image);
   const image = {
     data: req.file.buffer,
     contentType: req.file.mimetype,
@@ -162,22 +183,33 @@ module.exports.products_data_get = async (req, res) => {
   }
 };
 
-module.exports.logout_Del_Cookie = async (req, res) => {
-  res.clearCookie('jwt');
-  res.redirect('/home');
-}
-
 module.exports.admin_profile_get = async (req, res) => {
   res.render("admin/profile");
 };
 
+function getUserData(req) {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return null;
+    }
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
+    return userId;
+  } catch (err) {
+    console.error('Error decoding JWT:', err);
+    return null;
+  }
+}
+
 module.exports.admin_profile_get_api = async (req, res) => {
   try {
-
-    const users = await user.find();
-    res.json({ users });
+    const userId = getUserData(req);
+    const userData = await user.findById(userId);
+    res.json(userData);    
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('Error fetching user data:', err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -187,4 +219,17 @@ module.exports.admin_profile_post = async (req, res) => {
 module.exports.logout_Del_Cookie = async (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/home");
+};
+
+module.exports.update_data = async (req, res) => {
+  const condition = {_id: req.params.id};
+  try {
+    user.updateOne(condition, req.body).then((users) => {
+      return res.json(users);
+    }).catch((err) => {
+      console.log(err);
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
 };

@@ -34,13 +34,30 @@ link.forEach((element) => {
   }
 });
 
-window.redir = function() {
-  const status = localStorage.getItem('status');
-  const logIcon = document.getElementById(loginIc);
-  if(status === 'admin'){
-    logIcon.href = 'admin/dashboard';
-  }
-  if(status === 'user'){
-    logIcon.href = 'user';
-  }
+document.addEventListener("DOMContentLoaded", function () {
+  redirect();
+});
+
+function redirect() {
+  fetch("/home/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      var users;
+      data.users.forEach((user) => {
+        users = user;
+      });
+      document.getElementById('loginIc').removeAttribute('href');
+      const loginIcon = document.getElementById('loginIc');
+      if (users.status === 'admin') {
+        loginIcon.href = 'admin/dashboard';
+      } else if(users.status === 'user') {
+        loginIcon.href = 'user/dashboard';
+      }
+      console.log('Redirect link updated:', loginIcon.href);
+
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
 }

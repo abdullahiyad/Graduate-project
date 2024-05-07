@@ -20,6 +20,8 @@ module.exports.checkAuth = (req, res, next) => {
     }
 }
 
+
+
 module.exports.isLoggedIn = (req, res, next) => {
     const token = req.cookies.jwt;
     if(token) {
@@ -54,8 +56,3 @@ module.exports.upload = multer({
         }
     },
 });
-
-
-module.exports.CheckEmail = () => {
-    
-}
