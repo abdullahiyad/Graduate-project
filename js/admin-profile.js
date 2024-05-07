@@ -9,6 +9,27 @@ let cancelBtn = document.querySelector(".cancel-btn");
 let saveBtn = document.querySelector(".save-btn");
 let editBtn = document.querySelector(".edit-btn");
 let profile = document.querySelector(".user-info");
+let deleteAccountBtn = document.querySelector(".delete-btn");
+deleteAccountBtn.addEventListener("click", () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your account has been deleted.",
+        icon: "success",
+      });
+      //function()
+    }
+  });
+});
 
 let changePasswordBtn = document.querySelector(".change-pass-btn");
 let passwordContainer = document.querySelectorAll(".password-container");
@@ -23,17 +44,17 @@ changePasswordBtn.addEventListener("click", () => {
 
 console.log("inside js file");
 fetch("/admin/profile/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      let data = await response.json();
-      return data;
-    })
-    .then((data) => {
-      updateInfo(data.name, data.email, data.phone);
-    })
-    .catch((error) => console.error("Error fetching user data:", error));
+  .then(async (response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    let data = await response.json();
+    return data;
+  })
+  .then((data) => {
+    updateInfo(data.name, data.email, data.phone);
+  })
+  .catch((error) => console.error("Error fetching user data:", error));
 editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });

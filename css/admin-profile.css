@@ -76,8 +76,8 @@ body {
 .header #menu-icon {
   display: none;
 }
-.header .logo {
-  color: orangered;
+.header .logo a {
+  color: var(--color-dark);
 }
 .header .header-continer {
   display: flex;
