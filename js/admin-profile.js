@@ -37,6 +37,22 @@ fetch("/admin/profile/api")
 editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });
+fetch("/admin/profile/update")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      return data;
+    })
+    .then((data) => {
+      updateInfo(data.name, data.email, data.phone);
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
+editBtn.addEventListener("click", () => {
+  profile.classList.toggle("on-edit");
+});
+
 
 cancelBtn.addEventListener("click", () => {
   window.location.reload();
