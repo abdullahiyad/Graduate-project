@@ -98,6 +98,13 @@ body {
   padding: 5px;
   box-shadow: var(--box-shadow);
 }
+.reservation-container form textarea {
+  text-transform: capitalize;
+  font-size: 18px;
+  font-family: var(--statics-font);
+  padding: 5px;
+  box-shadow: var(--box-shadow);
+}
 .reservation-container form .person-name {
   grid-area: 2/1 / span 1 / span 2;
 }
