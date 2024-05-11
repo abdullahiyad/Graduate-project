@@ -178,6 +178,5 @@ function showDetails(event) {
   clickedElement.parentElement.classList.toggle("more-details");
   const type =
     clickedElement.previousElementSibling.firstElementChild.textContent.toLowerCase();
-  console.log(type);
   clickedElement.previousElementSibling.lastElementChild.value = type;
 }
