@@ -52,93 +52,10 @@
             </h1>
             <div class="products-table">
 
-                <div class="product-item">
-                    <form action="" method="none">
-                        <div class="product-id">1</div>
-                        <div class="product-img part edit-class on-edit" name="product-img">
-                            <label for="product-img">product Image :</label>
-                            <img src="/images/Daco_1494767.png" alt="">
-                            <input type="file" id="choose-file" name="choose-file" accept="image/*">
-                            <p class="note">*chose new image if you want change the current
-                                image*</p>
-                        </div>
-                        <div class="part s">
-                            <label>product name :</label>
-                            <input type="text" class="product-title" value="Product name">
-                        </div>
-                        <div class="part ">
-                            <label>product price :</label>
-                            $<input type="text" class="product-price" value="30">
-                        </div>
-                        <div class="part product-desc">
-                            <label>product description :</label>
-                            <input type="text" class="product-desc-input" value="hello world">
-                        </div>
-                        <div class="part">
-                            <label>product category :</label>
-                            <div class="product-type"><select name="products-type" id="products-type">
-                                    <option value="hotDrinks">hot drinks</option>
-                                    <option value="coldDrinks">cold drinks</option>
-                                    <option value="food">food</option>
-                                    <option value="dessert">desserts</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="edit">more</div>
-                        <div class="product-btns part">
-                            <input type="button" value="Delete" class="delete-btn">
-                            <input type="button" value="Edit" class="edit-btn">
-                            <input type="button" value="Done" class="done-btn">
-                            <input type="submit" value="Save" class="save-btn" />
-                            <input type="button" value="cancel" class="cancel-btn">
-                        </div>
-                    </form>
-                </div>
-                <div class="product-item">
-                    <form action="" method="none">
-                        <div class="product-id">1</div>
 
-                        <div class="product-img part edit-class on-edit" name="product-img" id="gallery">
-                            <label for="product-img">product Image :</label>
-                            <img src="/images/Daco_1494767.png" alt="">
-                            <input type="file" id="choose-file" name="choose-file" accept="image/*">
-                            <p class="note">*chose new image if you want change the current
-                                image*</p>
-                        </div>
-                        <div class="part s">
-                            <label>product name :</label>
-                            <input type="text" class="product-title" value="Product name">
-                        </div>
-                        <div class="part ">
-                            <label>product price :</label>
-                            $<input type="text" class="product-price" value="30">
-                        </div>
-                        <div class="part product-desc">
-                            <label>product description :</label>
-                            <input type="text" class="product-desc-input" value="hello world">
-                        </div>
-                        <div class="part">
-                            <label>product category :</label>
-                            <div class="product-type"><select name="products-type" id="products-type">
-                                    <option value="hotDrinks">hot drinks</option>
-                                    <option value="coldDrinks">cold drinks</option>
-                                    <option value="food">food</option>
-                                    <option value="dessert">desserts</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="edit">more</div>
-                        <div class="product-btns part">
-                            <input type="button" value="Delete" class="delete-btn">
-                            <input type="button" value="Edit" class="edit-btn">
-                            <input type="button" value="Done" class="done-btn">
-                            <input type="submit" value="Save" class="save-btn" />
-                            <input type="button" value="cancel" class="cancel-btn">
-                        </div>
-                    </form>
-                </div>
-                <button class="new-product-btn"><i class="fa-solid fa-circle-plus"></i></button>
             </div>
+            <button class="new-product-btn" onclick="activeAddProductPage()"><i
+                    class="fa-solid fa-circle-plus"></i></button>
         </div>
     </div>
     <div class="new-product-container ">
@@ -160,27 +77,28 @@
                 <div class="price-container input-field-container">
                     <label>price</label>
                     <input type="number" min="0" value="0" name="product-price" class="product-desc input-style"
-                        autocomplete="off" required /> 
+                        autocomplete="off" required />
                 </div>
                 <div class="type-container input-field-container">
+                    <div class="type-show">hotdrinks</div>
                     <label>type</label>
                     <select name="product-type" id="#type">
-                        <option value="hot-drinks" selected>hot drinks</option>
-                        <option value="cold-drinks">cold drinks</option>
+                        <option value="hotdrinks" selected>hotDrinks</option>
+                        <option value="colddrinks">coldDrinks</option>
                         <option value="food">food</option>
                         <option value="dessert">dessert</option>
                     </select>
                 </div>
                 <div class="image-container input-field-container">
                     <label>image</label>
-                    <input type="file" name="product-image" class="product-name input-style"
-                        autocomplete="off" required />
+                    <input type="file" name="product-image" class="product-name input-style" autocomplete="off"
+                        required />
 
                 </div>
 
                 <div class="buttons">
                     <input type="submit" value="Add" class="add-btn" />
-                    <input type="button" value="cancel" class="form-cancel-btn">
+                    <input type="button" value="cancel" class="form-cancel-btn" onclick="activeAddProductPage()">
                 </div>
             </form>
         </div>

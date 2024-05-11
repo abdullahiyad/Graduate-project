@@ -6,7 +6,6 @@ listIcon.addEventListener("click", () => {
 });
 //function to add user to page
 
-
 document.addEventListener("DOMContentLoaded", function () {
   // Function to add user to the table
   function addUser(name, email, phone, state) {
@@ -33,13 +32,13 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then((data) => {
       data.users.forEach((user) => {
-        addUser(user.name,  user.phone, user.email, user.status);
+        addUser(user.name, user.phone, user.email, user.status);
       });
     })
     .catch((error) => console.error("Error fetching user data:", error));
 
   // Function to handle form submission and update user data
-  function  updateUser(email, newName, newState) {
+  function updateUser(email, newName, newState) {
     fetch("/admin/customer/update", {
       method: "POST",
       headers: {
@@ -64,20 +63,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Event listener for submit button click
-  document.querySelector(".save-btn").addEventListener("click", function (event) {
-    const email = document.querySelector(".phone").value;
-    const newName = document.querySelector(".name").value;
-    const newState = document.querySelector(".state").value;
-    console.log(email, newName, newState);
-    updateUser(email, newName, newState);
-  });
+  document
+    .querySelector(".save-btn")
+    .addEventListener("click", function (event) {
+      const email = document.querySelector(".phone").value;
+      const newName = document.querySelector(".name").value;
+      const newState = document.querySelector(".state").value;
+      console.log(email, newName, newState);
+      updateUser(email, newName, newState);
+    });
 });
 
-
-function func() {
-
-}
-
+function func() {}
 
 //get details and shwo details page
 let detailsPage = document.querySelector(".details-page");
@@ -96,9 +93,9 @@ setTimeout(() => {
     ele.addEventListener("click", () => {
       nameFiled.value =
         ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-      emailFiled.value =
-        ele.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
       phoneFiled.value =
+        ele.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+      emailFiled.value =
         ele.previousElementSibling.previousElementSibling.textContent;
       if (
         ele.previousElementSibling.textContent.toLocaleLowerCase() == "user"

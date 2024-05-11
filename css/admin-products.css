@@ -264,15 +264,17 @@ body {
   -moz-transition: 0.5s;
   -ms-transition: 0.5s;
   -o-transition: 0.5s;
+  background-color: var(--color-background);
 }
+
 .product-item .product-id,
 .product-item label,
 .product-item .product-img input,
-.note {
+.note,
+.product-item select {
   display: none;
 }
-.product-item form input,
-select {
+.product-item form input,.product-item .type-show, .product-item select {
   background-color: transparent;
   font-size: 18px;
   color: #363949;
@@ -287,6 +289,9 @@ select {
 }
 .product-item .part {
   width: 20%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 .product-item .product-desc {
   display: none;
@@ -294,8 +299,8 @@ select {
 .product-item form {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+    grid-template-columns: 30% 25% 10% 25% 10%;
   align-items: center;
   overflow: hidden;
   margin-bottom: 10px;
@@ -331,13 +336,14 @@ select {
 @media (max-width: 800px) {
   .product-item,
   .product-item button,
-  .product-item select {
+  .product-item .type-show{
     font-size: 12px;
   }
   .product-item .part input,
   .product-item label,
   .product-item span,
   .product-item select,
+  .product-item .type-show,
   .product-item {
     font-size: 8px;
   }
@@ -367,6 +373,7 @@ select {
 
 .more-details {
   min-height: 500px;
+  display: flex !important;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
@@ -416,10 +423,11 @@ select {
 .more-details .edit,
 .more-details .product-btns .cancel-btn,
 .more-details .product-btns .save-btn,
+.more-details .type-show,
 .note {
   display: none;
 }
-.more-details label {
+.more-details label,.more-details select {
   display: block;
 }
 .more-details .part {
@@ -468,8 +476,8 @@ select {
 /* start details page */
 
 .new-product{
+  display: none;
   opacity: 0%;
-  z-index: -1;
   transition: 0.5s;
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
@@ -477,6 +485,7 @@ select {
   -o-transition: 0.5s;
 }
 .active-page {
+  display: block;
   opacity: 100%;
   z-index: 1;
   transition: 0.3s;
