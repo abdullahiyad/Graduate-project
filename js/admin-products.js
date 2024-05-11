@@ -7,11 +7,11 @@ listIcon.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Function to convert ArrayBuffer to Base64-encoded string 
+  // Function to convert ArrayBuffer to Base64-encoded string
   // Function to add product to the DOM
   function addProduct(image, name, price, type, description) {
     const base64String = arrayBufferToBase64(image.data.data);
-    const imgElement = document.createElement('img');
+    const imgElement = document.createElement("img");
     imgElement.src = `data:image/png;base64,${base64String}`;
     // You can also add other product details here if needed
     console.log(imgElement);
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function arrayBufferToBase64(buffer) {
-    let binary = '';
+    let binary = "";
     const bytes = new Uint8Array(buffer);
     const len = bytes.byteLength;
     for (let i = 0; i < len; i++) {
@@ -38,14 +38,17 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then((data) => {
       data.products.forEach((product) => {
-        addProduct(product.image, product.name, product.price, product.type, product.description);
+        addProduct(
+          product.image,
+          product.name,
+          product.price,
+          product.type,
+          product.description
+        );
       });
     })
     .catch((error) => console.error("Error fetching product data:", error));
 });
-
-
-
 
 let moreDetialsBtn = document.querySelectorAll(".edit");
 let closeDetialsBtn = document.querySelectorAll(".done-btn");
@@ -65,7 +68,24 @@ closeDetialsBtn.forEach((ele) => {
 });
 deleteDetialsBtn.forEach((ele) => {
   ele.addEventListener("click", () => {
-    ele.parentElement.parentElement.remove();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "the product has been deleted.",
+          icon: "success",
+        });
+        ele.parentElement.parentElement.remove();
+      }
+    });
   });
 });
 cancelEditProductBtn.forEach((ele) => {
@@ -92,10 +112,6 @@ let productForm = document.querySelector(".product-form");
 let content = document.querySelector(".content");
 let cancelFormBtn = document.querySelector(".form-cancel-btn");
 
-
-
-
-
 addProductBtn.addEventListener("click", () => {
   productFormDiv.classList.toggle("active-page");
   content.classList.toggle("hide-content");
@@ -105,4 +121,3 @@ cancelFormBtn.addEventListener("click", () => {
   productFormDiv.classList.toggle("active-page");
   content.classList.toggle("hide-content");
 });
-
