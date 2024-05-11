@@ -132,11 +132,22 @@ function deleteProduct(event) {
         icon: "success",
       });
       //
-      const id =
-        clickedElement.parentElement.parentElement.firstElementChild.innerHTML;
-      //
-      //function to delete from database
-      clickedElement.parentElement.parentElement.parentElement.remove();
+      const id = clickedElement.parentElement.parentElement.firstElementChild.innerHTML;
+
+      fetch('/admin/products/delete').then((response) => {
+        if(!response.ok){
+          throw new Error("Network response was not ok");
+        }
+        
+        clickedElement.parentElement.parentElement.parentElement.remove();
+      }).catch((err) => {
+        
+      });
+
+
+
+
+      
       //
     }
   });

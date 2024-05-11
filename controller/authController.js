@@ -264,6 +264,11 @@ module.exports.logout_Del_Cookie = async (req, res) => {
   res.redirect("/home");
 };
 
+module.exports.delete_product_id = async (req, res) => {
+  const Id = req.body.id;
+  const result = await Product.findByIdAndDelete(Id);
+  console.log(result);
+}
 module.exports.update_data = async (req, res) => {
   console.log('inside update method');
   try {
