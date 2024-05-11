@@ -54,6 +54,7 @@ module.exports.login_post = async (req, res) => {
     if (!check) {
       console.log("Can't find user");
     } else {
+      userState = check.status;
       const isPassMatch = await bcrypt.compare(
         req.body.password,
         check.password
@@ -64,7 +65,7 @@ module.exports.login_post = async (req, res) => {
           .status(201)
           .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
           .redirect("/admin/dashboard");
-      } else {
+      } else if (isPassMatch && userState === "user") {
         const token = createToken(check._id);
         res
           .status(201)
@@ -222,12 +223,19 @@ module.exports.logout_Del_Cookie = async (req, res) => {
 };
 
 module.exports.update_data = async (req, res) => {
-  const condition = {_id: req.params.id};
+  console.log('inside update method');
   try {
-    user.updateOne(condition, req.body).then((users) => {
-      return res.json(users);
+    const email = req.body.email;
+    console.log(email);
+    user.findOne({email: email}).then((usr) => {
+      console.log('inside find');
+      user.update(usr._id, req.body).then((users) => {
+        res.json(users);
+      }).catch((err) => {
+        res.send(err);
+      });
     }).catch((err) => {
-      console.log(err);
+      console.log("Can't find user");
     });
   } catch (error) {
     res.status(500).send(error);

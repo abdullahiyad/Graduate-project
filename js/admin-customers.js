@@ -5,6 +5,8 @@ listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
 //function to add user to page
+
+
 document.addEventListener("DOMContentLoaded", function () {
   // Function to add user to the table
   function addUser(name, email, phone, state) {
@@ -19,23 +21,64 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
     tableBody.appendChild(newUser);
   }
+
   // Fetch user data from backend and populate the table
   fetch("/admin/customer/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      console.log('inside fetch');
       let data = await response.json();
       return data;
     })
     .then((data) => {
       data.users.forEach((user) => {
-        addUser(user.name, user.phone, user.email, user.status);
+        addUser(user.name,  user.phone, user.email, user.status);
       });
     })
     .catch((error) => console.error("Error fetching user data:", error));
+
+  // Function to handle form submission and update user data
+  function  updateUser(email, newName, newState) {
+    fetch("/admin/customer/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        name: newName,
+        state: newState,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("User data updated:", data);
+      })
+      .catch((error) => console.error("Error updating user data:", error));
+  }
+
+  // Event listener for submit button click
+  document.querySelector(".save-btn").addEventListener("click", function (event) {
+    const email = document.querySelector(".phone").value;
+    const newName = document.querySelector(".name").value;
+    const newState = document.querySelector(".state").value;
+    console.log(email, newName, newState);
+    updateUser(email, newName, newState);
+  });
 });
+
+
+function func() {
+
+}
+
+
 //get details and shwo details page
 let detailsPage = document.querySelector(".details-page");
 let content = document.querySelector(".content");
@@ -118,32 +161,33 @@ setTimeout(() => {
     saveBtn.style.display = "none";
     content.classList.toggle("hide-content");
     detailsPage.classList.toggle("active-page");
+    detailsPage.submit();
   });
   //save button
-  saveBtn.addEventListener("click", () => {
-    nameFiled.style = `
-    pointer-events: none;
-    border:1px solid none;
-    `;
-    emailFiled.style = `
-     pointer-events: none;
-    border:1px solid none;
-    `;
-    phoneFiled.style = `
-     pointer-events: none;
-    border:1px solid none;
-    `;
-    stateFiled.style = `
-    pointer-events: none;
-    border:1px solid none;
-    `;
-    doneBtn.style.display = "block";
-    editUserBtn.style.display = "block";
-    cancelBtn.style.display = "none";
-    saveBtn.style.display = "none";
-    content.classList.toggle("hide-content");
-    detailsPage.classList.toggle("active-page");
-  });
+  // saveBtn.addEventListener("click", () => {
+  //   nameFiled.style = `
+  //   pointer-events: none;
+  //   border:1px solid none;
+  //   `;
+  //   emailFiled.style = `
+  //    pointer-events: none;
+  //   border:1px solid none;
+  //   `;
+  //   phoneFiled.style = `
+  //    pointer-events: none;
+  //   border:1px solid none;
+  //   `;
+  //   stateFiled.style = `
+  //   pointer-events: none;
+  //   border:1px solid none;
+  //   `;
+  //   doneBtn.style.display = "block";
+  //   editUserBtn.style.display = "block";
+  //   cancelBtn.style.display = "none";
+  //   saveBtn.style.display = "none";
+  //   content.classList.toggle("hide-content");
+  //   detailsPage.classList.toggle("active-page");
+  // });
 }, 2000);
 //Logout Button
 window.logout = function () {
