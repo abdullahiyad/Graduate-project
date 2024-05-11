@@ -41,8 +41,8 @@ function addProduct(
                             <div class="type-show">${productType}</div>
                                <label>type : </label>
                                <select name="product-type" id="#type">
-                               <option value="hotdrinks" selected>hot Drinks</option>
-                               <option value="colddrinks">cold Drinks</option>
+                               <option value="hot-drinks" selected>hot Drinks</option>
+                               <option value="cold-drinks">cold Drinks</option>
                                <option value="food">food</option>
                                <option value="dessert">dessert</option>
                           </select>
@@ -176,4 +176,8 @@ function doneShowDetails(event) {
 function showDetails(event) {
   const clickedElement = event.target;
   clickedElement.parentElement.classList.toggle("more-details");
+  const type =
+    clickedElement.previousElementSibling.firstElementChild.textContent.toLowerCase();
+  console.log(type);
+  clickedElement.previousElementSibling.lastElementChild.value = type;
 }
