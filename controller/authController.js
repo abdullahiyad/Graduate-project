@@ -115,23 +115,38 @@ module.exports.menu_post = async (req, res) => {
 
 module.exports.dashboard_get = async (req, res) => {
   const token = req.cookies.jwt;
+  console.log(token);
   if (!token) {
-    return null;
+    res.send("You don't have access to this page");
   }
   const decodedToken = jwt.verify(token, secretKey);
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
     res.send("You don't have access to this page");
-  }else{
+  } else {
     res.render("admin/dashboard");
   }
 };
+
 module.exports.dashboard_post = (req, res) => {
   res.send("This is dashboard page");
 };
+
 module.exports.customer_get = async (req, res) => {
-  res.render("admin/customer");
+  const token = req.cookies.jwt;
+  console.log(token);
+  if (!token) {
+    res.send("You don't have access to this page");
+  }
+  const decodedToken = jwt.verify(token, secretKey);
+  const userId = decodedToken.id;
+  const User = await user.findOne({_id: userId});
+  if( User.status === 'user'){
+    res.send("You don't have access to this page");
+  } else {
+    res.render("admin/customer");
+  }
 };
 module.exports.customer_data_get = async (req, res) => {
   try {
@@ -173,7 +188,19 @@ module.exports.products_post = async (req, res) => {
 }
 
 module.exports.products_get = async (req, res) => {
-  res.render('admin/products');
+  const token = req.cookies.jwt;
+  console.log(token);
+  if (!token) {
+    res.send("You don't have access to this page");
+  }
+  const decodedToken = jwt.verify(token, secretKey);
+  const userId = decodedToken.id;
+  const User = await user.findOne({_id: userId});
+  if( User.status === 'user'){
+    res.send("You don't have access to this page");
+  } else {
+    res.render("admin/products");
+  }
 }
 
 //this function to get data from database for products
@@ -188,7 +215,19 @@ module.exports.products_data_get = async (req, res) => {
 };
 
 module.exports.admin_profile_get = async (req, res) => {
-  res.render("admin/profile");
+  const token = req.cookies.jwt;
+  console.log(token);
+  if (!token) {
+    res.send("You don't have access to this page");
+  }
+  const decodedToken = jwt.verify(token, secretKey);
+  const userId = decodedToken.id;
+  const User = await user.findOne({_id: userId});
+  if( User.status === 'user'){
+    res.send("You don't have access to this page");
+  } else {
+    res.render("admin/profile");
+  }
 };
 
 function getUserData(req) {
