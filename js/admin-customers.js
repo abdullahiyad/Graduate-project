@@ -1,6 +1,6 @@
 //to show the links list in medium and small screens
 let listIcon = document.querySelector("#menu-icon");
-let dashboard = document.querySelector(".dashboard-container");
+let dashboard = document.querySelector(".customer-container");
 listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <td class="email">${email}</td>
       <td class="phone">${phone}</td>
       <td class="state">${state}</td>
-      <td class="edit">edit</td>
+      <td class="edit" onclick="editUserFunction(event)">edit</td>
       `;
     tableBody.appendChild(newUser);
   }
@@ -86,106 +86,102 @@ let phoneFiled = document.querySelector(".details-page .phone");
 let stateFiled = document.querySelector(".details-page .state");
 let email;
 
-setTimeout(() => {
-  let editBtns = document.querySelectorAll(".edit");
+//let editBtns = document.querySelectorAll(".edit");
+//function to show edit page
+function editUserFunction(event) {
+  const ele = event.target;
+  nameFiled.value =
+    ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+  phoneFiled.value =
+    ele.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+  emailFiled.value =
+    ele.previousElementSibling.previousElementSibling.textContent;
+  if (ele.previousElementSibling.textContent.toLocaleLowerCase() == "user") {
+    stateFiled.value = "user";
+  } else {
+    stateFiled.value = "admin";
+  }
+  content.classList.toggle("hide-content");
+  detailsPage.classList.toggle("active-page");
+  //email to edit on it
+  email = document.querySelector(".email-container .email").value;
+  // function to remove user from dbase()
+}
 
-  editBtns.forEach((ele) => {
-    ele.addEventListener("click", () => {
-      nameFiled.value =
-        ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-      phoneFiled.value =
-        ele.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-      emailFiled.value =
-        ele.previousElementSibling.previousElementSibling.textContent;
-      if (
-        ele.previousElementSibling.textContent.toLocaleLowerCase() == "user"
-      ) {
-        stateFiled.value = "user";
-      } else {
-        stateFiled.value = "admin";
-      }
-      content.classList.toggle("hide-content");
-      detailsPage.classList.toggle("active-page");
-    });
-  });
-  doneBtn.addEventListener("click", () => {
-    content.classList.toggle("hide-content");
-    detailsPage.classList.toggle("active-page");
-  });
+doneBtn.addEventListener("click", () => {
+  content.classList.toggle("hide-content");
+  detailsPage.classList.toggle("active-page");
+});
 
-  //edit button
-
-  let editUserBtn = document.querySelector(".edit-btn");
-  let deleteBtn = document.querySelector(".delete-btn");
-  let cancelBtn = document.querySelector(".cancel-btn");
-  let saveBtn = document.querySelector(".save-btn");
-  //edit buttin
-  editUserBtn.addEventListener("click", () => {
-    nameFiled.style = `
+//edit button
+let editUserBtn = document.querySelector(".edit-btn");
+let deleteBtn = document.querySelector(".delete-btn");
+let cancelBtn = document.querySelector(".cancel-btn");
+let saveBtn = document.querySelector(".save-btn");
+//edit buttin
+editUserBtn.addEventListener("click", () => {
+  nameFiled.style = `
     pointer-events: painted;
     border:1px solid black;
     `;
-    stateFiled.style = `
+  stateFiled.style = `
     pointer-events: painted;
     border:1px solid black;
     `;
-    doneBtn.style.display = "none";
-    editUserBtn.style.display = "none";
-    cancelBtn.style.display = "block";
-    saveBtn.style.display = "block";
-  });
-  //cancel button
-  cancelBtn.addEventListener("click", () => {
-    nameFiled.style = `
+  doneBtn.style.display = "none";
+  editUserBtn.style.display = "none";
+  cancelBtn.style.display = "block";
+  saveBtn.style.display = "block";
+});
+
+//cancel button
+cancelBtn.addEventListener("click", () => {
+  nameFiled.style = `
     pointer-events: none;
     border:1px solid none;
     `;
-    emailFiled.style = `
+  emailFiled.style = `
      pointer-events: none;
     border:1px solid none;
     `;
-    phoneFiled.style = `
+  phoneFiled.style = `
      pointer-events: none;
     border:1px solid none;
     `;
-    stateFiled.style = `
+  stateFiled.style = `
     pointer-events: none;
     border:1px solid none;
     `;
-    doneBtn.style.display = "block";
-    editUserBtn.style.display = "block";
-    cancelBtn.style.display = "none";
-    saveBtn.style.display = "none";
-    content.classList.toggle("hide-content");
-    detailsPage.classList.toggle("active-page");
-    detailsPage.submit();
+  doneBtn.style.display = "block";
+  editUserBtn.style.display = "block";
+  cancelBtn.style.display = "none";
+  saveBtn.style.display = "none";
+  content.classList.toggle("hide-content");
+  detailsPage.classList.toggle("active-page");
+});
+
+deleteBtn.addEventListener("click", () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your account has been deleted.",
+        icon: "success",
+      });
+      //function to delete
+      window.location.reload();
+    }
   });
-  //save button
-  // saveBtn.addEventListener("click", () => {
-  //   nameFiled.style = `
-  //   pointer-events: none;
-  //   border:1px solid none;
-  //   `;
-  //   emailFiled.style = `
-  //    pointer-events: none;
-  //   border:1px solid none;
-  //   `;
-  //   phoneFiled.style = `
-  //    pointer-events: none;
-  //   border:1px solid none;
-  //   `;
-  //   stateFiled.style = `
-  //   pointer-events: none;
-  //   border:1px solid none;
-  //   `;
-  //   doneBtn.style.display = "block";
-  //   editUserBtn.style.display = "block";
-  //   cancelBtn.style.display = "none";
-  //   saveBtn.style.display = "none";
-  //   content.classList.toggle("hide-content");
-  //   detailsPage.classList.toggle("active-page");
-  // });
-}, 2000);
+});
+
 //Logout Button
 window.logout = function () {
   fetch("/admin/customer/logout", {
