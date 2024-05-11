@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function addProduct(image, name, price, type, description) {
     const base64String = arrayBufferToBase64(image.data.data);
     const imgElement = document.createElement("img");
-    imgElement.src = `data:image/png;base64,${base64String}`;
+    imgElement.src = `data:image/png;base64,${image.base64String}`;
     // You can also add other product details here if needed
     console.log(imgElement);
     console.log(name, price, type, description);
@@ -27,6 +27,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return btoa(binary);
   }
+
+
+
+
   // Fetch product data from the backend and populate the table
   fetch("/admin/products/api")
     .then(async (response) => {
@@ -39,7 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((data) => {
       data.products.forEach((product) => {
         addProduct(
-          product.image,
+          // product.image,
+          data.products.forEach(image => {
+            const imgElement = document.createElement('img');
+            imgElement.src = `data:image/png;base64,${image.base64Data}`;
+            console.log(imgElement.src);
+            return imgElement;
+          }),
           product.name,
           product.price,
           product.type,

@@ -7,10 +7,12 @@ const authRoutes = require("./routes/authRoutes");
 const { mongo } = require("mongoose");
 const { MongoClient, GridFSBucket } = require("mongodb");
 const multer = require("multer");
+const bodyParser = require("body-parser");
 // const { GridFsStorage } = require('multer-gridfs-storage');
 const app = express();
 app.use(express.json());
-// require("dotenv").config();
+app.use(bodyParser.json());
+// require("dotenv").config();  
 const PORT = 3000;
 //const db = client.db(dbName);
 //const bucket = new mongodb.GridFSBucket(db);
@@ -18,6 +20,7 @@ const PORT = 3000;
 //MiddleWare:
 app.use(cookie());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use("/css", express.static("css"));
 app.use("/images", express.static(path.join(__dirname, "/images")));

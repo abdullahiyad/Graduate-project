@@ -4,6 +4,8 @@ const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
 const multer = require("multer");
 const cookie = require("cookie-parser");
+const fs = require('fs');
+const path = require('path');
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
@@ -155,7 +157,8 @@ module.exports.products_post = async (req, res) => {
   const type = req.body['product-type'];
   const description = req.body['product-desc'];
   const image = {
-    data: req.file.buffer,
+    // '../Graduate-project/images/coffee.png'
+    data: fs.readFileSync(path.join(process.cwd() + '/images/' + req.file.originalname)),
     contentType: req.file.mimetype,
   };
   try {
@@ -241,3 +244,31 @@ module.exports.update_data = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+module.exports.change_pass = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return null;
+    }
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
+    const isPassMatch = await bcrypt.compare(
+      req.body.password,
+      check.password
+    );
+    if(isPassMatch) {
+      user.findOne({_id: userId}).then((usr) => {
+        console.log('inside find user');
+        const newPass = req.body['new-password']
+        user.findByIdAndUpdate(userId, { password: newPass}, options)
+      }).catch((err) => {
+        console.log("Can't find user", err);
+      });
+    } else {
+      res.send("Password doesn't match" )
+    }
+  } catch (error) {
+    res.send(error);
+  }
+}

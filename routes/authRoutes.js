@@ -40,5 +40,6 @@ router.post('/admin/profile',  authController.admin_profile_post);
 router.post('/admin/profile/update', authController.update_data);
 
 router.post('/admin/customer/update', authController.update_data);
+router.post('/admin/profile/changepass', authController.change_pass);
 
 module.exports = router;
