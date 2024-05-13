@@ -14,6 +14,7 @@ function closeMessagge(event) {
   const clickedElement = event.target;
   clickedElement.parentElement.parentElement.classList.toggle("more-details");
 }
+
 let reservationID;
 function rejectReservation(event) {
   const clickedElement = event.target;
