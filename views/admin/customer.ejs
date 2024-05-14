@@ -72,7 +72,7 @@
             <form class="details-form" action="customer" enctype="multipart/form-data" method="post">
                 <div class="name-container input-field-container">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" name="name" class="name-container input-style" placeholder="Name" autocomplete="off"
+                    <input type="text" name="name" class="name input-style" placeholder="Name" autocomplete="off"
                         required />
                 </div>
                 <div class="phone-container input-field-container">
@@ -96,7 +96,7 @@
                     <input type="button" value="Delete" class="delete-btn">
                     <input type="button" value="Edit" class="edit-btn">
                     <input type="button" value="Done" class="done-btn">
-                    <input type="submit" value="Save" class="save-btn" />
+                    <input type="button" value="Save" class="save-btn" onclick="updateData()" />
                     <input type="button" value="Cancel" class="cancel-btn">
                 </div>
             </form>
