@@ -41,9 +41,13 @@ router.post(
 );
 router.delete("/admin/products", authController.delete_product_id);
 
-// logout
+// logout admin dashboards
 router.post('/admin/customer/logout', authController.logout_Del_Cookie);
 router.post('/admin/dashboard/logout', authController.logout_Del_Cookie);
+router.post('/admin/messages/logout', authController.logout_Del_Cookie);
+router.post('/admin/product/logout', authController.logout_Del_Cookie);
+router.post('/admin/profile/logout', authController.logout_Del_Cookie);
+router.post('/admin/orders/logout', authController.logout_Del_Cookie);
 
 // admin profile links
 router.get('/admin/profile', authController.admin_profile_get);
@@ -51,5 +55,20 @@ router.get('/admin/profile/api', authController.admin_profile_get_api);
 router.post('/admin/profile',  authController.admin_profile_post);
 router.put('/admin/profile',  authController.update_profile_data);
 router.delete('/admin/profile',  authController.delete_loggedIn_user);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = router;
