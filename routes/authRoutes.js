@@ -52,6 +52,4 @@ router.post('/admin/profile',  authController.admin_profile_post);
 router.put('/admin/profile',  authController.update_profile_data);
 router.delete('/admin/profile',  authController.delete_loggedIn_user);
 
-
-
 module.exports = router;
