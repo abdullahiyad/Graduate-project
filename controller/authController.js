@@ -4,8 +4,8 @@ const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
 const multer = require("multer");
 const cookie = require("cookie-parser");
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const maxAge = 2 * 24 * 60 * 60;
@@ -35,9 +35,9 @@ module.exports.login_get = (req, res) => {
   res.render("login");
 };
 module.exports.signup_post = async (req, res) => {
-  const { name, phone, email, password, status } = req.body;
+  const { name, phone, email, password } = req.body;
   try {
-    const users = await user.create({ name, phone, email, password, status });
+    const users = await user.create({ name, phone, email, password });
     const token = createToken(users._id);
     res
       .status(201)
@@ -53,7 +53,7 @@ module.exports.login_post = async (req, res) => {
   try {
     const check = await user.findOne({ email: req.body.email });
     if (!check) {
-      console.log("Can't find user");
+      console.log("cant find user");
     } else {
       userState = check.status;
       const isPassMatch = await bcrypt.compare(
@@ -89,7 +89,7 @@ module.exports.home_get_data = async (req, res) => {
     }
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
-    const users = await user.find({_id: userId});
+    const users = await user.find({ _id: userId });
     res.json({ users });
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -162,25 +162,34 @@ module.exports.customer_put = (req, res) => {
 };
 
 module.exports.products_post = async (req, res) => {
-  const name = req.body['product-name'];
-  const price = req.body['product-price'];
-  const type = req.body['product-type'];
-  const description = req.body['product-desc'];
+  const name = req.body["product-name"];
+  const price = req.body["product-price"];
+  const type = req.body["product-type"];
+  const description = req.body["product-desc"];
   const image = {
     // '../Graduate-project/images/coffee.png'
-    data: fs.readFileSync(path.join(process.cwd() + '/images/' + req.file.originalname)),
+    data: fs.readFileSync(
+      path.join(process.cwd() + "/images/" + req.file.originalname)
+    ),
     contentType: req.file.mimetype,
   };
   try {
-    const givenScore = (parseInt(price, 10))/10;
-    let prod = new Product({name: name, price: price, type: type, image: image, givenScore: givenScore, description: description});  
-  await prod.save();
-  res.redirect('products');
+    const givenScore = parseInt(price, 10) / 10;
+    let prod = new Product({
+      name: name,
+      price: price,
+      type: type,
+      image: image,
+      givenScore: givenScore,
+      description: description,
+    });
+    await prod.save();
+    res.redirect("products");
   } catch (err) {
     console.log(err);
     res.send(err);
   }
-}
+};
 
 module.exports.products_get = async (req, res) => {
   const token = req.cookies.jwt;
@@ -195,7 +204,7 @@ module.exports.products_get = async (req, res) => {
   } else {
     res.render("admin/products");
   }
-}
+};
 
 //this function to get data from database for products
 module.exports.products_data_get = async (req, res) => {
@@ -233,7 +242,7 @@ function getUserData(req) {
     const userId = decodedToken.id;
     return userId;
   } catch (err) {
-    console.error('Error decoding JWT:', err);
+    console.error("Error decoding JWT:", err);
     return null;
   }
 }
@@ -242,10 +251,10 @@ module.exports.admin_profile_get_api = async (req, res) => {
   try {
     const userId = getUserData(req);
     const userData = await user.findById(userId);
-    res.json(userData);    
+    res.json(userData);
   } catch (err) {
-    console.error('Error fetching user data:', err);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error fetching user data:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -268,12 +277,12 @@ module.exports.delete_product_id = async (req, res) => {
     console.error("Error deleting product:", error);
     res.status(500).send("Internal Server Error");
   }
-}
+};
 module.exports.delete_user_email = async (req, res) => {
   try {
     const userEmail = req.body.email;
     console.log(userEmail);
-    const result = await user.findOneAndDelete({email: userEmail});
+    const result = await user.findOneAndDelete({ email: userEmail });
     if (!result) {
       return res.status(404).send("user not found");
     }
@@ -282,23 +291,29 @@ module.exports.delete_user_email = async (req, res) => {
     console.error("Error deleting user:", error);
     res.status(500).send("Internal Server Error");
   }
-}
+};
 
 module.exports.update_data = async (req, res) => {
-  console.log('inside update method');
+  console.log("inside update method");
   try {
     const email = req.body.email;
     console.log(email);
-    user.findOne({email: email}).then((usr) => {
-      console.log('inside find');
-      user.update(usr._id, req.body).then((users) => {
-        res.json(users);
-      }).catch((err) => {
-        res.send(err);
+    user
+      .findOne({ email: email })
+      .then((usr) => {
+        console.log("inside find");
+        user
+          .update(usr._id, req.body)
+          .then((users) => {
+            res.json(users);
+          })
+          .catch((err) => {
+            res.send(err);
+          });
+      })
+      .catch((err) => {
+        console.log("Can't find user");
       });
-    }).catch((err) => {
-      console.log("Can't find user");
-    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -314,15 +329,14 @@ module.exports.update_user_data = async (req, res) => {
     );
     console.log(updatedUser);
     if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.error('Error updating user data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error updating user data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 module.exports.update_profile_data = async (req, res) => {
   try {
@@ -335,14 +349,14 @@ module.exports.update_profile_data = async (req, res) => {
     );
     console.log(updatedUser);
     if (!updatedUser) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.error('Error updating user data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error updating user data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 module.exports.delete_loggedIn_user = async (req, res) => {
   try {
@@ -351,10 +365,9 @@ module.exports.delete_loggedIn_user = async (req, res) => {
     if (!result) {
       return res.status(404).send("User not found");
     }
-    res.clearCookie('jwt').send('Deleted Successfully');
+    res.clearCookie("jwt").send("Deleted Successfully");
   } catch (error) {
     console.error("Error deleting user:", error);
     res.status(500).send("Internal Server Error");
   }
-}
-
+};
