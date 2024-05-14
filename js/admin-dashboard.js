@@ -11,8 +11,15 @@ window.logout = function () {
   })
     .then((result) => {
       console.log("logout success");
+      window.location.href = '/home';
     })
     .catch((err) => {
       console.log(err);
     });
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+  const logoutButton = document.querySelector(".logout");
+  logoutButton.addEventListener("click", logout);
+});
+

@@ -100,3 +100,16 @@ function updateInfo(name, email, phone) {
   emailField.value = email;
   phoneField.value = phone;
 }
+
+window.logout = function () {
+  fetch("/admin/profile/logout", {
+    method: "POST", // Change the method to POST
+  })
+    .then((result) => {
+      window.location.href='/home';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+

@@ -125,6 +125,20 @@ addMessage(
   5
 );
 
+window.logout = function () {
+  fetch("/admin/messages/logout", {
+    method: "POST", // Change the method to POST
+  })
+    .then((result) => {
+      window.location.href='/home';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+
+
 // //function to add product
 // let productTable = document.querySelector(".products-table");
 // function addProduct(

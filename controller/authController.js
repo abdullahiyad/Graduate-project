@@ -121,7 +121,7 @@ module.exports.dashboard_get = async (req, res) => {
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
-    res.send("You don't have access to this page");
+    res.render("home");
   } else {
     res.render("admin/dashboard");
   }
@@ -140,7 +140,7 @@ module.exports.customer_get = async (req, res) => {
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
-    res.send("You don't have access to this page");
+    res.render("home");
   } else {
     res.render("admin/customer");
   }
@@ -191,7 +191,7 @@ module.exports.products_get = async (req, res) => {
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
-    res.send("You don't have access to this page");
+    res.render("home");
   } else {
     res.render("admin/products");
   }
@@ -217,7 +217,7 @@ module.exports.admin_profile_get = async (req, res) => {
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
-    res.send("You don't have access to this page");
+    res.render("home");
   } else {
     res.render("admin/profile");
   }
@@ -253,8 +253,7 @@ module.exports.admin_profile_post = async (req, res) => {
   console.log("This is post method");
 };
 module.exports.logout_Del_Cookie = async (req, res) => {
-  res.clearCookie("jwt");
-  res.redirect("/home");
+  res.clearCookie("jwt").send("Logout Successfully");
 };
 
 module.exports.delete_product_id = async (req, res) => {
@@ -358,3 +357,4 @@ module.exports.delete_loggedIn_user = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 }
+

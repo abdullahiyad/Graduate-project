@@ -237,7 +237,7 @@ window.logout = function () {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
-      console.log("logout success");
+      window.location.href='/home';
     })
     .catch((err) => {
       console.log(err);
