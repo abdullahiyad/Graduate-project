@@ -4,12 +4,3 @@ mongoose.connect('mongodb://localhost:27017/YKPOCafe').then(() => {
 }).catch((err) => {
     console.log(err);
 });
-
-// async()=>{
-//     try{
-//         await(mongoose.connect('mongodb://localhost:27017/YKPOCafe'));
-//         console.log("connection Successfully");
-//     }catch (err){
-//         console.log(err);
-//     }
-// }

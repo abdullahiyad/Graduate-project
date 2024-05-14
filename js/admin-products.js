@@ -131,24 +131,33 @@ function deleteProduct(event) {
         text: "the product has been deleted.",
         icon: "success",
       });
-      //
-      const id = clickedElement.parentElement.parentElement.firstElementChild.innerHTML;
-
-      fetch('/admin/products/delete').then((response) => {
-        if(!response.ok){
-          throw new Error("Network response was not ok");
-        }
-        
-        clickedElement.parentElement.parentElement.parentElement.remove();
-      }).catch((err) => {
-        
-      });
-
-
-
-
-      
-      //
+      //Start delete event
+      const productId = clickedElement.parentElement.parentElement.firstElementChild.innerHTML;
+      fetch('/admin/products', {
+        method: 'DELETE', // Specify the HTTP method as DELETE
+        headers: {
+          'Content-Type': 'application/json', // Specify the content type
+        },
+        body: JSON.stringify({ id: productId }), // Send the product ID to delete
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('There is something error');
+          }
+          // Check if the response body contains the success message
+          return response.text();
+        })
+        .then((data) => {
+          console.log('Product deletion successful:', data);
+          // Handle the success response here
+          // For example, remove the deleted product from the DOM
+          clickedElement.parentElement.parentElement.parentElement.remove();
+        })
+        .catch((err) => {
+          console.error('Product deletion failed:', err);
+          // Handle the error here
+        });
+      //finish delete event
     }
   });
 }

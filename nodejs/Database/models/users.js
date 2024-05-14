@@ -29,11 +29,7 @@ const user_schema = new mongoose.Schema({
     },
     status: {
         type:String,
-        default:"user"
-    },
-    profilePic: {
-        type:String,
-        default:"None.png"
+        // default:"user"
     },
     score: {
         type:Number,

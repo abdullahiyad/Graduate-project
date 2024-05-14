@@ -10,6 +10,7 @@ let saveBtn = document.querySelector(".save-btn");
 let editBtn = document.querySelector(".edit-btn");
 let profile = document.querySelector(".user-info");
 let deleteAccountBtn = document.querySelector(".delete-btn");
+
 deleteAccountBtn.addEventListener("click", () => {
   Swal.fire({
     title: "Are you sure?",
@@ -27,6 +28,27 @@ deleteAccountBtn.addEventListener("click", () => {
         icon: "success",
       });
       //function()
+      const userEmail = document.querySelector(".email-container .email").value;
+      fetch('/admin/profile', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({ email: userEmail }), 
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('There is something error');
+          }
+          return response.text();
+        })
+        .then((data) => {
+          console.log('Customer deletion successful:', data);
+          window.location.href = '/home';
+        })
+        .catch((err) => {
+          console.error('Customer deletion failed:', err);
+        });
     }
   });
 });
@@ -53,8 +75,6 @@ editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });
 
-console.log("inside js file");
-
 fetch("/admin/profile/api")
   .then(async (response) => {
     if (!response.ok) {
@@ -68,33 +88,8 @@ fetch("/admin/profile/api")
   })
   .catch((error) => console.error("Error fetching user data:", error));
 
-fetch("/admin/profile/update")
-  .then(async (response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    let data = await response.json();
-    return data;
-  })
-  .then((data) => {
-    updateInfo(data.name, data.email, data.phone);
-  })
-  .catch((error) => console.error("Error fetching user data:", error));
 //----------------------------------------\\
 
-fetch("/admin/profile/update")
-  .then(async (response) => {
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    let data = await response.json();
-    return data;
-  })
-  .then((data) => {
-    updateInfo(data.name, data.email, data.phone);
-  })
-  .catch((error) => console.error("Error fetching user data:", error));
-//----------------------------------------\\
 
 let nameField = document.querySelector(".nameField");
 let emailField = document.querySelector(".email");
@@ -105,15 +100,3 @@ function updateInfo(name, email, phone) {
   emailField.value = email;
   phoneField.value = phone;
 }
-
-window.logout = function () {
-  fetch("/admin/dashboard/logout", {
-    method: "POST", // Change the method to POST
-  })
-    .then((result) => {
-      console.log("logout success");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};

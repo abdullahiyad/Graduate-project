@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Function to handle form submission and update user data
   function updateUser(email, newName, newState) {
+    email = document.querySelector(".email-container .email").value;
     fetch("/admin/customer/update", {
       method: "POST",
       headers: {
@@ -74,9 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function func() {}
-
-//get details and shwo details page
+//get details and show details page
 let detailsPage = document.querySelector(".details-page");
 let content = document.querySelector(".content");
 let doneBtn = document.querySelector(".details-page .done-btn");
@@ -104,8 +103,33 @@ function editUserFunction(event) {
   content.classList.toggle("hide-content");
   detailsPage.classList.toggle("active-page");
   //email to edit on it
-  email = document.querySelector(".email-container .email").value;
-  // function to remove user from dbase()
+  const userEmail = document.querySelector(".email-container .email").value;
+  const newName = document.querySelector(".name-container .name-container").value;
+  const newStatus = document.querySelector(".status-container .state").value;
+      //function to update
+      fetch('/admin/customer', {
+        method: 'PUT', // Specify the HTTP method as PUT for updating
+        headers: {
+          'Content-Type': 'application/json', // Specify the content type
+        },
+        body: JSON.stringify({ 
+          email: userEmail, // Email for identifying the user
+          name: newName,    // New name for the user
+          status: newStatus // New status for the user
+        }),
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('There is something error');
+        }
+        return response.text();
+      })
+      .then((data) => {
+        console.log('User update successful:', data);
+      })
+      .catch((err) => {
+        console.error('User update failed:', err);
+      });
 }
 
 doneBtn.addEventListener("click", () => {
@@ -176,7 +200,32 @@ deleteBtn.addEventListener("click", () => {
         text: "Your account has been deleted.",
         icon: "success",
       });
+      const userEmail = document.querySelector(".email-container .email").value;
       //function to delete
+      fetch('/admin/customer', {
+        method: 'DELETE', // Specify the HTTP method as DELETE
+        headers: {
+          'Content-Type': 'application/json', // Specify the content type
+        },
+        body: JSON.stringify({ email: userEmail }), // Send the product ID to delete
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('There is something error');
+          }
+          // Check if the response body contains the success message
+          return response.text();
+        })
+        .then((data) => {
+          console.log('Customer deletion successful:', data);
+          // Handle the success response here
+          // For example, remove the deleted product from the DOM
+          clickedElement.parentElement.parentElement.parentElement.remove();
+        })
+        .catch((err) => {
+          console.error('Customer deletion failed:', err);
+          // Handle the error here
+        });
       window.location.reload();
     }
   });

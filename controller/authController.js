@@ -35,9 +35,9 @@ module.exports.login_get = (req, res) => {
   res.render("login");
 };
 module.exports.signup_post = async (req, res) => {
-  const { name, phone, email, password } = req.body;
+  const { name, phone, email, password, status } = req.body;
   try {
-    const users = await user.create({ name, phone, email, password });
+    const users = await user.create({ name, phone, email, password, status });
     const token = createToken(users._id);
     res
       .status(201)
@@ -52,7 +52,6 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_post = async (req, res) => {
   try {
     const check = await user.findOne({ email: req.body.email });
-    userState = check.status;
     if (!check) {
       console.log("Can't find user");
     } else {
@@ -115,7 +114,6 @@ module.exports.menu_post = async (req, res) => {
 
 module.exports.dashboard_get = async (req, res) => {
   const token = req.cookies.jwt;
-  console.log(token);
   if (!token) {
     res.send("You don't have access to this page");
   }
@@ -135,7 +133,6 @@ module.exports.dashboard_post = (req, res) => {
 
 module.exports.customer_get = async (req, res) => {
   const token = req.cookies.jwt;
-  console.log(token);
   if (!token) {
     res.send("You don't have access to this page");
   }
@@ -163,9 +160,7 @@ module.exports.customer_post = (req, res) => {
 module.exports.customer_put = (req, res) => {
   res.send("This for update users");
 };
-module.exports.customer_delete = (req, res) => {
-  res.send("This for update users");
-};
+
 module.exports.products_post = async (req, res) => {
   const name = req.body['product-name'];
   const price = req.body['product-price'];
@@ -189,7 +184,6 @@ module.exports.products_post = async (req, res) => {
 
 module.exports.products_get = async (req, res) => {
   const token = req.cookies.jwt;
-  console.log(token);
   if (!token) {
     res.send("You don't have access to this page");
   }
@@ -216,7 +210,6 @@ module.exports.products_data_get = async (req, res) => {
 
 module.exports.admin_profile_get = async (req, res) => {
   const token = req.cookies.jwt;
-  console.log(token);
   if (!token) {
     res.send("You don't have access to this page");
   }
@@ -265,10 +258,33 @@ module.exports.logout_Del_Cookie = async (req, res) => {
 };
 
 module.exports.delete_product_id = async (req, res) => {
-  const Id = req.body.id;
-  const result = await Product.findByIdAndDelete(Id);
-  console.log(result);
+  try {
+    const Id = req.body.id;
+    const result = await Product.findByIdAndDelete(Id);
+    if (!result) {
+      return res.status(404).send("Product not found");
+    }
+    res.send("Product deleted successfully");
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).send("Internal Server Error");
+  }
 }
+module.exports.delete_user_email = async (req, res) => {
+  try {
+    const userEmail = req.body.email;
+    console.log(userEmail);
+    const result = await user.findOneAndDelete({email: userEmail});
+    if (!result) {
+      return res.status(404).send("user not found");
+    }
+    res.send("user deleted successfully");
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
 module.exports.update_data = async (req, res) => {
   console.log('inside update method');
   try {
@@ -289,30 +305,56 @@ module.exports.update_data = async (req, res) => {
   }
 };
 
-module.exports.change_pass = async (req, res) => {
+module.exports.update_user_data = async (req, res) => {
   try {
-    const token = req.cookies.jwt;
-    if (!token) {
-      return null;
-    }
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.id;
-    const isPassMatch = await bcrypt.compare(
-      req.body.password,
-      check.password
+    const email = req.body.email;
+    const updatedUser = await user.findOneAndUpdate(
+      { email: email },
+      { $set: { name: req.body.name, status: req.body.status } },
+      { new: true }
     );
-    if(isPassMatch) {
-      user.findOne({_id: userId}).then((usr) => {
-        console.log('inside find user');
-        const newPass = req.body['new-password']
-        user.findByIdAndUpdate(userId, { password: newPass}, options)
-      }).catch((err) => {
-        console.log("Can't find user", err);
-      });
-    } else {
-      res.send("Password doesn't match" )
+    console.log(updatedUser);
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
+    res.status(200).json(updatedUser);
   } catch (error) {
-    res.send(error);
+    console.error('Error updating user data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+module.exports.update_profile_data = async (req, res) => {
+  try {
+    const userId = getUserData();
+    console.log(userId);
+    const updatedUser = await user.findOneAndUpdate(
+      { _id: userId },
+      { $set: { name: req.body.name, phone: req.body.phone } },
+      { new: true }
+    );
+    console.log(updatedUser);
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+module.exports.delete_loggedIn_user = async (req, res) => {
+  try {
+    const userEmail = req.body.email;
+    const result = await user.findOneAndDelete({ email: userEmail });
+    if (!result) {
+      return res.status(404).send("User not found");
+    }
+    res.clearCookie('jwt').send('Deleted Successfully');
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).send("Internal Server Error");
   }
 }
