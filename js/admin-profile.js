@@ -29,25 +29,25 @@ deleteAccountBtn.addEventListener("click", () => {
       });
       //function()
       const userEmail = document.querySelector(".email-container .email").value;
-      fetch('/admin/profile', {
-        method: 'DELETE',
+      fetch("/admin/profile", {
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json', 
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: userEmail }), 
+        body: JSON.stringify({ email: userEmail }),
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('There is something error');
+            throw new Error("There is something error");
           }
           return response.text();
         })
         .then((data) => {
-          console.log('Customer deletion successful:', data);
-          window.location.href = '/home';
+          console.log("Customer deletion successful:", data);
+          window.location.href = "/home";
         })
         .catch((err) => {
-          console.error('Customer deletion failed:', err);
+          console.error("Customer deletion failed:", err);
         });
     }
   });
@@ -90,7 +90,6 @@ fetch("/admin/profile/api")
 
 //----------------------------------------\\
 
-
 let nameField = document.querySelector(".nameField");
 let emailField = document.querySelector(".email");
 let phoneField = document.querySelector(".phone");
@@ -106,10 +105,9 @@ window.logout = function () {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
-      window.location.href='/home';
+      window.location.href = "/home";
     })
     .catch((err) => {
       console.log(err);
     });
 };
-
