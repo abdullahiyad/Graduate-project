@@ -35,6 +35,10 @@ const user_schema = new mongoose.Schema({
         type:Number,
         default:0
     },
+    createDate: {
+        type: Date,
+        default: () => new Date(Date.now),
+    }
 });
 
 //before store in db

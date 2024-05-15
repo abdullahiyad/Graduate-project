@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
+const reservation = require('../nodejs/Database/models/reservation');
 const multer = require("multer");
 const cookie = require("cookie-parser");
 const fs = require("fs");
@@ -369,5 +370,35 @@ module.exports.delete_loggedIn_user = async (req, res) => {
   } catch (error) {
     console.error("Error deleting user:", error);
     res.status(500).send("Internal Server Error");
+  }
+};
+
+module.exports.messages_get = (req, res) => {
+  res.render('admin/messages');
+}
+
+module.exports.reservation_get = (req, res) => {
+  res.render('reservation');
+}
+
+module.exports.reservation_post = async (req, res) => { 
+  try {
+    const { name, phone, numOfPersons, Date, time, details } = req.body;
+    console.log(name, phone, numOfPersons, Date, time, details);
+    const userId = getUserData(req);
+    const userData = await user.findById(userId);
+    const createdReserve = await reservation.create(
+      userData.name,
+      userData.email,
+      name,
+      phone,
+      numOfPersons, 
+      {"ReserveTime.date": Date},
+      {"ReserveTime.time": time},
+      details
+    );
+    console.log(createdReserve);
+  } catch (error) {
+    res.send('reservation failed', error);
   }
 };
