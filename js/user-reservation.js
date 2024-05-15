@@ -226,6 +226,23 @@ here more details : [${moreDetails}]
   rejectedContainer.appendChild(newMessage.firstElementChild);
 }
 
+//function to add message to right section
+// if (reservation.state == "pending") {
+//   addMessagePending(
+//     "abdullah iyad",
+//     "abdullah@ykpo.com",
+//     1,
+//     "ali",
+//     "0568453235",
+//     "25-6-2024",
+//     "12:30",
+//     5
+//   );
+// } else if (reservation.state == "accepted") {
+//   addMessageAccepted(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
+// } else {
+//   addMessageRejected(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
+// }
 //examples of how to call function
 addMessageAccepted(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
 addMessageAccepted(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
