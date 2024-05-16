@@ -1,68 +1,66 @@
-const mongoose = require('mongoose');
-const {isEmail, isNumeric, isStrongPassword,} = require("validator");
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const { isEmail, isNumeric, isStrongPassword } = require("validator");
+const bcrypt = require("bcrypt");
 const user_schema = new mongoose.Schema({
-    name: {
-        type:String,
-        required:[true,"Please enter your name"],
-        minlength: 2,
-    },
-    phone: {
-        type:String,
-        required:[true,"Please enter your phone number"],
-        unique: [true,"This phone number is already used"],
-        minlength:[10,"Phone number must has 10 numbers"],
-        validate:[isNumeric,"Phone number must have just a number"],
-    },
-    email: {
-        type:String,
-        required:[true,"Please enter your email"],
-        unique: [true,"this email is already in use"],
-        lowercase: true,
-        validate: [isEmail,"Please enter a valid email"],
-    },
-    password: {
-        type:String,
-        required:[true,"Please enter a password"],
-        minlength:[8,"The minimum password length is 8"],
-        validate:[isStrongPassword,"enter strong password"],
-    },
-    status: {
-        type:String,
-        // default:"user"
-    },
-    score: {
-        type:Number,
-        default:0
-    },
-    createDate: {
-        type: Date,
-        default: () => new Date(Date.now),
-    }
+  name: {
+    type: String,
+    required: [true, "Please enter your name"],
+    minlength: 2,
+  },
+  phone: {
+    type: String,
+    required: [true, "Please enter your phone number"],
+    unique: [true, "This phone number is already used"],
+    minlength: [10, "Phone number must has 10 numbers"],
+    validate: [isNumeric, "Phone number must have just a number"],
+  },
+  email: {
+    type: String,
+    required: [true, "Please enter your email"],
+    unique: [true, "this email is already in use"],
+    lowercase: true,
+    validate: [isEmail, "Please enter a valid email"],
+  },
+  password: {
+    type: String,
+    required: [true, "Please enter a password"],
+    minlength: [8, "The minimum password length is 8"],
+    validate: [isStrongPassword, "enter strong password"],
+  },
+  status: {
+    type: String,
+    default: "user",
+  },
+  score: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 //before store in db
-user_schema.pre('save', async function (next){
-    const added = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password, added);
-    next();
+user_schema.pre("save", async function (next) {
+  const added = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, added);
+  next();
 });
 //Static for Login
 
-user_schema.static.login = async function(email, password){
-    const user = await this.findOne({ email });
-    if(user){
-        const auth = await bcrypt.compare(password, user.password);
-        if(auth){
-            return user;
-        }
-        throw Error('Password error');
+user_schema.static.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
     }
-    throw Error('Incorrect email');
-}
+    throw Error("Password error");
+  }
+  throw Error("Incorrect email");
+};
 
-
-
-const user = mongoose.model('user',user_schema);
+const user = mongoose.model("user", user_schema);
 
 module.exports = user;

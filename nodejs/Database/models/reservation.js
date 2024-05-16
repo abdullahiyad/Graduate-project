@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 
-const reservation_Schema = new mongoose.Schema({
-    userName: {
-        type: String,
-        require: true,
-        unique: true,
-    },
-    userEmail: {
-        type: String,
-        unique: true,
-        require: true,
-        validate: isEmail,
+const reservationSchema = new mongoose.Schema({
+    customer: {
+        userName: {
+            type: String,
+            ref: 'User',
+            required: true
+        },
+        userEmail: {
+            type: String,
+            ref: 'User',
+            required: true
+        }
     },
     state: {
         type: String,
@@ -19,33 +20,38 @@ const reservation_Schema = new mongoose.Schema({
     },
     resName: {
         type: String,
-        require: true,
+        required: true,
         minlength: 3,
     },
     phone: {
         type: String,
-        require: true,
+        required: true,
         minlength: 10,
     },
-    NumPerson: {
+    numPerson: {
         type: Number,
-        require: true,
+        required: true,
     },
-    ReserveTime: [{
-        date: {
+    reserveTime: [{
+        newDate: {
             type: Date,
-            min: Date.now(),
+            required: true,
+            validate: {
+                validator: function(value) {
+                    return value && value > Date.now();
+                },
+                message: props => `${props.value} should be a future date`
+            }
         },
-        time: {
-            type: Date,
+        newTime: {
+            type: String,
             required: true
         }
     }],
     details: {
         type: String,
-        require: false,
+        required: false,
     },
 });
 
-module.exports = resSchema = mongoose.model('reservation',reservation_Schema);
-
+module.exports = mongoose.model('Reservation', reservationSchema);

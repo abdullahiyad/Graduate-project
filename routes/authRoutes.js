@@ -19,6 +19,7 @@ router.get("/home/api", authController.home_get_data);
 router.get("/menu", authController.menu_get);
 router.post("/menu", authController.menu_post);
 router.get("/menu/api", authController.menu_data_get);
+router.get("/menu/switch", authController.switch_page);
 
 // dashboard admin links
 router.get("/admin/dashboard", authController.dashboard_get);
@@ -40,6 +41,8 @@ router.post(
   authController.products_post
 );
 router.delete("/admin/products", authController.delete_product_id);
+router.put("/admin/products", authController.edit_product);
+
 
 // logout admin dashboards
 router.post('/admin/customer/logout', authController.logout_Del_Cookie);
@@ -61,11 +64,16 @@ router.get('/admin/messages', authController.messages_get);
 router.get('/reservation', authController.reservation_get);
 router.post('/reservation', authController.reservation_post);
 
+// logout user dashboards
+router.post('/user/profile/logout', authController.logout_Del_Cookie);
+router.post('/user/reservation/logout', authController.logout_Del_Cookie);
 
-
-
-
-
+// user profile links
+router.get('/user/profile', authController.user_profile_get);
+router.get('/user/messages', authController.user_reservation_get);
+router.put('/user/profile',authController.update_profile_data);
+router.delete('/user/profile',  authController.delete_loggedIn_user);
+router.get('/user/profile/api', authController.user_profile_get_api);
 
 
 

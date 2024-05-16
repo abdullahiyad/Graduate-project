@@ -52,12 +52,13 @@ function redirect() {
       document.getElementById('loginIc').removeAttribute('href');
       const loginIcon = document.getElementById('loginIc');
       if (users.status === 'admin') {
+        document.getElementById('loginIc').removeAttribute('href');
         loginIcon.href = 'admin/dashboard';
       } else if(users.status === 'user') {
-        loginIcon.href = 'user/dashboard';
+        document.getElementById('loginIc').removeAttribute('href');
+        loginIcon.href = 'user/profile';
       }
       console.log('Redirect link updated:', loginIcon.href);
-
     })
     .catch((error) => console.error("Error fetching user data:", error));
 }
