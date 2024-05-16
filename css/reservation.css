@@ -106,14 +106,20 @@ body {
   box-shadow: var(--box-shadow);
 }
 .reservation-container form .person-name {
-  grid-area: 2/1 / span 1 / span 2;
+  grid-area: 2/1 / span 1 / span 1;
+}
+.reservation-container form .persons-number {
+  grid-area: 3/1 / span 1 / span 1;
+}
+.reservation-container form .reservation-date {
+  grid-area: 3/2 / span 1 / span 1;
 }
 .reservation-container form .more-details {
-  grid-area: 4/1 / span 1 / span 3;
+  grid-area: 4/1 / span 1 / span 2;
   height: 120px;
 }
 .reservation-container form .send-button {
-  grid-area: 5/1 / span 1 / span 3;
+  grid-area: 5/1 / span 1 / span 2;
   font-weight: bold;
   background-color: var(--color-dark);
   color: var(--color-white);
@@ -125,13 +131,14 @@ body {
   text-align: center;
   grid-area: 1/1 / span 1 / span 3;
 }
-@media (max-width: 850px) {
+/* @media (max-width: 850px) {
   .reservation-container form {
     width: 90%;
   }
   .reservation-container form .person-name {
     grid-area: 2/1 / span 1 / span 2;
   }
+
   .reservation-container form .more-details {
     grid-area: 5/1 / span 1 / span 2;
     height: 120px;
@@ -148,14 +155,23 @@ body {
     height: 40px;
     text-align: center;
     grid-area: 1/1 / span 1 / span 2;
-  }
-}
+  } */
+/* } */
 @media (max-width: 600px) {
   .reservation-container form {
     width: 90%;
   }
   .reservation-container form .person-name {
-    grid-area: 2/1 / span 1 / span 1;
+    grid-area: 2/1 / span 1 / span 2;
+  }
+  .reservation-container form .person-phone {
+    grid-area: 3/1 / span 1 / span 2;
+  }
+  .reservation-container form .persons-number {
+    grid-area: 4/1 / span 1 / span 2;
+  }
+  .reservation-container form .reservation-date {
+    grid-area: 5/1 / span 1 / span 2;
   }
   .reservation-container form .more-details {
     grid-area: 7/1 / span 1 / span 1;
