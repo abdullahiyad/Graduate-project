@@ -21,16 +21,18 @@ function addToCart(event) {
   const newProduct = document.createElement("div");
   newProduct.innerHTML = `
   <div class="product">
+    <div class="product-id">${productId}</div>
     <h4>${productName}</h4>
     <div class="quantity">
-      <button class="dec">-</button>
+      <i class="fa-solid fa-circle-minus" onclick="decreaseQuantity(event)"></i>
       <span class="quan">${1}</span>
-      <button class="inc">+</button>
+      <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
     </div>
       <p><span>${productPrice}</span>$</p>
-      <i class="fa-solid fa-circle-xmark remove"></i>
+      <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
   </div>
 `;
+  addObject(productId, productName, productPrice, 1);
   cartList.appendChild(newProduct.firstElementChild);
 }
 
@@ -75,6 +77,7 @@ function addProduct(
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  initializeProducts();
   // Fetch product data from the backend and populate the table
   fetch("/admin/products/api")
     .then(async (response) => {
@@ -98,7 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
           product.type
         );
       });
-      console.log(data);
     })
     .catch((error) => console.error("Error fetching product data:", error));
 
@@ -113,74 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return "data:image/jpeg;base64," + window.btoa(binary);
   }
 });
-
-//function to create cart tap elements and add it to cart list
-//start
-
-let productList = document.querySelector(".list-cart");
-let addedProducts = new Set();
-// function CreateListProduct(
-//   producttitle = "product",
-//   imageSrc = "/images/coffee.png",
-//   Price = "0"
-// )
-//{
-// if (!addedProducts.has(producttitle.toLocaleLowerCase())) {
-//create elements
-//   let product = document.createElement("div");
-//   let productImage = document.createElement("img");
-//   let productTitle = document.createElement("h4");
-//   let quantityContainer = document.createElement("div");
-//   let decreaseBtn = document.createElement("button");
-//   let quantitySpan = document.createElement("span");
-//   let increaseBtn = document.createElement("button");
-//   let price = document.createElement("p");
-//   // let priceSpan = document.createElement("span");
-//   let removeIcon = document.createElement("i");
-
-//   //add class to elements
-//   product.className = "product";
-//   quantityContainer.className = "quantity";
-//   increaseBtn.className = "inc";
-//   decreaseBtn.className = "dec";
-//   quantitySpan.className = "quan";
-//   removeIcon.classList = "fa-solid fa-circle-xmark remove";
-
-//   //add content to elements
-//   productImage.src = imageSrc;
-//   productTitle.innerText = producttitle;
-//   increaseBtn.textContent = "+";
-//   decreaseBtn.textContent = "-";
-//   quantitySpan.textContent = "1";
-//   price.textContent = Price;
-//   // priceSpan.textContent = " $";
-
-//   //add elements to product container
-//   quantityContainer.append(decreaseBtn, quantitySpan, increaseBtn);
-//   product.append(
-//     productImage,
-//     productTitle,
-//     quantityContainer,
-//     price,
-//     removeIcon
-//   );
-//   productList.appendChild(product);
-//   // addedProducts.add(producttitle.toLocaleLowerCase());
-// }
-
-// add to cart button
-// note: add to cart : atc   short cut
-// let atcBtn = document.querySelectorAll(".page-container .menu .atc ");
-// atcBtn.forEach((ele) => {
-//   ele.addEventListener("click", () => {
-//     CreateListProduct(
-//       ele.parentElement.previousElementSibling.firstElementChild.textContent,
-//       ele.parentElement.previousElementSibling.previousElementSibling
-//         .firstElementChild.src,
-//       ele.previousElementSibling.textContent
-//     );
-//   });
-// });
 
 //burger icon
 let linkIcon = document.querySelector(".burger-icon");
@@ -217,3 +151,144 @@ link.forEach((element) => {
     });
   }
 });
+
+// Function to run on page load to initialize products
+function initializeProducts(
+  productId,
+  productName,
+  productQuantity,
+  productPrice
+) {
+  const array = JSON.parse(sessionStorage.getItem("productsArray"));
+  if (array) {
+    array.forEach((product) => {
+      const newProduct = document.createElement("div");
+      newProduct.innerHTML = `
+  <div class="product">
+    <div class="product-id">${product.Id}</div>
+    <h4>${product.name}</h4>
+    <div class="quantity">
+      <i class="fa-solid fa-circle-minus" onclick="decreaseQuantity(event)"></i>
+      <span class="quan">${product.quan}</span>
+      <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
+    </div>
+      <p><span>${product.price}</span>$</p>
+      <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
+  </div>
+`;
+
+      cartList.appendChild(newProduct.firstElementChild);
+    });
+  }
+}
+
+//function to increase quantity
+function increaseQuantity(event) {
+  const clickedElement = event.target;
+  const product = clickedElement.parentElement;
+  const quantity = product.querySelector(".quan");
+  quantity.innerHTML = Number(quantity.innerHTML) + 1;
+  const productId =
+    clickedElement.parentElement.parentElement.querySelector(
+      ".product-id"
+    ).innerHTML;
+  increaseQuantityArr(productId);
+}
+
+//function to decrease quantity
+function decreaseQuantity(event) {
+  const clickedElement = event.target;
+  const product = clickedElement.parentElement;
+  const quantity = product.querySelector(".quan");
+  const productId =
+    clickedElement.parentElement.parentElement.querySelector(
+      ".product-id"
+    ).innerHTML;
+  if (Number(quantity.innerHTML) > 1) {
+    quantity.innerHTML = Number(quantity.innerHTML) - 1;
+    decreaseQuantityArr(productId);
+  } else {
+    clickedElement.parentElement.parentElement.remove();
+    //function to remove element from product array
+    removeObject(productId);
+  }
+}
+
+//function to remove product from cart list
+function deleteProduct(event) {
+  const clickedElement = event.target;
+  const productId =
+    clickedElement.parentElement.querySelector(".product-id").innerHTML;
+  clickedElement.parentElement.remove();
+  //function to remove it from  product array
+  removeObject(productId);
+}
+//function to create array Products
+function createArray() {
+  if (!sessionStorage.getItem("productsArray")) {
+    const array = [];
+    sessionStorage.setItem("productsArray", JSON.stringify(array));
+  }
+}
+
+// Call this function to initialize the array in local storage only if it doesn't already exist
+createArray();
+
+//function add object to array in session storage
+
+// Function to add an object to the array or increase the quantity if it already exists
+function addObject(productId, productName, productPrice, productQuantity = 1) {
+  let array = JSON.parse(sessionStorage.getItem("productsArray"));
+  let productExists = false;
+
+  array = array.map((item) => {
+    if (item.id === productId) {
+      item.quan += productQuantity;
+      productExists = true;
+    }
+    return item;
+  });
+
+  if (!productExists) {
+    const newProduct = {
+      id: productId,
+      name: productName,
+      price: productPrice,
+      quan: productQuantity,
+    };
+    array.push(newProduct);
+  }
+
+  sessionStorage.setItem("productsArray", JSON.stringify(array));
+}
+
+//function to remove object from array in session storage
+function removeObject(productId) {
+  let array = JSON.parse(sessionStorage.getItem("productsArray"));
+  array = array.filter((item) => item.id !== productId);
+  sessionStorage.setItem("productsArray", JSON.stringify(array));
+}
+
+//function to increase quantity on object in  array
+function increaseQuantityArr(productId) {
+  let array = JSON.parse(sessionStorage.getItem("productsArray"));
+  array = array.map((item) => {
+    if (item.id === productId) {
+      item.quan += 1;
+    }
+    return item;
+  });
+  sessionStorage.setItem("productsArray", JSON.stringify(array));
+}
+
+//function to decrease quantity on object in array
+function decreaseQuantityArr(productId) {
+  let array = JSON.parse(sessionStorage.getItem("productsArray"));
+  array = array.map((item) => {
+    if (item.id === productId) {
+      item.quan -= 1; // Ensure quantity doesn't go below 0
+    }
+    return item;
+  });
+  sessionStorage.setItem("productsArray", JSON.stringify(array));
+}
