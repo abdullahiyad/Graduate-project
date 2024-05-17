@@ -10,3 +10,6 @@ cancelBtn.addEventListener("click", () => {
   window.location.reload();
   profile.classList.toggle("on-edit");
 });
+
+
+

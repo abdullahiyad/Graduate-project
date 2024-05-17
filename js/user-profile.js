@@ -29,7 +29,7 @@ deleteAccountBtn.addEventListener("click", () => {
       });
       //function()
       const userEmail = document.querySelector(".email-container .email").value;
-      fetch("/admin/profile", {
+      fetch("/user/profile", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ editBtn.addEventListener("click", () => {
   profile.classList.toggle("on-edit");
 });
 
-fetch("/admin/profile/api")
+fetch("/user/profile/api")
   .then(async (response) => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -99,3 +99,56 @@ function updateInfo(name, email, phone) {
   emailField.value = email;
   phoneField.value = phone;
 }
+
+function updateData() {
+  // Extract values from form fields
+  const name = document.querySelector(".nameField").value;
+  const email = document.querySelector(".email").value;
+  const phone = document.querySelector(".phone").value;
+  const oldPassword = document.querySelector(".old-password").value;
+  const newPassword = document.querySelector(".new-password").value;
+  
+  // Create an object with the data to be sent in the request body
+  const userData = {
+    name: name,
+    email: email,
+    phone: phone,
+    oldPassword: oldPassword,
+    newPassword: newPassword
+  };
+  
+  // Send a PUT request to update the user's profile
+  fetch("/user/profile", {
+    method: "PUT", // Specify the HTTP method as PUT for updating
+    headers: {
+      "Content-Type": "application/json", // Specify the content type
+    },
+    body: JSON.stringify(userData), // Convert userData object to JSON string
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("There is something error");
+      }
+      return response.text();
+    })
+    .then((data) => {
+      console.log("Update Successful:", data);
+      window.location.reload(); // Reload the page after successful update
+    })
+    .catch((err) => {
+      console.error("Update Failed:", err);
+    });
+}
+
+
+window.logout = function () {
+  fetch("/admin/profile/logout", {
+    method: "POST", // Change the method to POST
+  })
+    .then((result) => {
+      window.location.href = "/home";
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

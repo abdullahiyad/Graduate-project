@@ -5,44 +5,45 @@ document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("form");
 
   form.addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the default form submission behavior
+      event.preventDefault(); // Prevent the default form submission behavior
 
-    const name = document.querySelector(".person-name").value;
-    const phone = document.querySelector(".person-phone").value;
-    const numOfPersons = document.querySelector(".persons-number").value;
-    const Date = document.querySelector(".reservation-date").value;
-    const details = document.querySelector(".more-details").value;
-
-    // Send reservation data to the server
-    fetch("/reservation", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: name,
-        phone: phone,
-        numOfPersons: numOfPersons,
-        Date: Date,
-        time: time,
-        details: details,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+      const name = document.querySelector(".person-name").value;
+      const phone = document.querySelector(".person-phone").value;
+      const numOfPersons = document.querySelector(".persons-number").value;
+      const insertedDate = document.querySelector(".reservation-date").value;
+      const time = document.querySelector(".reservation-time").value;
+      const details = document.querySelector(".more-details").value;
+      console.log(insertedDate);
+      // Send reservation data to the server
+      fetch("/reservation", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              name: name,
+              phone: phone,
+              numOfPersons: numOfPersons,
+              insDate: insertedDate,
+              time: time,
+              details: details,
+          }),
       })
-      .then((data) => {
-        console.log("Reservation successful:", data);
-        // Handle the success response here
-        // For example, display a success message to the user
-      })
-      .catch((error) => {
-        console.error("Error making reservation:", error);
-        // Handle the error here
-        // For example, display an error message to the user
-      });
+          .then((response) => {
+              if (!response.ok) {
+                  throw new Error("Server response was not ok");
+              }
+              return response.json();
+          })
+          .then((data) => {
+              console.log("Reservation successful:", data);
+              // Handle the success response here
+              // For example, display a success message to the user
+          })
+          .catch((error) => {
+              console.error("Error making reservation:", error.message);
+              // Handle the error here
+              // For example, display an error message to the user
+          });
   });
 });

@@ -72,7 +72,7 @@ module.exports.login_post = async (req, res) => {
         res
           .status(201)
           .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-          .redirect("/home");
+          .redirect("/user/profile");
       }
     }
   } catch (err) {
@@ -97,6 +97,25 @@ module.exports.home_get_data = async (req, res) => {
     res.status(500).json({ error: "Error fetching products" });
   }
 };
+
+module.exports.switch_page = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return null;
+    }
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
+    const users = await user.find({ _id: userId });
+    console.log(users);
+    res.json({ users });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Error fetching products" });
+  }
+}
+
+
 module.exports.menu_get = (req, res) => {
   res.render("menu");
 };
@@ -122,7 +141,7 @@ module.exports.dashboard_get = async (req, res) => {
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
-    res.render("home");
+    res.render("user/dashboard");
   } else {
     res.render("admin/dashboard");
   }
@@ -192,6 +211,45 @@ module.exports.products_post = async (req, res) => {
   }
 };
 
+// Assuming you have already imported the required modules and defined the product schema
+
+module.exports.edit_product = async (req, res) => {
+  try {
+    const productId = req.params.id; // Assuming the product ID is passed as a route parameter
+    const name = req.body["product-name"];
+    const price = req.body["product-price"];
+    const type = req.body["product-type"];
+    const description = req.body["product-desc"];
+    const image = {
+      data: fs.readFileSync(
+        path.join(process.cwd() + "/images/" + req.file.originalname)
+      ),
+      contentType: req.file.mimetype,
+    };
+    // Create an object with the fields to be updated
+    const updates = {};
+    if (image) updates.image = image;
+    if (name) updates.name = name;
+    if (price) updates.price = price;
+    if (description) updates.description = description;
+    if (type) updates.type = type;
+    
+    // Update the product using findOneAndUpdate
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: productId },
+      { $set: updates },
+      { new: true } // To return the updated document
+    );
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error("Error updating product:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 module.exports.products_get = async (req, res) => {
   const token = req.cookies.jwt;
   if (!token) {
@@ -227,7 +285,7 @@ module.exports.admin_profile_get = async (req, res) => {
   const userId = decodedToken.id;
   const User = await user.findOne({_id: userId});
   if( User.status === 'user'){
-    res.render("home");
+    res.render("user/profile");
   } else {
     res.render("admin/profile");
   }
@@ -339,25 +397,59 @@ module.exports.update_user_data = async (req, res) => {
   }
 };
 
+async function checkPass(userId, oldPassword) {
+  const userDoc = await user.findById(userId);
+  if (!userDoc) {
+    return false;
+  }
+  const isMatch = await bcrypt.compare(oldPassword, userDoc.password);
+  return isMatch;
+}
+
 module.exports.update_profile_data = async (req, res) => {
   try {
-    const userId = getUserData();
-    console.log(userId);
-    const updatedUser = await user.findOneAndUpdate(
-      { _id: userId },
-      { $set: { name: req.body.name, phone: req.body.phone } },
-      { new: true }
-    );
-    console.log(updatedUser);
-    if (!updatedUser) {
-      return res.status(404).json({ error: "User not found" });
+    const token = req.cookies.jwt;
+    if (!token) {
+      return null;
     }
-    res.status(200).json(updatedUser);
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
+    const oldPassword = req.body.oldPassword;
+    const isPasswordCorrect = await checkPass(userId, oldPassword);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Old password is incorrect" });
+    }
+    
+    const newPassword = req.body.newPassword.trim();
+    if (newPassword !== '') {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
+      const updatedUser = await user.findOneAndUpdate(
+        { _id: userId },
+        { $set: { name: req.body.name, email: req.body.email, phone: req.body.phone, password: hashedPassword } },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      return res.status(200).json(updatedUser);
+    } else {
+      const updatedUser = await user.findOneAndUpdate(
+        { _id: userId },
+        { $set: { name: req.body.name, email: req.body.email, phone: req.body.phone } },
+        { new: true }
+      );
+      if (!updatedUser) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      return res.status(200).json(updatedUser);
+    }
   } catch (error) {
     console.error("Error updating user data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 module.exports.delete_loggedIn_user = async (req, res) => {
   try {
@@ -377,28 +469,44 @@ module.exports.messages_get = (req, res) => {
   res.render('admin/messages');
 }
 
+module.exports.user_profile_get = (req, res) => {
+  res.render('user/profile');
+}
+
+module.exports.user_reservation_get = (req, res) => {
+  res.render('user/reservation');
+}
+
 module.exports.reservation_get = (req, res) => {
   res.render('reservation');
 }
 
 module.exports.reservation_post = async (req, res) => { 
   try {
-    const { name, phone, numOfPersons, Date, time, details } = req.body;
-    console.log(name, phone, numOfPersons, Date, time, details);
+    const { name, phone, numOfPersons, insDate, time, details } = req.body;
     const userId = getUserData(req);
     const userData = await user.findById(userId);
-    const createdReserve = await reservation.create(
-      userData.name,
-      userData.email,
-      name,
-      phone,
-      numOfPersons, 
-      {"ReserveTime.date": Date},
-      {"ReserveTime.time": time},
-      details
-    );
-    console.log(createdReserve);
+    const createdReserve = await reservation.create({
+      userName: userData.name,
+      userEmail: userData.email,
+      resName: name,
+      phone: phone,
+      numPerson: numOfPersons,
+      reserveTime: [{ newDate: insDate, newTime: time }],
+      details: details
+    });
+    res.send('Reservation successful');
   } catch (error) {
-    res.send('reservation failed', error);
+    res.status(500).send({ error: 'Reservation failed', message: error.message });
+  }
+};
+module.exports.user_profile_get_api = async (req, res) => {
+  try {
+    const userId = getUserData(req);
+    const userData = await user.findById(userId);
+    res.json(userData);
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

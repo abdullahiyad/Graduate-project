@@ -76,7 +76,7 @@ function addProduct(
 
 document.addEventListener("DOMContentLoaded", function () {
   // Fetch product data from the backend and populate the table
-  fetch("/menu/api")
+  fetch("/admin/products/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
           product.type
         );
       });
+      console.log(data);
     })
     .catch((error) => console.error("Error fetching product data:", error));
 
