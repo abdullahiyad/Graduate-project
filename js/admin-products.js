@@ -40,7 +40,7 @@ function addProduct(
                         <div class="type-container input-field-container part">
                             <div class="type-show">${productType}</div>
                                <label>type : </label>
-                               <select name="product-type" id="#type">
+                               <select name="product-type" id="type">
                                <option value="hot-drinks" selected>hot Drinks</option>
                                <option value="cold-drinks">cold Drinks</option>
                                <option value="food">food</option>
@@ -52,7 +52,7 @@ function addProduct(
                             <input type="button" value="Delete" class="delete-btn" onclick="deleteProduct(event)">
                             <input type="button" value="Edit" class="edit-btn" onclick="eidtProductBtnFunction(event)">
                             <input type="button" value="Done" class="done-btn" onclick="doneShowDetails(event)">
-                            <input type="submit" value="Save" class="save-btn" />
+                            <input type="button" value="Save" class="save-btn" onclick="updateProduct(event)"/>
                             <input type="button" value="cancel" class="cancel-btn" onclick="cancelBtnFunction(event)">
                         </div>
                     </form>
@@ -219,3 +219,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);
 });
+
+//function to update btn
+function updateProduct(event) {
+  const clickedElement = event.target;
+  const product = clickedElement.parentElement.parentElement;
+  const id = product.querySelector(".product-id").textContent;
+  const img = product.querySelector("#choose-file").value;
+  const name = product.querySelector(".product-title").value;
+  const price = product.querySelector(".product-price").value;
+  const description = product.querySelector(".product-desc-input").value;
+  const type = product.querySelector("#type").value;
+  console.log(id, img, name, price, description, type);
+
+  //function to send this data to databasea
+  //here
+}
