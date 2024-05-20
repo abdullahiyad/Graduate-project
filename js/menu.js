@@ -172,8 +172,6 @@ link.forEach((element) => {
     });
   }
 });
-
-<<<<<<< HEAD
 //Redirect to dashboard
 function redirect() {
   fetch("/menu/switch")
@@ -199,7 +197,6 @@ function redirect() {
     })
     .catch((error) => console.error("Error fetching user data:", error));
 }
-=======
 // Function to run on page load to initialize products
 function initializeProducts(
   productId,
@@ -369,4 +366,3 @@ function deleteProduct(event) {
 document.querySelectorAll(".add-to-cart-button").forEach((button) => {
   button.addEventListener("click", addToCart);
 });
->>>>>>> bd299a0f18a52fc27ba19abc3bcfdd4ad2d41739
