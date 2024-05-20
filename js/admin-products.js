@@ -219,3 +219,40 @@ document.addEventListener("DOMContentLoaded", function () {
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);
 });
+
+// This for update product data
+// function updateData() {
+//   userEmail = document
+//     .querySelector(".email-container .email")
+//     .value.toLocaleLowerCase();
+//   newName = document
+//     .querySelector(".name-container .name")
+//     .value.toLocaleLowerCase();
+//   newStatus = document
+//     .querySelector(".status-container .state")
+//     .value.toLocaleLowerCase();
+
+//   //function to update
+//   fetch("/admin/product", {
+//     method: "PUT", // Specify the HTTP method as PUT for updating
+//     headers: {
+//       "Content-Type": "application/json", // Specify the content type
+//     },
+//     body: JSON.stringify({
+      
+//     }),
+//   })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error("There is something error");
+//       }
+//       return response.text();
+//     })
+//     .then((data) => {
+//       console.log("User update successful:", data);
+//     })
+//     .catch((err) => {
+//       console.error("User update failed:", err);
+//     });
+//   window.location.reload();
+// }

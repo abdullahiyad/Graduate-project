@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { isEmail } = require('validator');
 
 const reservationSchema = new mongoose.Schema({
     customer: {
@@ -32,22 +31,16 @@ const reservationSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    reserveTime: [{
-        newDate: {
-            type: Date,
-            required: true,
-            validate: {
-                validator: function(value) {
-                    return value && value > Date.now();
-                },
-                message: props => `${props.value} should be a future date`
-            }
-        },
-        newTime: {
-            type: String,
-            required: true
+    newDate: {
+        type: Date,
+        required: true,
+        validate: {
+            validator: function(value) {
+                return value && value > Date.now();
+            },
+            message: props => `${props.value} should be a future date`
         }
-    }],
+    },
     details: {
         type: String,
         required: false,
