@@ -495,6 +495,7 @@ module.exports.reservation_post = async (req, res) => {
       reserveTime: [{ newDate: insDate, newTime: time }],
       details: details
     });
+    console.log(createdReserve);
     res.send('Reservation successful');
   } catch (error) {
     res.status(500).send({ error: 'Reservation failed', message: error.message });

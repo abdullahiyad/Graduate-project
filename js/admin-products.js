@@ -219,7 +219,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);
 });
-
 //function to update btn
 function updateProduct(event) {
   const clickedElement = event.target;

@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
-
     const name = document.querySelector(".person-name").value;
     const phone = document.querySelector(".person-phone").value;
     const numOfPersons = document.querySelector(".persons-number").value;
