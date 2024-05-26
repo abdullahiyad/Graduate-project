@@ -47,12 +47,40 @@
         </div>
         <!-- end header -->
 
-        <!-- start menu -->
         <div class="check-out-container">
-            <div class="bill-container"></div>
-            <div class="address-container"></div>
+            <div class="bill-container">
+                <div class="bill">
+                    <div class="bill-title">your order</div>
+                    <div class="product-table">
+
+                    </div>
+                    <div class="dashed">-----------------------------------</div>
+                    <div class="total">
+                        <div class="label">total </div>
+                        <div class="price">
+                            <div class="number"></div>
+                            <div class="sign">$</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="address-container">
+                <div class="address">
+                    <input type="text" class="name input-style" placeholder="name" required>
+                    <input type="text" class="phone input-style" placeholder="phone number" required>
+                    <input type="text" class="city input-style" placeholder="city" required>
+                    <input type="text" class="address1 input-style" placeholder="address" required>
+                    <input type="text" class="address2 input-style" placeholder="address 2 (optional)">
+                    <label for="" class="method-payment">payment methods :</label>
+                    <div class="cod">
+                        <input type="radio" name="cod" id="cod" value="cod" checked required>
+                        <label for="cod" class="cod-label">Cash on Delivery</label>
+                    </div>
+                    <input type="button" class="submit-btn" value="Submit Order">
+                </div>
+            </div>
         </div>
-        <!-- end menu -->
+        <i class="back-btn" href="menu"><i class="fa-solid fa-circle-arrow-left"></i> back</i>
     </div>
 
     <!-- start footer -->
