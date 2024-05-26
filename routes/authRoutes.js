@@ -41,7 +41,7 @@ router.post(
   authController.products_post
 );
 router.delete("/admin/products", authController.delete_product_id);
-router.put("/admin/products", authController.edit_product);
+router.put("/admin/products", upload.single("choose-file"), authController.edit_product);
 
 
 // logout admin dashboards

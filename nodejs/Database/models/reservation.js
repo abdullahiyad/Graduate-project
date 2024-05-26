@@ -4,13 +4,15 @@ const reservationSchema = new mongoose.Schema({
     customer: {
         userName: {
             type: String,
-            ref: 'User',
-            required: true
+            ref: 'users',
+            required: true,
+            unique: false,
         },
         userEmail: {
             type: String,
-            ref: 'User',
-            required: true
+            ref: 'users',
+            required: true,
+            unique: false,
         }
     },
     state: {
@@ -44,6 +46,7 @@ const reservationSchema = new mongoose.Schema({
     details: {
         type: String,
         required: false,
+        default: "No details"
     },
 });
 
