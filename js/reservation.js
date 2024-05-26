@@ -23,16 +23,17 @@ document.getElementsByName("reservation-date")[0].setAttribute("min", today);
 
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.querySelector("form");
-
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
+
     const name = document.querySelector(".person-name").value;
     const phone = document.querySelector(".person-phone").value;
-    const numOfPersons = document.querySelector(".persons-number").value;
-    const insertedDate = document.querySelector(".reservation-date").value;
-    const time = document.querySelector(".reservation-time").value;
+    const numOfPersons = parseInt(document.querySelector(".persons-number").value, 10);
+    let insertedDate = document.querySelector(".reservation-date").value;
     const details = document.querySelector(".more-details").value;
-    console.log(insertedDate);
+    // Log the values for debugging
+    console.log(name, phone, numOfPersons, insertedDate, details);
+
     // Send reservation data to the server
     fetch("/reservation", {
       method: "POST",
@@ -42,9 +43,8 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify({
         name: name,
         phone: phone,
-        numOfPersons: numOfPersons,
-        insDate: insertedDate,
-        time: time,
+        numOfPersons: numOfPersons, // Ensure numOfPersons is an integer
+        insDate: insertedDate, // Convert date to ISO string in UTC
         details: details,
       }),
     })
@@ -66,3 +66,5 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+
+

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
 const reservation = require('../nodejs/Database/models/reservation');
+const moment = require('moment-timezone');
 const multer = require("multer");
 const cookie = require("cookie-parser");
 const fs = require("fs");
@@ -215,17 +216,22 @@ module.exports.products_post = async (req, res) => {
 
 module.exports.edit_product = async (req, res) => {
   try {
-    const productId = req.params.id; // Assuming the product ID is passed as a route parameter
+    const productId = req.body.id;
     const name = req.body["product-name"];
     const price = req.body["product-price"];
     const type = req.body["product-type"];
     const description = req.body["product-desc"];
-    const image = {
-      data: fs.readFileSync(
-        path.join(process.cwd() + "/images/" + req.file.originalname)
-      ),
-      contentType: req.file.mimetype,
-    };
+    
+    let image;
+    if (req.file) {
+      image = {
+        data: fs.readFileSync(
+          path.join(process.cwd() + "/images/" + req.file.originalname)
+        ),
+        contentType: req.file.mimetype,
+      };
+    }
+    
     // Create an object with the fields to be updated
     const updates = {};
     if (image) updates.image = image;
@@ -240,9 +246,11 @@ module.exports.edit_product = async (req, res) => {
       { $set: updates },
       { new: true } // To return the updated document
     );
+    
     if (!updatedProduct) {
       return res.status(404).json({ error: "Product not found" });
     }
+    
     res.status(200).json(updatedProduct);
   } catch (error) {
     console.error("Error updating product:", error);
@@ -481,24 +489,40 @@ module.exports.reservation_get = (req, res) => {
   res.render('reservation');
 }
 
-module.exports.reservation_post = async (req, res) => { 
+module.exports.reservation_post =  async (req, res) => {
   try {
-    const { name, phone, numOfPersons, insDate, time, details } = req.body;
-    const userId = getUserData(req);
+    const token = req.cookies.jwt;
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
     const userData = await user.findById(userId);
-    const createdReserve = await reservation.create({
-      userName: userData.name,
-      userEmail: userData.email,
+    const { name, phone, numOfPersons, insDate, details } = req.body;
+
+    if (!name || !phone || !numOfPersons || !insDate) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
+    const newReservation = new reservation({
+      customer: {
+        userName: userData.name,
+        userEmail: userData.email
+      },
       resName: name,
       phone: phone,
       numPerson: numOfPersons,
-      reserveTime: [{ newDate: insDate, newTime: time }],
-      details: details
+      newDate: reservationDate,
+      details: details || "No details",
     });
-    console.log(createdReserve);
-    res.send('Reservation successful');
+
+    await newReservation.save();
+    res.status(201).json({ message: "Reservation created successfully" });
   } catch (error) {
-    res.status(500).send({ error: 'Reservation failed', message: error.message });
+    console.error("Error creating reservation:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 module.exports.user_profile_get_api = async (req, res) => {

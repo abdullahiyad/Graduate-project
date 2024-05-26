@@ -224,13 +224,38 @@ function updateProduct(event) {
   const clickedElement = event.target;
   const product = clickedElement.parentElement.parentElement;
   const id = product.querySelector(".product-id").textContent;
-  const img = product.querySelector("#choose-file").value;
+  const imgInput = product.querySelector("#choose-file");
   const name = product.querySelector(".product-title").value;
   const price = product.querySelector(".product-price").value;
   const description = product.querySelector(".product-desc-input").value;
   const type = product.querySelector("#type").value;
-  console.log(id, img, name, price, description, type);
-
-  //function to send this data to databasea
-  //here
+  console.log("this is imgInput",imgInput.value);
+  // Create a FormData object to handle the file upload
+  const formData = new FormData();
+  formData.append("id", id);
+  formData.append("product-name", name);
+  formData.append("product-price", price);
+  formData.append("product-type", type);
+  formData.append("product-desc", description);
+  
+  if (imgInput.files.length > 0) {
+    formData.append("choose-file", imgInput.files[0]);
+  }
+  fetch('/admin/products', { // Ensure the URL matches the endpoint in your Node.js route
+    method: "PUT", // Specify the HTTP method as PUT for updating
+    body: formData, // Send the FormData object
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("There is something error");
+      }
+      return response.json(); // Expecting JSON response
+    })
+    .then((data) => {
+      console.log("Update Successful:", data);
+      window.location.reload(); // Reload the page after successful update
+    })
+    .catch((err) => {
+      console.error("Update Failed:", err);
+    });
 }
