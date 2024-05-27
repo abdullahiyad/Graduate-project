@@ -167,7 +167,27 @@ button {
   transition: 0.3s;
   outline: none;
   border: none;
-  background-color: orangered;
+  color: var(--color-white);
+  font-family: var(--statics-font);
+  font-size: 15px;
+  cursor: pointer;
+
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.address .submit-btn .submit,
+.address .submit-btn .back {
+  width: 50%;
+  height: 100%;
+  text-transform: capitalize;
+  transition: 0.3s;
+  outline: none;
+  border: none;
   color: var(--color-white);
   font-family: var(--statics-font);
   font-size: 15px;
@@ -178,8 +198,15 @@ button {
   -ms-transition: 0.3s;
   -o-transition: 0.3s;
 }
-.address .submit-btn:hover {
+.address .submit-btn .submit:hover,
+.address .submit-btn .back:hover {
   box-shadow: none;
+}
+.address .submit-btn .submit {
+  background-color: orangered;
+}
+.address .submit-btn .back {
+  background-color: var(--color-dark);
 }
 input[type="radio"] {
   accent-color: orangered;
@@ -254,23 +281,4 @@ input[type="radio"] {
     height: fit-content;
     background-color: var(--color-background);
   }
-}
-
-.back-btn {
-  position: fixed;
-  left: 50px;
-  bottom: 50px;
-  cursor: pointer;
-  padding: 10px 20px;
-  background-color: orangered;
-  text-decoration: none;
-  color: var(--color-white);
-  font-family: var(--statics-font);
-  text-transform: capitalize;
-  border-radius: var(--border-radius-3);
-  box-shadow: var(--box-shadow);
-  -webkit-border-radius: var(--border-radius-3);
-  -moz-border-radius: var(--border-radius-3);
-  -ms-border-radius: var(--border-radius-3);
-  -o-border-radius: var(--border-radius-3);
 }
