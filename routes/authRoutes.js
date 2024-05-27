@@ -20,6 +20,8 @@ router.get("/menu", authController.menu_get);
 router.post("/menu", authController.menu_post);
 router.get("/menu/api", authController.menu_data_get);
 router.get("/menu/switch", authController.switch_page);
+router.get("/checkout", authController.checkOut);
+router.post("/menu/checkout", authController.checkOut_post);
 
 // dashboard admin links
 router.get("/admin/dashboard", authController.dashboard_get);
@@ -35,14 +37,9 @@ router.delete("/admin/customer", authController.delete_user_email); //this for d
 // products for admin links
 router.get("/admin/products", authController.products_get);
 router.get("/admin/products/api", authController.products_data_get);
-router.post(
-  "/admin/products",
-  upload.single("product-image"),
-  authController.products_post
-);
+router.post("/admin/products", upload.single("product-image"), authController.products_post);
 router.delete("/admin/products", authController.delete_product_id);
 router.put("/admin/products", upload.single("choose-file"), authController.edit_product);
-
 
 // logout admin dashboards
 router.post('/admin/customer/logout', authController.logout_Del_Cookie);
@@ -74,11 +71,5 @@ router.get('/user/messages', authController.user_reservation_get);
 router.put('/user/profile',authController.update_profile_data);
 router.delete('/user/profile',  authController.delete_loggedIn_user);
 router.get('/user/profile/api', authController.user_profile_get_api);
-
-
-
-
-
-
 
 module.exports = router;

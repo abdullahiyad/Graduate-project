@@ -23,13 +23,22 @@ const orderSchema = new mongoose.Schema({
         require: true
     },
   },
-  products: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
+  products: {
+    name: {
+      type: String,
       ref: "Product", // Reference to the Product model
       require: true,
     },
-  ],
+    price: {
+      type: Number,
+      ref: "product",
+      require: true,
+    },
+    quantity: {
+      type: Number,
+      require: true,
+    },
+  },
   totalPrice: {
     type: Number,
     require: true,

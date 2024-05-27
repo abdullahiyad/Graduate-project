@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
 const reservation = require('../nodejs/Database/models/reservation');
+const Order = require('../nodejs/Database/models/orders')
 const moment = require('moment-timezone');
 const multer = require("multer");
 const cookie = require("cookie-parser");
@@ -314,6 +315,24 @@ function getUserData(req) {
   }
 }
 
+async function getProduct(req) {
+  try {
+    const productId = req.params.productId || req.body.productId;
+    if (!productId) {
+      return null;
+    }
+    const product = await Product.findById(productId);
+    if (!product) {
+      return null;
+    }
+    return product;
+  } catch (err) {
+    console.error("Error fetching product data:", err);
+    return null;
+  }
+}
+
+
 module.exports.admin_profile_get_api = async (req, res) => {
   try {
     const userId = getUserData(req);
@@ -495,7 +514,6 @@ module.exports.reservation_post =  async (req, res) => {
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
     }
-
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
     const userData = await user.findById(userId);
@@ -504,7 +522,6 @@ module.exports.reservation_post =  async (req, res) => {
     if (!name || !phone || !numOfPersons || !insDate) {
       return res.status(400).json({ error: "All fields are required" });
     }
-
     const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
     const newReservation = new reservation({
       customer: {
@@ -517,7 +534,6 @@ module.exports.reservation_post =  async (req, res) => {
       newDate: reservationDate,
       details: details || "No details",
     });
-
     await newReservation.save();
     res.status(201).json({ message: "Reservation created successfully" });
   } catch (error) {
@@ -525,6 +541,7 @@ module.exports.reservation_post =  async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 module.exports.user_profile_get_api = async (req, res) => {
   try {
     const userId = getUserData(req);
@@ -535,3 +552,58 @@ module.exports.user_profile_get_api = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+module.exports.checkOut = (req, res) => {
+  res.render('check-out');
+};
+
+module.exports.checkOut_post = async (req, res) => {
+  try {
+    const user = await getUserData(req);
+    if (!user) {
+      return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    const cart = req.body.cart;
+    if (!cart || cart.length === 0) {
+      return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    // Process cart items and calculate total price
+    let totalPrice = 0;
+    const products = await Promise.all(cart.map(async item => {
+      const product = await Product.findById(item.productId).exec();
+      if (!product) {
+        throw new Error(`Product with ID ${item.productId} not found`);
+      }
+      totalPrice += product.price * item.quantity;
+      return {
+        name: product.name,
+        price: product.price,
+        quantity: item.quantity
+      };
+    }));
+
+    const orderData = {
+      customer: {
+        userName: user.name,
+        userEmail: user.email,
+        userPhone: user.phone,
+        userScore: user.score,
+      },
+      products: products,
+      totalPrice: totalPrice,
+      status: 'pending',
+    };
+
+    const newOrder = new Order(orderData);
+    await newOrder.save();
+
+    res.status(201).json({ message: "Order created successfully", order: newOrder });
+  } catch (err) {
+    console.error("Error processing order:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
