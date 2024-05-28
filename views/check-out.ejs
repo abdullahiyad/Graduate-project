@@ -18,6 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet" />
     <link rel="icon" href="/images/home.ico" />
     <title>YKPO Cafe</title>
+
 </head>
 
 <body>
@@ -65,22 +66,28 @@
                 </div>
             </div>
             <div class="address-container">
-                <div class="address">
-                    <input type="text" class="name input-style" placeholder="name" required>
-                    <input type="text" class="phone input-style" placeholder="phone number" required>
-                    <input type="text" class="city input-style" placeholder="city" required>
-                    <input type="text" class="address1 input-style" placeholder="address" required>
-                    <input type="text" class="address2 input-style" placeholder="address 2 (optional)">
-                    <label for="" class="method-payment">payment methods :</label>
-                    <div class="cod">
-                        <input type="radio" name="cod" id="cod" value="cod" checked required>
-                        <label for="cod" class="cod-label">Cash on Delivery</label>
+                <form id="orderForm">
+                    <div class="address">
+                        <input type="text" class="name input-style" placeholder="name" required>
+                        <input type="text" class="phone input-style" placeholder="phone number" required>
+                        <input type="text" class="city input-style" placeholder="city" required>
+                        <input type="text" class="address1 input-style" placeholder="address" required>
+                        <input type="text" class="address2 input-style" placeholder="address 2 (optional)">
+                        <label for="" class="method-payment">payment methods :</label>
+                        <div class="cod">
+                            <input type="radio" name="cod" id="cod" value="cod" checked required>
+                            <label for="cod" class="cod-label">Cash on Delivery</label>
+                        </div>
+                        <div class="submit-btn">
+                            <button class="back" onclick="backFunc()">back</button>
+                            <button class="submit" onclick="submitFunc()">submit order</button>
+                        </div>
+
                     </div>
-                    <input type="button" class="submit-btn" value="Submit Order">
-                </div>
+                </form>
             </div>
         </div>
-        <i class="back-btn" href="menu"><i class="fa-solid fa-circle-arrow-left"></i> back</i>
+
     </div>
 
     <!-- start footer -->
@@ -125,6 +132,7 @@
     </div>
     <!-- end preloading -->
     <!-- connect javascript file -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/check-out.js"></script>
 </body>
 

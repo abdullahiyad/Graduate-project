@@ -49,3 +49,42 @@ document.addEventListener("DOMContentLoaded", () => {
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
 });
+
+//function for buttons back and submit
+function backFunc() {
+  window.location.href = "/menu";
+}
+
+function submitFunc() {
+  Swal.fire({
+    title: "confirm order?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, submit it",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "submitted",
+        text: "Your order has been submitted.",
+        icon: "success",
+      });
+      submitOrder();
+      setTimeout(() => {
+        // window.location.href = "/menu";
+      }, 1000);
+    }
+  });
+}
+
+//function to submit order to database
+function submitOrder() {
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+  let name = document.querySelector(".address .name").value;
+  let phone = document.querySelector(".address .phone").value;
+  let city = document.querySelector(".address .city").value;
+  let address = document.querySelector(".address .address1").value;
+  let address2 = document.querySelector(".address .address2").value;
+}
