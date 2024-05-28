@@ -367,11 +367,10 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
   button.addEventListener("click", addToCart);
 });
 
-
 function redirectToCheckout() {
   window.location.href = '/checkout'; // Change '/checkout' to the correct URL if needed
 }
 
 // Add event listener to the "Check out" button
 document.querySelector('.checkout').addEventListener('click', redirectToCheckout);
-
+ 

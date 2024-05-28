@@ -58,6 +58,9 @@ router.delete('/admin/profile',  authController.delete_loggedIn_user);
 
 // admin messages
 router.get('/admin/messages', authController.messages_get);
+router.get('/admin/messages/api', authController.messages_data_get);
+router.put('/admin/messages', authController.message_acc_rej);
+
 router.get('/reservation', authController.reservation_get);
 router.post('/reservation', authController.reservation_post);
 

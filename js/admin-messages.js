@@ -15,7 +15,8 @@ function closeMessagge(event) {
   clickedElement.parentElement.parentElement.classList.toggle("more-details");
 }
 
-let reservationID;
+// if reject reservation
+//let reservationID;
 function rejectReservation(event) {
   const clickedElement = event.target;
   Swal.fire({
@@ -30,18 +31,38 @@ function rejectReservation(event) {
     if (result.isConfirmed) {
       Swal.fire({
         title: "Rejected!",
-        text: "the reservation request has been rejected.",
+        text: "The reservation request has been rejected.",
         icon: "success",
       });
-      reservationID =
-        clickedElement.parentElement.previousElementSibling
-          .previousElementSibling.previousElementSibling.lastElementChild
-          .lastElementChild.value;
-      //function to send this reservation info to rejected reservation database
-      //
-      //function here
-      //
-      clickedElement.parentElement.parentElement.remove();
+
+      // Extract reservation ID from the DOM
+      const reservationID = clickedElement.parentElement.previousElementSibling
+        .previousElementSibling.previousElementSibling.lastElementChild
+        .lastElementChild.value;
+      console.log(reservationID);
+      // Send the reservation ID and state to the server
+      fetch("/admin/messages", {
+        method: "PUT", // Specify the HTTP method as PUT
+        headers: {
+          "Content-Type": "application/json", // Specify the content type
+        },
+        body: JSON.stringify({ id: reservationID, state: 'rej' }), // Send the reservation ID and state
+        
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("There is something wrong");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Reservation update successful:", data);
+          // Handle the success response here
+          clickedElement.parentElement.parentElement.remove();
+        })
+        .catch((err) => {
+          console.error("Reservation update failed:", err);
+        });
     }
   });
 }
@@ -53,7 +74,6 @@ function addMessage(
   reservationName,
   reservationPhone,
   reservationDate,
-  reservationTime,
   numOfPersons,
   moreDetails = "none"
 ) {
@@ -83,7 +103,6 @@ Please find the reservation details below:
 Contact Name: [${reservationName}]
 Contact Phone: [${reservationPhone}]
 Date: [${reservationDate}]
-Time: [${reservationTime}]
 Number of persons: [${numOfPersons}]
 
 We would appreciate it if you could confirm our reservation at your earliest convenience. 
@@ -93,7 +112,7 @@ here more details : [${moreDetails}]
                     </div>
                     <p class="open-msg" onclick="readMessagge(event)">read</p>
                     <div class="btns display-none ">
-                        <input type="submit" class="accept-btn btn-style" value="accept">
+                        <button class="accept-btn btn-style" onclick="acceptReservation(event)">Accept</button>
                         <input type="button" class="reject-btn btn-style" onclick="rejectReservation(event)"
                             value="reject">
                         <input type="button" class="close-msg btn-style" value="close" onclick="closeMessagge(event)">
@@ -103,27 +122,33 @@ here more details : [${moreDetails}]
   messagesTable.appendChild(newMessage.firstElementChild);
 }
 
-//examples of how to call function
-addMessage(
-  "sati Hamad",
-  "sati@ykpo.com",
-  1,
-  "sati",
-  "0568453235",
-  "25-6-2024",
-  "12:30",
-  5
-);
-addMessage(
-  "abdullah iyad",
-  "abdullah@ykpo.com",
-  1,
-  "ali",
-  "0568453235",
-  "25-6-2024",
-  "12:30",
-  5
-);
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/admin/messages/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      return data;
+    })
+    .then((data) => {
+      data.forEach((reservation) => {
+        addMessage(
+          reservation.customer.userName,
+          reservation.customer.userEmail,
+          reservation._id,
+          reservation.resName,
+          reservation.phone,
+          new Date(reservation.newDate).toLocaleDateString(), // Format date
+          reservation.numPerson,
+          reservation.details
+        );
+      });
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
+});
+
+
 
 window.logout = function () {
   fetch("/admin/messages/logout", {
@@ -138,187 +163,43 @@ window.logout = function () {
 };
 
 
+// if accept reservation
+function acceptReservation(event) {
+  event.preventDefault(); // Prevent default button behavior
+  const clickedElement = event.target;
+  const reservationID = clickedElement.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.lastElementChild.lastElementChild.value;
+  console.log(reservationID);
+  fetch("/admin/messages", {
+    method: "PUT", // Specify the HTTP method as PUT for updating
+    headers: {
+      "Content-Type": "application/json", // Specify the content type
+    },
+    body: JSON.stringify({ id: reservationID, state: 'acc' }), // Send the reservation ID and state
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("There is something error");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Reservation accepted successfully:", data);
+      Swal.fire({
+        title: "Accepted!",
+        text: "The reservation request has been accepted.",
+        icon: "success",
+      });
+      // Optionally, you can update the UI to reflect the change
+      // For example, remove the accepted reservation from the DOM
+      clickedElement.parentElement.parentElement.remove();
+    })
+    .catch((err) => {
+      console.error("Reservation acceptance failed:", err);
+      Swal.fire({
+        title: "Error!",
+        text: "There was an error accepting the reservation.",
+        icon: "error",
+      });
+    });
+}
 
-// //function to add product
-// let productTable = document.querySelector(".products-table");
-// function addProduct(
-//   imgSrc,
-//   productName,
-//   productPrice,
-//   productDesc,
-//   productType,
-//   productId
-// ) {
-//   const newProduct = `
-//                     <form action="" method="none">
-//                         <div class="product-id">${productId}</div>
-//                         <div class="product-img part edit-class on-edit" name="product-img">
-//                             <label for="product-img">product Image :</label>
-//                             <img src="${imgSrc}" alt="productimage">
-//                             <input type="file" id="choose-file" name="choose-file" accept="image/*">
-//                             <p class="note">*chose new image if you want change the current
-//                                 image*</p>
-//                         </div>
-//                         <div class="part s">
-//                             <label>product name :</label>
-//                             <input type="text" class="product-title" value="${productName}">
-//                         </div>
-//                         <div class="part ">
-//                             <label>product price :</label>
-//                             $<input type="text" class="product-price" value="${productPrice}">
-//                         </div>
-//                         <div class="part product-desc">
-//                             <label>product description :</label>
-//                             <input type="text" class="product-desc-input" value="${productDesc}">
-//                         </div>
-//                         <div class="type-container input-field-container part">
-//                             <div class="type-show">${productType}</div>
-//                                <label>type : </label>
-//                                <select name="product-type" id="#type">
-//                                <option value="hot-drinks" selected>hot Drinks</option>
-//                                <option value="cold-drinks">cold Drinks</option>
-//                                <option value="food">food</option>
-//                                <option value="dessert">dessert</option>
-//                           </select>
-//                         </div>
-//                         <div class="edit" onclick="showDetails(event)" >more</div>
-//                         <div class="product-btns part">
-//                             <input type="button" value="Delete" class="delete-btn" onclick="deleteProduct(event)">
-//                             <input type="button" value="Edit" class="edit-btn" onclick="eidtProductBtnFunction(event)">
-//                             <input type="button" value="Done" class="done-btn" onclick="doneShowDetails(event)">
-//                             <input type="submit" value="Save" class="save-btn" />
-//                             <input type="button" value="cancel" class="cancel-btn" onclick="cancelBtnFunction(event)">
-//                         </div>
-//                     </form>
-//   `;
-//   const tempDiv = document.createElement("div");
-//   tempDiv.classList = "product-item";
-//   tempDiv.innerHTML = newProduct;
-//   const newProductElement = tempDiv;
-
-//   // Append the new product element to the product table
-//   productTable.appendChild(newProductElement);
-// }
-// //adding proudct from data base to page
-// document.addEventListener("DOMContentLoaded", function () {
-//   // Fetch product data from the backend and populate the table
-//   fetch("/admin/products/api")
-//     .then(async (response) => {
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       const data = await response.json();
-//       return data;
-//     })
-//     .then((data) => {
-//       data.products.forEach((product) => {
-//         // Assuming product.image contains ArrayBuffer image data
-//         let imgSrc =
-//           "data:image/jpeg;base64," +
-//           arrayBufferToBase64(product.image.data.data);
-//         // Now imgSrc contains the Base64-encoded image data, which you can use as the src attribute of an <img> tag
-//         // Example usage:
-//         addProduct(
-//           imgSrc,
-//           product.name,
-//           product.price,
-//           product.description,
-//           product.type,
-//           product._id
-//         );
-//       });
-//     })
-//     .catch((error) => console.error("Error fetching product data:", error));
-
-//   // Function to convert ArrayBuffer to Base64-encoded string
-//   function arrayBufferToBase64(buffer) {
-//     let binary = "";
-//     const bytes = new Uint8Array(buffer);
-//     const len = bytes.byteLength;
-//     for (let i = 0; i < len; i++) {
-//       binary += String.fromCharCode(bytes[i]);
-//     }
-//     return btoa(binary);
-//   }
-// });
-
-// let addProductBtn = document.querySelector(".new-product-btn");
-// let productFormDiv = document.querySelector(".new-product");
-// let productForm = document.querySelector(".product-form");
-// let content = document.querySelector(".content");
-
-// //delete product
-// function deleteProduct(event) {
-//   const clickedElement = event.target;
-//   Swal.fire({
-//     title: "Are you sure?",
-//     text: "You won't be able to revert this!",
-//     icon: "warning",
-//     showCancelButton: true,
-//     confirmButtonColor: "#3085d6",
-//     cancelButtonColor: "#d33",
-//     confirmButtonText: "Yes, delete it!",
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       Swal.fire({
-//         title: "Deleted!",
-//         text: "the product has been deleted.",
-//         icon: "success",
-//       });
-//       //
-//       const id =
-//         clickedElement.parentElement.parentElement.firstElementChild.innerHTML;
-
-//       fetch("/admin/products/delete")
-//         .then((response) => {
-//           if (!response.ok) {
-//             throw new Error("Network response was not ok");
-//           }
-
-//           clickedElement.parentElement.parentElement.parentElement.remove();
-//         })
-//         .catch((err) => {});
-
-//       //
-//     }
-//   });
-// }
-
-// //edit product btn
-// function eidtProductBtnFunction(event) {
-//   const ele = event.target;
-//   ele.parentElement.parentElement.classList.toggle("on-edit");
-//   ele.style.display = "none";
-//   ele.nextElementSibling.style.display = "none";
-//   ele.nextElementSibling.nextElementSibling.style.display = "block";
-//   ele.nextElementSibling.nextElementSibling.nextElementSibling.style.display =
-//     "block";
-//   ele.parentElement.parentElement.firstElementChild.nextElementSibling.lastElementChild.style.display =
-//     "block";
-// }
-
-// //cancel edit on product
-// function cancelBtnFunction(event) {
-//   window.location.reload();
-// }
-
-// //active and disable add product page
-// function activeAddProductPage() {
-//   productFormDiv.classList.toggle("active-page");
-//   content.classList.toggle("hide-content");
-// }
-
-// //close more details of product
-// function doneShowDetails(event) {
-//   const clickedElement = event.target;
-//   clickedElement.parentElement.parentElement.classList.toggle("more-details");
-// }
-
-// //show more details of product
-// function showDetails(event) {
-//   const clickedElement = event.target;
-//   clickedElement.parentElement.classList.toggle("more-details");
-//   const type =
-//     clickedElement.previousElementSibling.firstElementChild.textContent.toLowerCase();
-//   clickedElement.previousElementSibling.lastElementChild.value = type;
-// }

@@ -56,7 +56,7 @@ module.exports.login_post = async (req, res) => {
   try {
     const check = await user.findOne({ email: req.body.email });
     if (!check) {
-      console.log("cant find user");
+      res.status(404).sent("Can't find user");
     } else {
       userState = check.status;
       const isPassMatch = await bcrypt.compare(
@@ -78,7 +78,7 @@ module.exports.login_post = async (req, res) => {
       }
     }
   } catch (err) {
-    console.log(err);
+    res.status(500).send(err);
   }
 };
 module.exports.home_get = (req, res) => {
@@ -607,3 +607,41 @@ module.exports.checkOut_post = async (req, res) => {
   }
 };
 
+module.exports.messages_data_get = async (req, res) => {
+  try {
+    const reservations = await reservation.find({state: "pending"});
+    console.log(reservations);
+    res.status(200).json(reservations);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.message_acc_rej = async (req, res) => {
+  try {
+    const { id, state } = req.body;
+
+    // Validate the state
+    if (state !== 'acc' && state !== 'rej') {
+      return res.status(400).json({ error: "Invalid state value" });
+    }
+
+    // Update the reservation state based on the provided state
+    const updatedReservation = await reservation.findByIdAndUpdate(
+      id,
+      { state: state === 'acc' ? 'accepted' : 'rejected' },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedReservation) {
+      return res.status(404).json({ error: "Reservation not found" });
+    }
+
+    // Send a success response
+    res.status(200).json({ message: "Reservation updated successfully", reservation: updatedReservation });
+
+  } catch (err) {
+    console.error("Error updating reservation state:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
