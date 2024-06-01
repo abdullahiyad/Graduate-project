@@ -56,7 +56,7 @@ module.exports.login_post = async (req, res) => {
   try {
     const check = await user.findOne({ email: req.body.email });
     if (!check) {
-      res.status(404).sent("Can't find user");
+      res.status(500).json({ error: "the email or password is not correct. please try again"});
     } else {
       userState = check.status;
       const isPassMatch = await bcrypt.compare(
@@ -68,13 +68,15 @@ module.exports.login_post = async (req, res) => {
         res
           .status(201)
           .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-          .redirect("/admin/dashboard");
+          .json({state: "admin"});
       } else if (isPassMatch && userState === "user") {
         const token = createToken(check._id);
         res
           .status(201)
           .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-          .redirect("/user/profile");
+          .json({state: "user"})
+      } else {
+        res.status(500).json({ error: "the email or password is not correct. please try again"});
       }
     }
   } catch (err) {
@@ -434,6 +436,7 @@ async function checkPass(userId, oldPassword) {
 }
 
 module.exports.update_profile_data = async (req, res) => {
+  console.log("Test1");
   try {
     const token = req.cookies.jwt;
     if (!token) {
@@ -441,14 +444,15 @@ module.exports.update_profile_data = async (req, res) => {
     }
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
-    const oldPassword = req.body.oldPassword;
-    const isPasswordCorrect = await checkPass(userId, oldPassword);
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ error: "Old password is incorrect" });
-    }
-    
+    console.log(userId);
     const newPassword = req.body.newPassword.trim();
     if (newPassword !== '') {
+      const oldPassword = req.body.oldPassword;
+      const isPasswordCorrect = await checkPass(userId, oldPassword);
+      if (!isPasswordCorrect) {
+        console.log("Incorrect Password");
+        return res.status(400).json({ error: "Old password is incorrect" });
+      }
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
       const updatedUser = await user.findOneAndUpdate(
@@ -461,11 +465,13 @@ module.exports.update_profile_data = async (req, res) => {
       }
       return res.status(200).json(updatedUser);
     } else {
+      console.log("Else condition");
       const updatedUser = await user.findOneAndUpdate(
         { _id: userId },
         { $set: { name: req.body.name, email: req.body.email, phone: req.body.phone } },
         { new: true }
       );
+      console.log(updatedUser);
       if (!updatedUser) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -508,7 +514,7 @@ module.exports.reservation_get = (req, res) => {
   res.render('reservation');
 }
 
-module.exports.reservation_post =  async (req, res) => {
+module.exports.reservation_post = async (req, res) => {
   try {
     const token = req.cookies.jwt;
     if (!token) {
@@ -517,10 +523,14 @@ module.exports.reservation_post =  async (req, res) => {
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
     const userData = await user.findById(userId);
-    const { name, phone, numOfPersons, insDate, details } = req.body;
 
+    const { name, phone, numOfPersons, insDate, details } = req.body;
     if (!name || !phone || !numOfPersons || !insDate) {
       return res.status(400).json({ error: "All fields are required" });
+    }
+    const alreadyReserved = await reservation.findOne({"customer.userEmail": userData.email})
+    if(alreadyReserved){
+      return res.status(400).json({ error: "you already reserved" });
     }
     const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
     const newReservation = new reservation({
@@ -537,7 +547,6 @@ module.exports.reservation_post =  async (req, res) => {
     await newReservation.save();
     res.status(201).json({ message: "Reservation created successfully" });
   } catch (error) {
-    console.error("Error creating reservation:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -610,7 +619,6 @@ module.exports.checkOut_post = async (req, res) => {
 module.exports.messages_data_get = async (req, res) => {
   try {
     const reservations = await reservation.find({state: "pending"});
-    console.log(reservations);
     res.status(200).json(reservations);
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -107,7 +107,6 @@ function updateData() {
   const phone = document.querySelector(".phone").value;
   const oldPassword = document.querySelector(".old-password").value;
   const newPassword = document.querySelector(".new-password").value;
-  
   // Create an object with the data to be sent in the request body
   const userData = {
     name: name,
@@ -116,7 +115,7 @@ function updateData() {
     oldPassword: oldPassword,
     newPassword: newPassword
   };
-  
+  console.log(JSON.stringify(userData));
   // Send a PUT request to update the user's profile
   fetch("/user/profile", {
     method: "PUT", // Specify the HTTP method as PUT for updating

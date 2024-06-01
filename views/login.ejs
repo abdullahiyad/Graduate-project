@@ -21,7 +21,7 @@
   <div class="container">
     <div class="login-container">
       <h2 class="login-title">YKPO Cafe</h2>
-      <form class="login-form" action="/login" method="post">
+      <form class="login-form" id="login-form">
         <div class="email-container">
           <i class="fa-solid fa-user"></i>
           <input type="email" name="email" class="email" placeholder="Email" autocomplete="off" required />
@@ -33,7 +33,7 @@
         </div>
         <p class="error" name="errorMsg">the username or password is not correct. please try again</p>
         <!-- I need this one to show error message in page -->
-        <input type="submit" value="Login" class="login-btn" onclick="addToLocalStorage()"/>
+        <input type="submit" value="Login" class="login-btn"/>
       </form>
       <p>Doesn't have account ? <a href="signup">Signup</a></p>
     </div>

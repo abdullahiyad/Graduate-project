@@ -129,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       let data = await response.json();
+      console.log(data);
       return data;
     })
     .then((data) => {

@@ -10,14 +10,13 @@ const user_schema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, "Please enter your phone number"],
-    unique: [true, "This phone number is already used"],
     minlength: [10, "Phone number must has 10 numbers"],
     validate: [isNumeric, "Phone number must have just a number"],
   },
   email: {
     type: String,
     required: [true, "Please enter your email"],
-    // unique: [true, "this email is already in use"],
+    unique: [true, "this email is already in use"],
     lowercase: true,
     validate: [isEmail, "Please enter a valid email"],
   },
@@ -25,7 +24,7 @@ const user_schema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter a password"],
     minlength: [8, "The minimum password length is 8"],
-    validate: [isStrongPassword, "enter strong password"],
+    validate: [isStrongPassword, "enter strong password"],//Capital letter, Small letter,number, symbol
   },
   status: {
     type: String,
@@ -34,6 +33,10 @@ const user_schema = new mongoose.Schema({
   score: {
     type: Number,
     default: 0,
+  },
+  blocked: {
+    type: Boolean,
+    default: false
   },
   createdAt: {
     type: Date,

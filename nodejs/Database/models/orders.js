@@ -4,34 +4,34 @@ const orderSchema = new mongoose.Schema({
   customer: {
     userName: {
       type: String,
-      ref: "user",
+      ref: "users",
       require: true,
     },
     userEmail: {
       type: String,
-      ref: "user",
+      ref: "users",
       require: true,
     },
     userPhone: {
       type: String,
-      ref: "user",
+      ref: "users",
       require: true,
     },
     userScore: {
         type: Number,
-        ref:"user",
+        ref:"users",
         require: true
     },
   },
   products: {
     name: {
       type: String,
-      ref: "Product", // Reference to the Product model
+      ref: "products", // Reference to the Product model
       require: true,
     },
     price: {
       type: Number,
-      ref: "product",
+      ref: "products",
       require: true,
     },
     quantity: {

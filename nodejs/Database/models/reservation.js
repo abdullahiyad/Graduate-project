@@ -4,15 +4,12 @@ const reservationSchema = new mongoose.Schema({
     customer: {
         userName: {
             type: String,
-            ref: 'users',
             required: true,
-            unique: false,
         },
         userEmail: {
             type: String,
             ref: 'users',
             required: true,
-            unique: false,
         }
     },
     state: {
@@ -48,6 +45,11 @@ const reservationSchema = new mongoose.Schema({
         required: false,
         default: "No details"
     },
+    message: {
+        type: String,
+        require: false,
+        default: ""
+    }
 });
 
 module.exports = mongoose.model('Reservation', reservationSchema);

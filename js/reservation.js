@@ -31,9 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const numOfPersons = parseInt(document.querySelector(".persons-number").value, 10);
     let insertedDate = document.querySelector(".reservation-date").value;
     const details = document.querySelector(".more-details").value;
-    // Log the values for debugging
-    console.log(name, phone, numOfPersons, insertedDate, details);
-
     // Send reservation data to the server
     fetch("/reservation", {
       method: "POST",
@@ -56,13 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         console.log("Reservation successful:", data);
-        // Handle the success response here
-        // For example, display a success message to the user
       })
       .catch((error) => {
         console.error("Error making reservation:", error.message);
-        // Handle the error here
-        // For example, display an error message to the user
       });
   });
 });
