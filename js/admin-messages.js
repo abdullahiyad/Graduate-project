@@ -36,9 +36,10 @@ function rejectReservation(event) {
       });
 
       // Extract reservation ID from the DOM
-      const reservationID = clickedElement.parentElement.previousElementSibling
-        .previousElementSibling.previousElementSibling.lastElementChild
-        .lastElementChild.value;
+      const reservationID =
+        clickedElement.parentElement.previousElementSibling
+          .previousElementSibling.previousElementSibling.lastElementChild
+          .lastElementChild.value;
       console.log(reservationID);
       // Send the reservation ID and state to the server
       fetch("/admin/messages", {
@@ -46,8 +47,7 @@ function rejectReservation(event) {
         headers: {
           "Content-Type": "application/json", // Specify the content type
         },
-        body: JSON.stringify({ id: reservationID, state: 'rej' }), // Send the reservation ID and state
-        
+        body: JSON.stringify({ id: reservationID, state: "rej" }), // Send the reservation ID and state
       })
         .then((response) => {
           if (!response.ok) {
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
           reservation._id,
           reservation.resName,
           reservation.phone,
-          new Date(reservation.newDate).toLocaleDateString(), // Format date
+          new Date(reservation.newDate).toLocaleString(), // Format date
           reservation.numPerson,
           reservation.details
         );
@@ -149,33 +149,32 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => console.error("Error fetching user data:", error));
 });
 
-
-
 window.logout = function () {
   fetch("/admin/messages/logout", {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
-      window.location.href='/home';
+      window.location.href = "/home";
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
-
 // if accept reservation
 function acceptReservation(event) {
   event.preventDefault(); // Prevent default button behavior
   const clickedElement = event.target;
-  const reservationID = clickedElement.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.lastElementChild.lastElementChild.value;
+  const reservationID =
+    clickedElement.parentElement.previousElementSibling.previousElementSibling
+      .previousElementSibling.lastElementChild.lastElementChild.value;
   console.log(reservationID);
   fetch("/admin/messages", {
     method: "PUT", // Specify the HTTP method as PUT for updating
     headers: {
       "Content-Type": "application/json", // Specify the content type
     },
-    body: JSON.stringify({ id: reservationID, state: 'acc' }), // Send the reservation ID and state
+    body: JSON.stringify({ id: reservationID, state: "acc" }), // Send the reservation ID and state
   })
     .then((response) => {
       if (!response.ok) {
@@ -203,4 +202,3 @@ function acceptReservation(event) {
       });
     });
 }
-
