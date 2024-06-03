@@ -1,6 +1,6 @@
 //to show the links list in medium and small screens
 let listIcon = document.querySelector("#menu-icon");
-let dashboard = document.querySelector(".messages-container");
+let dashboard = document.querySelector(".orders-container");
 listIcon.addEventListener("click", () => {
   dashboard.classList.toggle("activeList");
 });
@@ -93,8 +93,8 @@ function addMessage(
                             <input type="text" class="reservation-id" value="${reservationId}">
                         </div>
                     </div>
-                    <div class="message-content display-none">
-                        <textarea name="" id="" class="message-content input-style">
+                    <div class="order-content display-none">
+                        <textarea name="" id="" class="order-content input-style">
 
 subject: reservation request
 
@@ -110,7 +110,7 @@ here more details : [${moreDetails}]
 
                         </textarea>
                     </div>
-                    <p class="open-msg" onclick="readMessagge(event)">read</p>
+                    <p class="open-order" onclick="readMessagge(event)">read</p>
                     <div class="btns display-none ">
                         <button class="accept-btn btn-style" onclick="acceptReservation(event)">Accept</button>
                         <input type="button" class="reject-btn btn-style" onclick="rejectReservation(event)"

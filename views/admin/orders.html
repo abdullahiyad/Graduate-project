@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- connect css files -->
+    <link rel="stylesheet" href="/css/header-style.css" />
+    <link rel="stylesheet" href="/css/footer-style.css">
+    <link rel="stylesheet" href="/css/loading-style.css" />
+    <link rel="stylesheet" href="/css/admin-orders.css" />
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="/css/fontawesome/css/all.min.css" />
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap" rel="stylesheet" />
+    <link rel="icon" href="/images/home.ico" />
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <!-- start header -->
+    <div class="header">
+        <div class="header-container">
+            <i class="fa-solid fa-bars" id="menu-icon"></i>
+            <span class="logo"><a href="/home">YKPO Cafe</a></span>
+            <div class="right-header">
+                <div class="user-name">hey <span class="name">Admin</span></div>
+                <img class="user-img" src="/images/nigga.jpg" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- end header -->
+    <div class="orders-container">
+        <div class="aside">
+            <ul>
+                <li class="dashboard"><a href="dashboard"><i class="fa-solid fa-house"></i> dashboard</a></li>
+                <li class="customers"><a href="customer"><i class="fa-regular fa-user"></i> customers</a></li>
+                <li class="orders"><a href="orders"><i class="fa-solid fa-scroll"></i> orders</a></li>
+                <li class="messages"><a href="messages"><i class="fa-regular fa-envelope"></i> messages</a></li>
+                <li class="products"><a href="products"><i class="fa-solid fa-utensils"></i> products</a></li>
+                <li class="profile"><a href="profile"><i class="fa-solid fa-user"></i> your profile</a></li>
+            </ul>
+            <button class="logout">logout <i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+        <div class="content">
+            <h1 class="orders-title">
+                Orders
+            </h1>
+            <div class="orders-table">
+                <div class="message flex-row">
+                    <div class="info-container flex-row">
+                        <div class="icon flex-row">
+                            <i class="fa-solid fa-utensils"></i>
+                            <p class="input-style .new-message">new order</p>
+                        </div>
+
+                        <div class="user-details">
+                            <input type="text" class="customer-name input-style" value="${userName}">
+                            <input type="email" class="customers-email input-style display-none" value="${userEmail}">
+                            <!-- <input type="text" class="customer-info input-style display-none" value="0569912325"> -->
+                        </div>
+                    </div>
+                    <div class="order-content display-none">
+                        <div class="order-content input-style">
+                            <div class=" display-none order-info ">
+                                <h3>order information :</h3>
+                                <div class="name input-style">name : ${name}</div>
+                                <div class="phone input-style">phone : ${phone}</div>
+                                <div class="city input-style">city : ${city}</div>
+                                <div class="address1 input-style">address : ${address1}</div>
+                                <div class="address2 input-style">address2 : ${address2}</div>
+                            </div>
+                            <div class="order-details">
+                                <h3>order details : </h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>product</th>
+                                            <th>quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>coffee</td>
+                                            <td>5 </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <td>total price :${total price} $</td>
+                                        <td></td>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="open-order" onclick="readMessagge(event)">details</p>
+                    <div class="btns display-none ">
+                        <input type="button" class="close-msg btn-style" value="close" onclick="closeMessagge(event)">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- start preloading -->
+    <div class="loader">
+        <div class="one"></div>
+        <div class="two"></div>
+        <div class="three"></div>
+    </div>
+    <!-- end preloading -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/admin-orders.js"></script>
+</body>
+
+</html>
