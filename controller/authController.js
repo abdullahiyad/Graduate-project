@@ -569,45 +569,64 @@ module.exports.checkOut = (req, res) => {
 
 module.exports.checkOut_post = async (req, res) => {
   try {
-    const user = await getUserData(req);
-    if (!user) {
+    const userId = getUserData(req);
+    if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });
     }
-
-    const cart = req.body.cart;
+    console.log(userId);
+    const { customer, cart } = req.body;
+    console.log("Customer: ", customer, "\n cart: ", cart);
     if (!cart || cart.length === 0) {
       return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    if (!customer || !customer.name || !customer.phone || !customer.City || !customer.address1) {
+      return res.status(400).json({ error: "Customer information is incomplete" });
+    }
+
+    // Check for recent orders within the last 10 minutes
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    const recentOrder = await Order.findOne({ userId: userId, createdAt: { $gte: tenMinutesAgo } }).exec();
+    if (recentOrder) {
+      return res.status(429).json({ error: "You can only place an order every 10 minutes" });
     }
 
     // Process cart items and calculate total price
     let totalPrice = 0;
     const products = await Promise.all(cart.map(async item => {
-      const product = await Product.findById(item.productId).exec();
+      const product = await Product.findById(item.id).exec();
       if (!product) {
-        throw new Error(`Product with ID ${item.productId} not found`);
+        throw new Error(`Product with ID ${item.id} not found`);
       }
-      totalPrice += product.price * item.quantity;
+      totalPrice += product.price * item.quan;
       return {
-        name: product.name,
-        price: product.price,
-        quantity: item.quantity
+        productId: item.id,
+        quantity: item.quan,
       };
     }));
 
     const orderData = {
+      userId: userId,
       customer: {
-        userName: user.name,
-        userEmail: user.email,
-        userPhone: user.phone,
-        userScore: user.score,
+        name: customer.name,
+        phone: customer.phone,
+        City: customer.City,
+        address1: customer.address1,
+        address2: customer.address2 || "", // Optional field
       },
       products: products,
       totalPrice: totalPrice,
-      status: 'pending',
     };
-
+    
     const newOrder = new Order(orderData);
     await newOrder.save();
+
+    // Increment the user's orderNumbers field
+    await user.findByIdAndUpdate(
+      userId,
+      { $inc: { orderNumbers: 1 } },
+      { new: true }
+    );
 
     res.status(201).json({ message: "Order created successfully", order: newOrder });
   } catch (err) {
@@ -615,6 +634,8 @@ module.exports.checkOut_post = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 
 module.exports.messages_data_get = async (req, res) => {
   try {
@@ -643,6 +664,16 @@ module.exports.message_acc_rej = async (req, res) => {
 
     if (!updatedReservation) {
       return res.status(404).json({ error: "Reservation not found" });
+    }
+
+    // If the reservation is accepted, increment the user's reservationNumbers
+    if (state === 'acc') {
+      const userId = updatedReservation.userId; // Assuming the reservation document contains a userId field
+      await user.findByIdAndUpdate(
+        userId,
+        { $inc: { reservationNumbers: 1 } },
+        { new: true }
+      );
     }
 
     // Send a success response

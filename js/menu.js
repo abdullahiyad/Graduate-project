@@ -368,9 +368,13 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
 });
 
 function redirectToCheckout() {
-  window.location.href = '/checkout'; // Change '/checkout' to the correct URL if needed
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+  if (!productsArray || productsArray.length === 0) {
+    alert("Your cart is empty. Please add items to the cart before proceeding to checkout.");
+  } else {
+    window.location.href = '/checkout'; // Change '/checkout' to the correct URL if needed
+  }
 }
 
 // Add event listener to the "Check out" button
 document.querySelector('.checkout').addEventListener('click', redirectToCheckout);
- 

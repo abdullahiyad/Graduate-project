@@ -85,6 +85,9 @@ document
           //here the info that should submitted for backend
           console.log(name, phone, city, address, address2);
           console.log(productsArray);
+          
+          submitOrder(name, phone, city, address, address2, productsArray);
+
           setTimeout(() => {
             sessionStorage.removeItem("productsArray");
             window.location.href = "/menu";
@@ -100,4 +103,40 @@ document
 //function for back button
 function backFunc() {
   window.location.href = "/menu";
+}
+
+
+async function submitOrder(name, phone, city, address, address2, productsArray) {
+
+  const orderData = {
+    customer: {
+      name: name,
+      phone: phone,
+      City: city,
+      address1: address,
+      address2: address2,
+    },
+    cart: productsArray,
+  };
+
+  console.log(orderData);
+
+  try {
+    const response = await fetch("/menu/checkout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    console.log("Order created successfully:", data);
+  } catch (error) {
+    console.error("Error submitting order:", error);
+  }
 }

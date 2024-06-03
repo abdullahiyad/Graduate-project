@@ -1,19 +1,13 @@
 const mongoose = require('mongoose');
 
 const reservationSchema = new mongoose.Schema({
-    customer: {
-        userName: {
-            type: String,
-            required: true,
-        },
-        userEmail: {
-            type: String,
-            ref: 'users',
-            required: true,
-        }
+    userId: {
+        type: String,
+        required: true,
     },
     state: {
         type: String,
+        enum: ["pending", "accepted", "rejected", "finished"],
         default: "pending",
     },
     resName: {
@@ -30,6 +24,7 @@ const reservationSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    // Date for reservation time
     newDate: {
         type: Date,
         required: true,
@@ -40,11 +35,13 @@ const reservationSchema = new mongoose.Schema({
             message: props => `${props.value} should be a future date`
         }
     },
+    // detail from user if want any specific detail on his reservation
     details: {
         type: String,
         required: false,
         default: "No details"
     },
+    // admin message if reject
     message: {
         type: String,
         require: false,

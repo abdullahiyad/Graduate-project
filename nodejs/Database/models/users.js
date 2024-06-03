@@ -24,10 +24,11 @@ const user_schema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter a password"],
     minlength: [8, "The minimum password length is 8"],
-    validate: [isStrongPassword, "enter strong password"],//Capital letter, Small letter,number, symbol
+    validate: [isStrongPassword, "enter strong password"],//Capital letter, Small letter, number, symbol.
   },
   status: {
     type: String,
+    enum: ["user", "manager", "admin"],
     default: "user",
   },
   score: {
@@ -42,6 +43,14 @@ const user_schema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  orderNumbers: {
+    type: Number,
+    default: 0,
+  },
+  reservationNumbers: {
+    type: Number,
+    default: 0,
+  }
 });
 
 //before store in db
