@@ -24,12 +24,12 @@ function addOrder(
   city,
   address1,
   address2,
-  prodctsArray,
+  productsArray,
   totalPrice
 ) {
   const products = document.createElement("tbody");
-  prodctsArray.forEach((element) => {
-    products.appendChild(addProduct(element.name, element.quan));
+  productsArray.forEach((element) => {
+    products.appendChild(addProduct(element.name, element.quantity));
   });
   const newOrder = document.createElement("div");
   newOrder.innerHTML = `
@@ -83,27 +83,6 @@ function addOrder(
   ordersTable.appendChild(newOrder.firstElementChild);
 }
 
-///
-
-//test the function
-const productsArr = [
-  { name: "coffee", quan: 3 },
-  { name: "tea", quan: 2 },
-];
-addOrder(
-  "ahmed",
-  "abdullahiyad@gmail.com",
-  "ali",
-  "1571681681",
-  "jenin",
-  "arabah",
-  "address2",
-  productsArr,
-  300
-);
-
-///
-
 //function add products
 function addProduct(productName, productQuantity) {
   const row = document.createElement("tr");
@@ -127,3 +106,47 @@ window.logout = function () {
       console.log(err);
     });
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/admin/orders/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      console.log(data);
+      return data;
+    })
+    .then((data) => {
+      data.orders.forEach((order) => {
+        // Extract user data
+        const userName = order.userName;
+        const userEmail = order.userEmail;
+
+        // Extract delivery data
+        const orderName = order.customer.name;
+        const orderPhone = order.customer.phone;
+        const city = order.customer.City;
+        const address1 = order.customer.address1;
+        const address2 = order.customer.address2 || "";
+
+        // Extract product data
+        const productsArray = order.products.map(product => ({
+          name: product.productName,
+          quantity: product.quantity,
+        }));
+
+        // Extract total price
+        const totalPrice = order.totalPrice;
+
+        // Add the order data to the HTML
+        addOrder(userName, userEmail, orderName, orderPhone, city, address1, address2, productsArray, totalPrice);
+      });
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
+});
+
+
+// Change status to processing when click on processing 
+
+// Change status to finished, with message the order will arrive within minutes

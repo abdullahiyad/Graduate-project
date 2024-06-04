@@ -74,5 +74,11 @@ router.get('/user/messages', authController.user_reservation_get);
 router.put('/user/profile',authController.update_profile_data);
 router.delete('/user/profile',  authController.delete_loggedIn_user);
 router.get('/user/profile/api', authController.user_profile_get_api);
+// This is for test notifications
+router.get('/user/dashboard', authController.user_dashboard_get);
+router.post('/user/dashboard', authController.subscription_post);
+// admin orders
+router.get('/admin/orders', authController.getOrders);
+router.get('/admin/orders/api', authController.get_orders_data);
 
 module.exports = router;

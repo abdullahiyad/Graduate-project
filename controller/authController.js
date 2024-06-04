@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const webPush = require("web-push");
 const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
 const reservation = require('../nodejs/Database/models/reservation');
@@ -11,8 +12,13 @@ const fs = require("fs");
 const path = require("path");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
+const { render } = require("ejs");
 const maxAge = 2 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
+// Notifications variable: vapid key
+const publicVapidKey = 'BIfnXiQ8o1KKEM75QjeKg9Q16hA956r7RolBrUmbHnBcuBrk3Giyvk3sb2feXYiE9Vkk-ObPF9Nmf4DhG8J_Hfo';
+const privateVapidKey = 'ZmtVuSTm9tMvIHMr0jkFvj5_crXS2gh7ci6blnBIiCo';
+
 var userState;
 const handleErrors = (err) => {
   if (err.code === 11000) {
@@ -684,3 +690,73 @@ module.exports.message_acc_rej = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+module.exports.getOrders = (req, res) => {
+  res.render('admin/orders');
+};
+
+module.exports.get_orders_data = async (req, res) => {
+  try {
+    // Fetch all orders
+    const orders = await Order.find();
+
+    // Process each order to get user and product information
+    const ordersData = await Promise.all(orders.map(async order => {
+      // Fetch user information
+      const user = await User.findById(order.userId).exec();
+      if (!user) {
+        throw new Error(`User with ID ${order.userId} not found`);
+      }
+
+      // Fetch product information
+      const products = await Promise.all(order.products.map(async productItem => {
+        const product = await Product.findById(productItem.productId).exec();
+        if (!product) {
+          throw new Error(`Product with ID ${productItem.productId} not found`);
+        }
+        return {
+          productId: product._id,
+          productName: product.name,
+          quantity: productItem.quantity
+        };
+      }));
+      // Construct order data with user and product information
+      return {
+        orderId: order._id,
+        userName: user.name,
+        userEmail: user.email,
+        userScore: user.score,
+        customer: order.customer,
+        products: products,
+        totalPrice: order.totalPrice,
+        createdAt: order.createdAt
+      };
+    }));
+    // Send the combined data back to the client
+    res.status(200).json({ orders: ordersData });
+  } catch (err) {
+    console.error("Error fetching orders data:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+webPush.setVapidDetails('mailto:ooday2424@gmail.com', publicVapidKey, privateVapidKey);
+
+module.exports.subscription_post = (req, res) => {
+    const subscription = req.body;
+    res.status(201).json({});
+
+    // Create payload
+    const payload = JSON.stringify({ 
+        title: 'Push Test',
+        body: 'This is a test push notification',
+        icon: 'http://image.ibb.co/frYOFD/tmlogo.png' 
+    });
+
+    webPush.sendNotification(subscription, payload).catch(err => console.error(err));
+};
+
+module.exports.user_dashboard_get = (req, res) => {
+    res.render("user/testNotify");
+}
