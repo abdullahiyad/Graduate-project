@@ -832,42 +832,51 @@ module.exports.get_user_messages = async (req, res) => {
 
 module.exports.get_orders_user_data = async (req, res) => {
   try {
-    
     // Get the userId from the request
     const userId = getUserData(req);
-    console.log("inside order get", userId);
+    
     // Fetch the user data
     const userData = await user.findById(userId);
     if (!userData) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Search for reservations by userId
+    // Fetch the orders for the user
     const userOrders = await Order.find({ userId: userId });
-    // Check if reservations exist for the user
     if (userOrders.length === 0) {
-      return res.status(404).json({ message: "No reservations found for this user" });
+      return res.status(404).json({ message: "No orders found for this user" });
     }
 
-    // Format the reservations data with user details
-    const allUserOrders = userOrders.map(data => ({
-      userName: userData.name,
-      userEmail: userData.email,
-      OrderId: data._id,
-      orderName: data.customer.name,
-      orderPhone: data.customer.phone,
-      City: data.customer.City,
-      customerAddress1: data.customer.address1,
-      customerAddress2: data.customer.address2,
-      productArray: data.productArray,
-      totalPrice: data.totalPrice,
-      createdAt: data.createdAt,
-      state: data.state,
+    // Fetch product details for each order
+    const ordersData = await Promise.all(userOrders.map(async (order) => {
+      const products = await Promise.all(order.products.map(async (product) => {
+        const productData = await Product.findById(product.productId);
+        return {
+          productName: productData.name,
+          quantity: product.quantity
+        };
+      }));
+
+      return {
+        userName: userData.name,
+        userEmail: userData.email,
+        orderId: order._id,
+        orderName: order.customer.name,
+        orderPhone: order.customer.phone,
+        city: order.customer.City,
+        address1: order.customer.address1,
+        address2: order.customer.address2,
+        products,
+        totalPrice: order.totalPrice,
+        createdAt: order.createdAt,
+        state: order.status,
+      };
     }));
-    // Send the formatted reservations in the response
-    res.status(200).json(allUserOrders);
+
+    // Send the formatted orders in the response
+    res.status(200).json(ordersData);
   } catch (err) {
-    console.error("Error fetching reservations:", err);
+    console.error("Error fetching orders:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

@@ -33,14 +33,14 @@ function addOrder(
   city,
   address1,
   address2,
-  orderDate,
+  ordersDate,
   orderState,
-  prodctsArray,
+  productsArray,
   totalPrice
 ) {
   const products = document.createElement("tbody");
-  prodctsArray.forEach((element) => {
-    products.appendChild(addProduct(element.name, element.quan));
+  productsArray.forEach((element) => {
+    products.appendChild(addProduct(element.productName, element.quantity));
   });
   const newOrder = document.createElement("div");
   newOrder.innerHTML = `
@@ -92,20 +92,23 @@ function addOrder(
                 </div>
   `;
 
-  //   pendingOrders.appendChild(newOrder.firstElementChild);
-  // const currentTime = new Date();
-  // const ordersDate = new Date(ordersDate);
-  // // Calculate 24 hours in milliseconds
-  // const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
-  // const timeDifference = currentTime - orderDate;
-  // if (
-  //   timeDifference > millisecondsIn24Hours ||
-  //   orderState.toLowerCase() === "submitted"
-  // ) {
-  //   oldOrders.appendChild(newOrder.firstElementChild);
-  // } else {
-  //   pendingOrders.appendChild(newOrder.firstElementChild);
-  // }
+  pendingOrders.appendChild(newOrder.firstElementChild);
+  const currentTime = new Date();
+  const orderDates = new Date(ordersDate);
+  // Calculate 24 hours in milliseconds
+  const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+  const timeDifference = currentTime - orderDates;
+  console.log(newOrder);
+  console.log(oldOrders);
+  console.log(pendingOrders);
+  if (
+    timeDifference > millisecondsIn24Hours ||
+    orderState.toLowerCase() === "submitted"
+  ) {
+    oldOrders.appendChild(newOrder.firstElementChild);
+  } else {
+    pendingOrders.appendChild(newOrder.firstElementChild);
+  }
 }
 
 ///
@@ -115,19 +118,19 @@ const productsArr = [
   { name: "coffee", quan: 3 },
   { name: "tea", quan: 2 },
 ];
-addOrder(
-  "ahmed",
-  "abdullahiyad@gmail.com",
-  "ali",
-  "1571681681",
-  "jenin",
-  "arabah",
-  "address2",
-  "2024-06-06T22:00:00Z",
-  "pending",
-  productsArr,
-  300
-);
+// addOrder(
+//   "ahmed",
+//   "abdullahiyad@gmail.com",
+//   "ali",
+//   "1571681681",
+//   "jenin",
+//   "arabah",
+//   "address2",
+//   "2024-06-06T22:00:00Z",
+//   "pending",
+//   productsArr,
+//   300
+// );
 
 ///
 
@@ -154,7 +157,6 @@ window.logout = function () {
       console.log(err);
     });
 };
-const oneDay = 24 * 60 * 60 * 1000;
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/orders/api")
     .then(async (response) => {
@@ -162,12 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       let data = await response.json();
-      // console.log(data);
       return data;
     })
     .then((data) => {
       data.forEach((Order) => {
-        console.log(Order.orderName);
+        console.log(Order.products);
         addOrder(
           Order.userName,
           Order.userEmail,
@@ -176,25 +177,13 @@ document.addEventListener("DOMContentLoaded", () => {
           Order.city,
           Order.address1,
           Order.address2,
-          Order.orderDate.toLocalString(),
-          Order.orderState,
-          Order.productArray,
+          new Date(Order.createdAt).toLocaleString(),
+          Order.state,
+          Order.products,
+          Order.totalPrice,
         );
-        const test = {
-          userName: Order.userName,
-          userEmail: Order.userEmail,
-          orderName: Order.orderName,
-          orderPhone: Order.orderPhone,
-          orderCity: Order.city,
-          orderAddress1: Order.address1,
-          orderAddress2: Order.address2,
-          orderDate: Order.orderDate.toLocalString(),
-          orderState: Order.orderState,
-          orderProducts: Order.productArray,
-        };
-        console.log(test);
       });
     })
-    .catch((error) => console.error("Error fetching user data:", error));
+    .catch((error) => console.error("Error fetching orders data:", error));
 });
 
