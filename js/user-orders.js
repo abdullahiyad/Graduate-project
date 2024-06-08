@@ -40,7 +40,7 @@ function addOrder(
 ) {
   const products = document.createElement("tbody");
   prodctsArray.forEach((element) => {
-    products.appendChild(addProduct(element.name, element.quan));
+    products.appendChild(addProduct(element.productName, element.quantity));
   });
   const newOrder = document.createElement("div");
   newOrder.className = "message flex-row";
@@ -105,24 +105,6 @@ function addOrder(
   }
 }
 
-//test the function
-const productsArr = [
-  { name: "coffee", quan: 3 },
-  { name: "tea", quan: 2 },
-];
-addOrder(
-  "ahmed",
-  "abdullahiyad@gmail.com",
-  "ali",
-  "1571681681",
-  "jenin",
-  "arabah",
-  "address2",
-  new Date(),
-  "pending",
-  productsArr,
-  300
-);
 
 //function add products
 function addProduct(productName, productQuantity) {
@@ -147,7 +129,7 @@ window.logout = function () {
       console.log(err);
     });
 };
-const oneDay = 24 * 60 * 60 * 1000;
+
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/orders/api")
     .then(async (response) => {
@@ -155,12 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       let data = await response.json();
-      // console.log(data);
       return data;
     })
     .then((data) => {
       data.forEach((Order) => {
-        console.log(Order.orderName);
+        console.log(Order.productArray);
         addOrder(
           Order.userName,
           Order.userEmail,
@@ -169,24 +150,12 @@ document.addEventListener("DOMContentLoaded", () => {
           Order.city,
           Order.address1,
           Order.address2,
-          Order.orderDate.toLocalString(),
-          Order.orderState,
-          Order.productArray
+          new Date(Order.createdAt).toLocaleString(),
+          Order.state,
+          Order.products,
+          Order.totalPrice,
         );
-        const test = {
-          userName: Order.userName,
-          userEmail: Order.userEmail,
-          orderName: Order.orderName,
-          orderPhone: Order.orderPhone,
-          orderCity: Order.city,
-          orderAddress1: Order.address1,
-          orderAddress2: Order.address2,
-          orderDate: Order.orderDate.toLocalString(),
-          orderState: Order.orderState,
-          orderProducts: Order.productArray,
-        };
-        console.log(test);
       });
     })
-    .catch((error) => console.error("Error fetching user data:", error));
+    .catch((error) => console.error("Error fetching orders data:", error));
 });

@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Extract user data
         const userName = order.userName;
         const userEmail = order.userEmail;
-
+        console.log(order.userName, order.userEmail);
         // Extract delivery data
         const orderName = order.customer.name;
         const orderPhone = order.customer.phone;

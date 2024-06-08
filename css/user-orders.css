@@ -202,7 +202,7 @@ body {
   z-index: 1;
   transition-duration: 0.5s;
 }
-.messages-container .aside .messages a {
+.messages-container .aside .orders a {
   color: orangered;
 }
 .messages-container .aside li {

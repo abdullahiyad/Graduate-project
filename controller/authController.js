@@ -728,8 +728,8 @@ module.exports.get_orders_data = async (req, res) => {
     // Process each order to get user and product information
     const ordersData = await Promise.all(orders.map(async order => {
       // Fetch user information
-      const user = await User.findById(order.userId).exec();
-      if (!user) {
+      const User = await user.findById(order.userId).exec();
+      if (!User) {
         throw new Error(`User with ID ${order.userId} not found`);
       }
 
@@ -748,15 +748,16 @@ module.exports.get_orders_data = async (req, res) => {
       // Construct order data with user and product information
       return {
         orderId: order._id,
-        userName: user.name,
-        userEmail: user.email,
-        userScore: user.score,
+        userName: User.name,
+        userEmail: User.email,
+        userScore: User.score,
         customer: order.customer,
         products: products,
         totalPrice: order.totalPrice,
         createdAt: order.createdAt
       };
     }));
+    console.log(ordersData);
     // Send the combined data back to the client
     res.status(200).json({ orders: ordersData });
   } catch (err) {
@@ -840,13 +841,13 @@ module.exports.get_orders_user_data = async (req, res) => {
     if (!userData) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    
     // Fetch the orders for the user
     const userOrders = await Order.find({ userId: userId });
     if (userOrders.length === 0) {
       return res.status(404).json({ message: "No orders found for this user" });
     }
-
+    console.log(userOrders);
     // Fetch product details for each order
     const ordersData = await Promise.all(userOrders.map(async (order) => {
       const products = await Promise.all(order.products.map(async (product) => {
@@ -872,7 +873,7 @@ module.exports.get_orders_user_data = async (req, res) => {
         state: order.status,
       };
     }));
-
+    console.log(ordersData);
     // Send the formatted orders in the response
     res.status(200).json(ordersData);
   } catch (err) {
