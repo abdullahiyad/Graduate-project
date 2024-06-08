@@ -89,20 +89,20 @@ function addOrder(
     </div>
   `;
 
-  //   pendingOrders.appendChild(newOrder.firstElementChild);
-  // const currentTime = new Date();
-  // const ordersDate = new Date(ordersDate);
-  // // Calculate 24 hours in milliseconds
-  // const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
-  // const timeDifference = currentTime - orderDate;
-  // if (
-  //   timeDifference > millisecondsIn24Hours ||
-  //   orderState.toLowerCase() === "submitted"
-  // ) {
-  //   oldOrders.appendChild(newOrder.firstElementChild);
-  // } else {
-  //   pendingOrders.appendChild(newOrder.firstElementChild);
-  // }
+  pendingOrders.appendChild(newOrder.firstElementChild);
+  const currentTime = new Date();
+  const ordersDate = new Date(ordersDate);
+  // Calculate 24 hours in milliseconds
+  const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+  const timeDifference = currentTime - orderDate;
+  if (
+    timeDifference > millisecondsIn24Hours ||
+    orderState.toLowerCase() === "submitted"
+  ) {
+    oldOrders.appendChild(newOrder.firstElementChild);
+  } else {
+    pendingOrders.appendChild(newOrder.firstElementChild);
+  }
 }
 
 //test the function
