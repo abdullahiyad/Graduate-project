@@ -43,72 +43,67 @@ function addOrder(
     products.appendChild(addProduct(element.name, element.quan));
   });
   const newOrder = document.createElement("div");
+  newOrder.className = "message flex-row";
   newOrder.innerHTML = `
-   <div class="message flex-row">
-                    <div class="info-container flex-row">
-                        <div class="icon flex-row">
-                            <i class="fa-solid fa-utensils"></i>
-                            <p class="input-style .new-message">new order</p>
-                        </div>
-
-                        <div class="user-details">
-                            <input type="text" class="customer-name input-style" value="${userName}">
-                            <input type="email" class="customers-email input-style display-none" value="${userEmail}">
-                            <!-- <input type="text" class="customer-info input-style display-none" value="0569912325"> -->
-                        </div>
-                    </div>
-                    <div class="order-content display-none">
-                        <div class="order-content input-style">
-                            <div class=" display-none order-info ">
-                                <h3>order information :</h3>
-                                <div class="name input-style">name : ${orderName}</div>
-                                <div class="phone input-style">phone : ${orderPhone}</div>
-                                <div class="city input-style">city : ${city}</div>
-                                <div class="address1 input-style">address : ${address1}</div>
-                                <div class="address2 input-style">address2 : ${address2}</div>
-                            </div>
-                            <div class="order-details">
-                                <h3>order details : </h3>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>product</th>
-                                            <th>quantity</th>
-                                        </tr>
-                                    </thead>
-                                    ${products.innerHTML}
-                                    <tfoot>
-                                        <td>total price :${totalPrice} $</td>
-                                        <td></td>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="open-order" onclick="readMessagge(event)">details</p>
-                    <div class="btns display-none ">
-                        <input type="button" class="close-msg btn-style" value="close" onclick="closeMessagge(event)">
-                    </div>
-                </div>
+    <div class="info-container flex-row">
+      <div class="icon flex-row">
+        <i class="fa-solid fa-utensils"></i>
+        <p class="input-style new-message">new order</p>
+      </div>
+      <div class="user-details">
+        <input type="text" class="customer-name input-style" value="${userName}">
+        <input type="email" class="customers-email input-style display-none" value="${userEmail}">
+      </div>
+    </div>
+    <div class="order-content display-none">
+      <div class="order-content input-style">
+        <div class="display-none order-info">
+          <h3>order information :</h3>
+          <div class="name input-style">name : ${orderName}</div>
+          <div class="phone input-style">phone : ${orderPhone}</div>
+          <div class="city input-style">city : ${city}</div>
+          <div class="address1 input-style">address : ${address1}</div>
+          <div class="address2 input-style">address2 : ${address2}</div>
+        </div>
+        <div class="order-details">
+          <h3>order details : </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>product</th>
+                <th>quantity</th>
+              </tr>
+            </thead>
+            ${products.outerHTML}
+            <tfoot>
+              <td>total price : ${totalPrice} $</td>
+              <td></td>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+    <p class="open-order" onclick="readMessagge(event)">details</p>
+    <div class="btns display-none">
+      <input type="button" class="close-msg btn-style" value="close" onclick="closeMessagge(event)">
+    </div>
   `;
 
-  //   pendingOrders.appendChild(newOrder.firstElementChild);
-  // const currentTime = new Date();
-  // const ordersDate = new Date(ordersDate);
-  // // Calculate 24 hours in milliseconds
-  // const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
-  // const timeDifference = currentTime - orderDate;
-  // if (
-  //   timeDifference > millisecondsIn24Hours ||
-  //   orderState.toLowerCase() === "submitted"
-  // ) {
-  //   oldOrders.appendChild(newOrder.firstElementChild);
-  // } else {
-  //   pendingOrders.appendChild(newOrder.firstElementChild);
-  // }
-}
+  // Add the new order to pending or old orders based on the conditions
+  const currentTime = new Date();
+  const orderTime = new Date(orderDate);
+  const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+  const timeDifference = currentTime - orderTime;
 
-///
+  if (
+    timeDifference > millisecondsIn24Hours ||
+    orderState.toLowerCase() === "submitted"
+  ) {
+    oldOrders.appendChild(newOrder);
+  } else {
+    pendingOrders.appendChild(newOrder);
+  }
+}
 
 //test the function
 const productsArr = [
@@ -123,7 +118,7 @@ addOrder(
   "jenin",
   "arabah",
   "address2",
-  "2024-06-06T22:00:00Z",
+  new Date(),
   "pending",
   productsArr,
   300
@@ -178,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
           Order.address2,
           Order.orderDate.toLocalString(),
           Order.orderState,
-          Order.productArray,
+          Order.productArray
         );
         const test = {
           userName: Order.userName,
@@ -197,4 +192,3 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching user data:", error));
 });
-

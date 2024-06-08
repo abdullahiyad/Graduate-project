@@ -36,11 +36,8 @@ function rejectReservation(event) {
       });
 
       // Extract reservation ID from the DOM
-      const reservationID =
-        clickedElement.parentElement.previousElementSibling
-          .previousElementSibling.previousElementSibling.lastElementChild
-          .lastElementChild.value;
-      console.log(reservationID);
+      const parent = clickedElement.parentElement.parentElement;
+      const reservationID = parent.querySelector(".reservation-id").value;
       // Send the reservation ID and state to the server
       fetch("/admin/messages", {
         method: "PUT", // Specify the HTTP method as PUT
@@ -58,7 +55,7 @@ function rejectReservation(event) {
         .then((data) => {
           console.log("Reservation update successful:", data);
           // Handle the success response here
-          clickedElement.parentElement.parentElement.remove();
+          parent.remove();
         })
         .catch((err) => {
           console.error("Reservation update failed:", err);
@@ -134,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       data.forEach((reservation) => {
-
         addMessage(
           reservation.userName,
           reservation.userEmail,
@@ -169,7 +165,7 @@ function acceptReservation(event) {
   const reservationID =
     clickedElement.parentElement.previousElementSibling.previousElementSibling
       .previousElementSibling.lastElementChild.lastElementChild.value;
-  console.log("Test1: ",reservationID);
+  console.log("Test1: ", reservationID);
   fetch("/admin/messages", {
     method: "PUT", // Specify the HTTP method as PUT for updating
     headers: {

@@ -38,15 +38,13 @@ function rejectReservation(event) {
         text: "the reservation has been canceled.",
         icon: "success",
       });
-      reservationID =
-        clickedElement.parentElement.previousElementSibling
-          .previousElementSibling.previousElementSibling.lastElementChild
-          .lastElementChild.value;
+      const parent = clickedElement.parentElement.parentElement;
+      const reservationID = parent.querySelector(".reservation-id").value;
       //function to send this reservation info to rejected reservation database
       //
       //function here
       //
-      clickedElement.parentElement.parentElement.remove();
+      parent.remove();
     }
   });
 }
@@ -251,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => {
       data.forEach((reservation) => {
         console.log(reservation.state);
-        if(reservation.state === "pending") {
+        if (reservation.state === "pending") {
           addMessagePending(
             reservation.userName,
             reservation.userEmail,
@@ -262,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
             reservation.numPerson,
             reservation.details
           );
-        } else if(reservation.state === "accepted") {
+        } else if (reservation.state === "accepted") {
           addMessageAccepted(
             reservation.userName,
             reservation.userEmail,
@@ -273,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
             reservation.numPerson,
             reservation.details
           );
-        } else if(reservation.state === "rejected") {
+        } else if (reservation.state === "rejected") {
           addMessageRejected(
             reservation.userName,
             reservation.userEmail,
@@ -285,7 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
             reservation.details
           );
         }
-        
       });
     })
     .catch((error) => console.error("Error fetching user data:", error));

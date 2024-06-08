@@ -370,6 +370,12 @@ form.more-details{
 .more-details .info-container .icon{
   display: none;  
 }
+.more-details .info-container .user-details{
+  width: 100%;
+}
+.more-details .info-container .user-details .input-style{
+  width: 100%;
+}
 .more-details .info-container .input-style{
   font-size: 12px;
 }
