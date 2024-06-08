@@ -33,14 +33,14 @@ function addOrder(
   city,
   address1,
   address2,
-  ordersDate,
+  orderDate,
   orderState,
-  productsArray,
+  prodctsArray,
   totalPrice
 ) {
   const products = document.createElement("tbody");
-  productsArray.forEach((element) => {
-    products.appendChild(addProduct(element.productName, element.quantity));
+  prodctsArray.forEach((element) => {
+    products.appendChild(addProduct(element.name, element.quan));
   });
   const newOrder = document.createElement("div");
   newOrder.className = "message flex-row";
@@ -89,19 +89,19 @@ function addOrder(
     </div>
   `;
 
-  pendingOrders.appendChild(newOrder.firstElementChild);
+  // Add the new order to pending or old orders based on the conditions
   const currentTime = new Date();
-  const ordersDate = new Date(ordersDate);
-  // Calculate 24 hours in milliseconds
+  const orderTime = new Date(orderDate);
   const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
-  const timeDifference = currentTime - orderDate;
+  const timeDifference = currentTime - orderTime;
+
   if (
     timeDifference > millisecondsIn24Hours ||
     orderState.toLowerCase() === "submitted"
   ) {
-    oldOrders.appendChild(newOrder.firstElementChild);
+    oldOrders.appendChild(newOrder);
   } else {
-    pendingOrders.appendChild(newOrder.firstElementChild);
+    pendingOrders.appendChild(newOrder);
   }
 }
 
@@ -118,7 +118,7 @@ addOrder(
   "jenin",
   "arabah",
   "address2",
-  "2024-06-06T22:00:00Z",
+  new Date(),
   "pending",
   productsArr,
   300
@@ -147,6 +147,7 @@ window.logout = function () {
       console.log(err);
     });
 };
+const oneDay = 24 * 60 * 60 * 1000;
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/orders/api")
     .then(async (response) => {
@@ -154,11 +155,12 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       let data = await response.json();
+      // console.log(data);
       return data;
     })
     .then((data) => {
       data.forEach((Order) => {
-        console.log(Order.products);
+        console.log(Order.orderName);
         addOrder(
           Order.userName,
           Order.userEmail,
@@ -169,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
           Order.address2,
           Order.orderDate.toLocalString(),
           Order.orderState,
-          Order.productArray,
+          Order.productArray
         );
         const test = {
           userName: Order.userName,
@@ -186,5 +188,5 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(test);
       });
     })
-    .catch((error) => console.error("Error fetching orders data:", error));
+    .catch((error) => console.error("Error fetching user data:", error));
 });
