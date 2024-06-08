@@ -124,8 +124,6 @@ addOrder(
   300
 );
 
-///
-
 //function add products
 function addProduct(productName, productQuantity) {
   const row = document.createElement("tr");
