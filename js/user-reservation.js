@@ -226,48 +226,6 @@ here more details : [${moreDetails}]
   rejectedContainer.appendChild(newMessage.firstElementChild);
 }
 
-//function to add message to right section
-// if (reservation.state == "pending") {
-//   addMessagePending(
-//     "abdullah iyad",
-//     "abdullah@ykpo.com",
-//     1,
-//     "ali",
-//     "0568453235",
-//     "25-6-2024",
-//     "12:30",
-//     5
-//   );
-// } else if (reservation.state == "accepted") {
-//   addMessageAccepted(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
-// } else {
-//   addMessageRejected(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
-// }
-//examples of how to call function
-addMessageAccepted(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
-addMessageAccepted(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
-addMessageRejected(1, "sati", "0568453235", "25-6-2024", "12:30", 5);
-addMessagePending(
-  "abdullah iyad",
-  "abdullah@ykpo.com",
-  1,
-  "ali",
-  "0568453235",
-  "25-6-2024",
-  "12:30",
-  5
-);
-addMessagePending(
-  "abdullah iyad",
-  "abdullah@ykpo.com",
-  1,
-  "ali",
-  "0568453235",
-  "25-6-2024",
-  "12:30",
-  5
-);
-
 window.logout = function () {
   fetch("/admin/messages/logout", {
     method: "POST", // Change the method to POST
@@ -279,3 +237,56 @@ window.logout = function () {
       console.log(err);
     });
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/user/messages/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      // console.log(data);
+      return data;
+    })
+    .then((data) => {
+      data.forEach((reservation) => {
+        console.log(reservation.state);
+        if(reservation.state === "pending") {
+          addMessagePending(
+            reservation.userName,
+            reservation.userEmail,
+            reservation._id,
+            reservation.resName,
+            reservation.phone,
+            new Date(reservation.newDate).toLocaleString(), // Format date
+            reservation.numPerson,
+            reservation.details
+          );
+        } else if(reservation.state === "accepted") {
+          addMessageAccepted(
+            reservation.userName,
+            reservation.userEmail,
+            reservation._id,
+            reservation.resName,
+            reservation.phone,
+            new Date(reservation.newDate).toLocaleString(), // Format date
+            reservation.numPerson,
+            reservation.details
+          );
+        } else if(reservation.state === "rejected") {
+          addMessageRejected(
+            reservation.userName,
+            reservation.userEmail,
+            reservation._id,
+            reservation.resName,
+            reservation.phone,
+            new Date(reservation.newDate).toLocaleString(), // Format date
+            reservation.numPerson,
+            reservation.details
+          );
+        }
+        
+      });
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
+});

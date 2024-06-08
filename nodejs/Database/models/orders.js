@@ -40,6 +40,11 @@ const orderSchema = new mongoose.Schema({
       },
     }
   ],
+  status: {
+    type: String,
+    enum: ["pending","processing","completed"],
+    default: "pending",
+  },
   totalPrice: {
     type: Number,
     required: true,
@@ -48,7 +53,6 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  
 });
 
 module.exports = Order = mongoose.model("Order", orderSchema);

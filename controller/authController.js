@@ -529,27 +529,26 @@ module.exports.reservation_post = async (req, res) => {
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
     const userData = await user.findById(userId);
-
+    console.log(userData);
     const { name, phone, numOfPersons, insDate, details } = req.body;
     if (!name || !phone || !numOfPersons || !insDate) {
       return res.status(400).json({ error: "All fields are required" });
     }
-    const alreadyReserved = await reservation.findOne({"customer.userEmail": userData.email})
+    const alreadyReserved = await reservation.findOne({userId: userId});
+    console.log(alreadyReserved);
     if(alreadyReserved){
       return res.status(400).json({ error: "you already reserved" });
     }
     const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
     const newReservation = new reservation({
-      customer: {
-        userName: userData.name,
-        userEmail: userData.email
-      },
+      userId: userId,
       resName: name,
       phone: phone,
       numPerson: numOfPersons,
       newDate: reservationDate,
       details: details || "No details",
     });
+    console.log("New Reservation: ", newReservation);
     await newReservation.save();
     res.status(201).json({ message: "Reservation created successfully" });
   } catch (error) {
@@ -645,26 +644,52 @@ module.exports.checkOut_post = async (req, res) => {
 
 module.exports.messages_data_get = async (req, res) => {
   try {
-    const reservations = await reservation.find({state: "pending"});
-    res.status(200).json(reservations);
+    const reservations = await reservation.find({ state: "pending" });
+    const usersData = [];
+    
+    reservations.forEach((data) => {
+      usersData.push(user.findById(data.userId));
+    });
+
+    const userDataList = await Promise.all(usersData);
+    const Reservations = [];
+
+    reservations.forEach((data, index) => {
+      const users = userDataList[index];
+      if (users) {
+        Reservations.push({
+          userName: users.name,
+          userEmail: users.email,
+          reservationId: data._id,
+          resName: data.resName,
+          phone: data.phone,
+          reserveDate: data.newDate,
+          numPerson: data.numPerson,
+          details: data.details
+        });
+      }
+    });
+    res.status(200).json(Reservations);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("Error fetching reservations:", err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 module.exports.message_acc_rej = async (req, res) => {
   try {
     const { id, state } = req.body;
 
     // Validate the state
-    if (state !== 'acc' && state !== 'rej') {
+    if (state !== 'accepted' && state !== 'rejected') {
       return res.status(400).json({ error: "Invalid state value" });
     }
 
     // Update the reservation state based on the provided state
     const updatedReservation = await reservation.findByIdAndUpdate(
       id,
-      { state: state === 'acc' ? 'accepted' : 'rejected' },
+      { state: state === 'accepted' ? 'accepted' : 'rejected' },
       { new: true } // Return the updated document
     );
 
@@ -673,7 +698,7 @@ module.exports.message_acc_rej = async (req, res) => {
     }
 
     // If the reservation is accepted, increment the user's reservationNumbers
-    if (state === 'acc') {
+    if (state === 'accepted') {
       const userId = updatedReservation.userId; // Assuming the reservation document contains a userId field
       await user.findByIdAndUpdate(
         userId,
@@ -760,3 +785,89 @@ module.exports.subscription_post = (req, res) => {
 module.exports.user_dashboard_get = (req, res) => {
     res.render("user/testNotify");
 }
+
+module.exports.get_user_orders = (req, res) => {
+  res.render('user/orders');
+};
+
+module.exports.get_user_messages = async (req, res) => {
+  try {
+    // Get the userId from the request
+    const userId = getUserData(req);
+
+    // Fetch the user data
+    const userData = await user.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Search for reservations by userId
+    const userReservations = await reservation.find({ userId: userId });
+
+    // Check if reservations exist for the user
+    if (userReservations.length === 0) {
+      return res.status(404).json({ message: "No reservations found for this user" });
+    }
+
+    // Format the reservations data with user details
+    const formattedReservations = userReservations.map(data => ({
+      userName: userData.name,
+      userEmail: userData.email,
+      reservationId: data._id,
+      resName: data.resName,
+      phone: data.phone,
+      reserveDate: data.newDate,
+      numPerson: data.numPerson,
+      details: data.details,
+      state: data.state
+    }));
+    console.log("Test1: id = ",reservation._id);
+    // Send the formatted reservations in the response
+    res.status(200).json(formattedReservations);
+  } catch (err) {
+    console.error("Error fetching reservations:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports.get_orders_user_data = async (req, res) => {
+  try {
+    
+    // Get the userId from the request
+    const userId = getUserData(req);
+    console.log("inside order get", userId);
+    // Fetch the user data
+    const userData = await user.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Search for reservations by userId
+    const userOrders = await Order.find({ userId: userId });
+    // Check if reservations exist for the user
+    if (userOrders.length === 0) {
+      return res.status(404).json({ message: "No reservations found for this user" });
+    }
+
+    // Format the reservations data with user details
+    const allUserOrders = userOrders.map(data => ({
+      userName: userData.name,
+      userEmail: userData.email,
+      OrderId: data._id,
+      orderName: data.customer.name,
+      orderPhone: data.customer.phone,
+      City: data.customer.City,
+      customerAddress1: data.customer.address1,
+      customerAddress2: data.customer.address2,
+      productArray: data.productArray,
+      totalPrice: data.totalPrice,
+      createdAt: data.createdAt,
+      state: data.state,
+    }));
+    // Send the formatted reservations in the response
+    res.status(200).json(allUserOrders);
+  } catch (err) {
+    console.error("Error fetching reservations:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

@@ -41,7 +41,7 @@ function addToCart(event) {
           <span class="quan">1</span>
           <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
         </div>
-        <p><span>${productPrice}</span>$</p>
+        <p><span>${productPrice}</span>₪</p>
         <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
       </div>
     `;
@@ -81,7 +81,7 @@ function addProduct(
            <p class="product-description">${productDescription}.</p>
        </div>
        <div class="price">
-           <p><span class="price-x">${productPrice}</span> $</p>
+           <p><span class="price-x">${productPrice}</span> ₪</p>
            <button class="atc" onclick="addToCart(event)">Add To Cart</button>
        </div>
    </div>
@@ -217,7 +217,7 @@ function initializeProducts(
       <span class="quan">${product.quan}</span>
       <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
     </div>
-      <p><span>${product.price}</span>$</p>
+      <p><span>${product.price}</span>₪</p>
       <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
   </div>
 `;
@@ -317,7 +317,7 @@ function updateCartList() {
           <span class="quan">${product.quan}</span>
           <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
         </div>
-        <p><span>${product.price}</span>$</p>
+        <p><span>${product.price}</span>₪</p>
         <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
       </div>
     `;

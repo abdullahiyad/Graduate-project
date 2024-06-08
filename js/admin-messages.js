@@ -47,7 +47,7 @@ function rejectReservation(event) {
         headers: {
           "Content-Type": "application/json", // Specify the content type
         },
-        body: JSON.stringify({ id: reservationID, state: "rej" }), // Send the reservation ID and state
+        body: JSON.stringify({ id: reservationID, state: "rejected" }), // Send the reservation ID and state
       })
         .then((response) => {
           if (!response.ok) {
@@ -129,14 +129,15 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       let data = await response.json();
-      console.log(data);
+      // console.log(data);
       return data;
     })
     .then((data) => {
       data.forEach((reservation) => {
+
         addMessage(
-          reservation.customer.userName,
-          reservation.customer.userEmail,
+          reservation.userName,
+          reservation.userEmail,
           reservation._id,
           reservation.resName,
           reservation.phone,
@@ -168,13 +169,13 @@ function acceptReservation(event) {
   const reservationID =
     clickedElement.parentElement.previousElementSibling.previousElementSibling
       .previousElementSibling.lastElementChild.lastElementChild.value;
-  console.log(reservationID);
+  console.log("Test1: ",reservationID);
   fetch("/admin/messages", {
     method: "PUT", // Specify the HTTP method as PUT for updating
     headers: {
       "Content-Type": "application/json", // Specify the content type
     },
-    body: JSON.stringify({ id: reservationID, state: "acc" }), // Send the reservation ID and state
+    body: JSON.stringify({ id: reservationID, state: "accepted" }), // Send the reservation ID and state
   })
     .then((response) => {
       if (!response.ok) {

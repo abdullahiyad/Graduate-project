@@ -93,19 +93,19 @@ function addOrder(
   `;
 
   //   pendingOrders.appendChild(newOrder.firstElementChild);
-  const currentTime = new Date();
-  const orderDatee = new Date(orderDate);
-  // Calculate 24 hours in milliseconds
-  const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
-  const timeDifference = currentTime - orderDatee;
-  if (
-    timeDifference > millisecondsIn24Hours ||
-    orderState.toLowerCase() === "submitted"
-  ) {
-    oldOrders.appendChild(newOrder.firstElementChild);
-  } else {
-    pendingOrders.appendChild(newOrder.firstElementChild);
-  }
+  // const currentTime = new Date();
+  // const ordersDate = new Date(ordersDate);
+  // // Calculate 24 hours in milliseconds
+  // const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
+  // const timeDifference = currentTime - orderDate;
+  // if (
+  //   timeDifference > millisecondsIn24Hours ||
+  //   orderState.toLowerCase() === "submitted"
+  // ) {
+  //   oldOrders.appendChild(newOrder.firstElementChild);
+  // } else {
+  //   pendingOrders.appendChild(newOrder.firstElementChild);
+  // }
 }
 
 ///
@@ -123,7 +123,7 @@ addOrder(
   "jenin",
   "arabah",
   "address2",
-  "2024-06-03T22:00:00Z",
+  "2024-06-06T22:00:00Z",
   "pending",
   productsArr,
   300
@@ -154,3 +154,47 @@ window.logout = function () {
       console.log(err);
     });
 };
+const oneDay = 24 * 60 * 60 * 1000;
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/user/orders/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      // console.log(data);
+      return data;
+    })
+    .then((data) => {
+      data.forEach((Order) => {
+        console.log(Order.orderName);
+        addOrder(
+          Order.userName,
+          Order.userEmail,
+          Order.orderName,
+          Order.orderPhone,
+          Order.city,
+          Order.address1,
+          Order.address2,
+          Order.orderDate.toLocalString(),
+          Order.orderState,
+          Order.productArray,
+        );
+        const test = {
+          userName: Order.userName,
+          userEmail: Order.userEmail,
+          orderName: Order.orderName,
+          orderPhone: Order.orderPhone,
+          orderCity: Order.city,
+          orderAddress1: Order.address1,
+          orderAddress2: Order.address2,
+          orderDate: Order.orderDate.toLocalString(),
+          orderState: Order.orderState,
+          orderProducts: Order.productArray,
+        };
+        console.log(test);
+      });
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
+});
+

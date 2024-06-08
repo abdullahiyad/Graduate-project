@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         console.log("Reservation successful:", data);
+        window.location.href = '/reservation';
       })
       .catch((error) => {
         console.error("Error making reservation:", error.message);
