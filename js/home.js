@@ -58,7 +58,6 @@ function redirect() {
         document.getElementById('loginIc').removeAttribute('href');
         loginIcon.href = 'user/profile';
       }
-      console.log('Redirect link updated:', loginIcon.href);
     })
     .catch((error) => console.error("Error fetching user data:", error));
 }

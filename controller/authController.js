@@ -92,22 +92,6 @@ module.exports.login_post = async (req, res) => {
 module.exports.home_get = (req, res) => {
   res.render("home");
 };
-module.exports.home_get_data = async (req, res) => {
-  try {
-    const token = req.cookies.jwt;
-    if (!token) {
-      return null;
-    }
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.id;
-    const users = await user.find({ _id: userId });
-    res.json({ users });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).json({ error: "Error fetching products" });
-  }
-};
-
 module.exports.switch_page = async (req, res) => {
   try {
     const token = req.cookies.jwt;
@@ -117,31 +101,35 @@ module.exports.switch_page = async (req, res) => {
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
     const users = await user.find({ _id: userId });
-    console.log(users);
     res.json({ users });
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).json({ error: "Error fetching products" });
   }
-}
-
+};
 
 module.exports.menu_get = (req, res) => {
   res.render("menu");
 };
 module.exports.menu_data_get = async (req, res) => {
   try {
+    const userId = getUserData(req);
+    if (!userId) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const userData = await user.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const products = await Product.find();
-    res.json({ products });
+    res.json({ user: userData, products });
   } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).json({ error: "Error fetching products" });
+    console.error("Error fetching products and user data:", error);
+    res.status(500).json({ error: "Error fetching products and user data" });
   }
 };
-module.exports.menu_post = async (req, res) => {
-  console.log("This is the post method");
-};
-
 module.exports.dashboard_get = async (req, res) => {
   const token = req.cookies.jwt;
   if (!token) {
@@ -184,12 +172,6 @@ module.exports.customer_data_get = async (req, res) => {
   }
 };
 //this code takes all users needed
-module.exports.customer_post = (req, res) => {
-  res.send("This is customers page");
-};
-module.exports.customer_put = (req, res) => {
-  res.send("This for update users");
-};
 
 module.exports.products_post = async (req, res) => {
   const name = req.body["product-name"];
@@ -352,9 +334,6 @@ module.exports.admin_profile_get_api = async (req, res) => {
   }
 };
 
-module.exports.admin_profile_post = async (req, res) => {
-  console.log("This is post method");
-};
 module.exports.logout_Del_Cookie = async (req, res) => {
   res.clearCookie("jwt").send("Logout Successfully");
 };
@@ -757,7 +736,6 @@ module.exports.get_orders_data = async (req, res) => {
         createdAt: order.createdAt
       };
     }));
-    console.log(ordersData);
     // Send the combined data back to the client
     res.status(200).json({ orders: ordersData });
   } catch (err) {
@@ -822,7 +800,6 @@ module.exports.get_user_messages = async (req, res) => {
       details: data.details,
       state: data.state
     }));
-    console.log("Test1: id = ",reservation._id);
     // Send the formatted reservations in the response
     res.status(200).json(formattedReservations);
   } catch (err) {
@@ -847,7 +824,6 @@ module.exports.get_orders_user_data = async (req, res) => {
     if (userOrders.length === 0) {
       return res.status(404).json({ message: "No orders found for this user" });
     }
-    console.log(userOrders);
     // Fetch product details for each order
     const ordersData = await Promise.all(userOrders.map(async (order) => {
       const products = await Promise.all(order.products.map(async (product) => {
@@ -873,7 +849,6 @@ module.exports.get_orders_user_data = async (req, res) => {
         state: order.status,
       };
     }));
-    console.log(ordersData);
     // Send the formatted orders in the response
     res.status(200).json(ordersData);
   } catch (err) {

@@ -20,7 +20,7 @@ module.exports.checkAuth = (req, res, next) => {
     }
 }
 
-module.exports.isLoggedIn = (req, res, next) => {
+module.exports.isLoggedIn = async (req, res, next) => {
     const token = req.cookies.jwt;
     if(token) {
         jwt.verify(token, secretKey, (err, DToken) => {

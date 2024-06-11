@@ -99,8 +99,9 @@ function addProduct(
 
 document.addEventListener("DOMContentLoaded", function () {
   initializeProducts();
+
   // Fetch product data from the backend and populate the table
-  fetch("/admin/products/api")
+  fetch("/menu/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -109,10 +110,19 @@ document.addEventListener("DOMContentLoaded", function () {
       return data;
     })
     .then((data) => {
+      // Redirect logic based on user status
+      const user = data.user;
+      const loginIcon = document.getElementById('loginIc');
+      if (user.status === 'admin') {
+        loginIcon.href = 'admin/dashboard';
+      } else if (user.status === 'user') {
+        loginIcon.href = 'user/profile';
+      }
+
+      // Process products data
       data.products.forEach((product) => {
         let base64Image = arrayBufferToBase64(product.image.data.data);
         let imgSrc = base64Image;
-        // Assuming product.image contains ArrayBuffer image data
         addProduct(
           product._id,
           imgSrc,
@@ -135,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return "data:image/jpeg;base64," + window.btoa(binary);
   }
+
 });
 
 //burger icon
@@ -172,31 +183,7 @@ link.forEach((element) => {
     });
   }
 });
-//Redirect to dashboard
-function redirect() {
-  fetch("/menu/switch")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      let data = await response.json();
-      var users;
-      data.users.forEach((user) => {
-        users = user;
-      });
-      document.getElementById("loginIc").removeAttribute("href");
-      const loginIcon = document.getElementById("loginIc");
-      if (users.status === "admin") {
-        document.getElementById("loginIc").removeAttribute("href");
-        loginIcon.href = "admin/dashboard";
-      } else if (users.status === "user") {
-        document.getElementById("loginIc").removeAttribute("href");
-        loginIcon.href = "user/profile";
-      }
-      console.log("Redirect link updated:", loginIcon.href);
-    })
-    .catch((error) => console.error("Error fetching user data:", error));
-}
+
 // Function to run on page load to initialize products
 function initializeProducts(
   productId,
@@ -266,115 +253,115 @@ function addObject(productId, productName, productPrice, productQuantity = 1) {
   sessionStorage.setItem("productsArray", JSON.stringify(array));
 }
 
-// Function to add a product to the cart when the 'Add to Cart' button is clicked
-function addToCart(event) {
-  const clickedElement = event.target;
-  const productContainer = clickedElement.parentElement.parentElement;
-  const productId = productContainer.querySelector(".product-id").textContent;
-  const productName =
-    productContainer.querySelector(".product-title").textContent;
-  const productPrice = productContainer.querySelector(".price-x").textContent;
+// // Function to add a product to the cart when the 'Add to Cart' button is clicked
+// function addToCart(event) {
+//   const clickedElement = event.target;
+//   const productContainer = clickedElement.parentElement.parentElement;
+//   const productId = productContainer.querySelector(".product-id").textContent;
+//   const productName =
+//     productContainer.querySelector(".product-title").textContent;
+//   const productPrice = productContainer.querySelector(".price-x").textContent;
 
-  // Retrieve the array from session storage
-  let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
-  let productInArray = productsArray.find(
-    (product) => product.id === productId
-  );
+//   // Retrieve the array from session storage
+//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
+//   let productInArray = productsArray.find(
+//     (product) => product.id === productId
+//   );
 
-  if (productInArray) {
-    // Increase the quantity of the existing product in the session storage
-    productInArray.quan += 1;
-  } else {
-    // Add the new product to the session storage
-    const newProduct = {
-      id: productId,
-      name: productName,
-      price: productPrice,
-      quan: 1,
-    };
-    productsArray.push(newProduct);
-  }
+//   if (productInArray) {
+//     // Increase the quantity of the existing product in the session storage
+//     productInArray.quan += 1;
+//   } else {
+//     // Add the new product to the session storage
+//     const newProduct = {
+//       id: productId,
+//       name: productName,
+//       price: productPrice,
+//       quan: 1,
+//     };
+//     productsArray.push(newProduct);
+//   }
 
-  // Update session storage
-  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+//   // Update session storage
+//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
 
-  // Update the cart list in the DOM
-  updateCartList();
-}
+//   // Update the cart list in the DOM
+//   updateCartList();
+// }
 
-// Function to update the cart list in the DOM based on session storage
-function updateCartList() {
-  cartList.innerHTML = ""; // Clear the current cart list
-  let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
-  productsArray.forEach((product) => {
-    const productElement = document.createElement("div");
-    productElement.innerHTML = `
-      <div class="product">
-        <div class="product-id">${product.id}</div>
-        <h4>${product.name}</h4>
-        <div class="quantity">
-          <i class="fa-solid fa-circle-minus" onclick="decreaseQuantity(event)"></i>
-          <span class="quan">${product.quan}</span>
-          <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
-        </div>
-        <p><span>${product.price}</span>₪</p>
-        <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
-      </div>
-    `;
-    cartList.appendChild(productElement.firstElementChild);
-  });
-}
+// // Function to update the cart list in the DOM based on session storage
+// function updateCartList() {
+//   cartList.innerHTML = ""; // Clear the current cart list
+//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
+//   productsArray.forEach((product) => {
+//     const productElement = document.createElement("div");
+//     productElement.innerHTML = `
+//       <div class="product">
+//         <div class="product-id">${product.id}</div>
+//         <h4>${product.name}</h4>
+//         <div class="quantity">
+//           <i class="fa-solid fa-circle-minus" onclick="decreaseQuantity(event)"></i>
+//           <span class="quan">${product.quan}</span>
+//           <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
+//         </div>
+//         <p><span>${product.price}</span>₪</p>
+//         <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
+//       </div>
+//     `;
+//     cartList.appendChild(productElement.firstElementChild);
+//   });
+// }
 
-// Call the updateCartList function on page load to initialize the cart
-window.addEventListener("load", updateCartList);
+// // Call the updateCartList function on page load to initialize the cart
+// window.addEventListener("load", updateCartList);
 
-// Example increase and decrease quantity functions
-function increaseQuantity(event) {
-  const productElement = event.target.closest(".product");
-  const productId = productElement.querySelector(".product-id").textContent;
-  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  let product = productsArray.find((item) => item.id === productId);
-  product.quan += 1;
-  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
-  updateCartList();
-}
+// // Example increase and decrease quantity functions
+// function increaseQuantity(event) {
+//   const productElement = event.target.closest(".product");
+//   const productId = productElement.querySelector(".product-id").textContent;
+//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+//   let product = productsArray.find((item) => item.id === productId);
+//   product.quan += 1;
+//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+//   updateCartList();
+// }
 
-function decreaseQuantity(event) {
-  const productElement = event.target.closest(".product");
-  const productId = productElement.querySelector(".product-id").textContent;
-  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  let product = productsArray.find((item) => item.id === productId);
-  if (product.quan > 1) {
-    product.quan -= 1;
-  } else {
-    productsArray = productsArray.filter((item) => item.id !== productId);
-  }
-  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
-  updateCartList();
-}
+// function decreaseQuantity(event) {
+//   const productElement = event.target.closest(".product");
+//   const productId = productElement.querySelector(".product-id").textContent;
+//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+//   let product = productsArray.find((item) => item.id === productId);
+//   if (product.quan > 1) {
+//     product.quan -= 1;
+//   } else {
+//     productsArray = productsArray.filter((item) => item.id !== productId);
+//   }
+//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+//   updateCartList();
+// }
 
-function deleteProduct(event) {
-  const productElement = event.target.closest(".product");
-  const productId = productElement.querySelector(".product-id").textContent;
-  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  productsArray = productsArray.filter((item) => item.id !== productId);
-  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
-  updateCartList();
-}
+// function deleteProduct(event) {
+//   const productElement = event.target.closest(".product");
+//   const productId = productElement.querySelector(".product-id").textContent;
+//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+//   productsArray = productsArray.filter((item) => item.id !== productId);
+//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+//   updateCartList();
+// }
 
-// Ensure the addToCart function is called when the 'Add to Cart' button is clicked
-document.querySelectorAll(".add-to-cart-button").forEach((button) => {
-  button.addEventListener("click", addToCart);
-});
+// // Ensure the addToCart function is called when the 'Add to Cart' button is clicked
+// document.querySelectorAll(".add-to-cart-button").forEach((button) => {
+//   button.addEventListener("click", addToCart);
+// });
 
-function redirectToCheckout() {
-  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  if (!productsArray || productsArray.length === 0) {
-    alert("Your cart is empty. Please add items to the cart before proceeding to checkout.");
-  } else {
-    window.location.href = '/checkout'; // Change '/checkout' to the correct URL if needed
-  }
-}
+// function redirectToCheckout() {
+//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+//   if (!productsArray || productsArray.length === 0) {
+//     alert("Your cart is empty. Please add items to the cart before proceeding to checkout.");
+//   } else {
+//     window.location.href = '/checkout'; // Change '/checkout' to the correct URL if needed
+//   }
+// }
 
-// Add event listener to the "Check out" button
-document.querySelector('.checkout').addEventListener('click', redirectToCheckout);
+// // Add event listener to the "Check out" button
+// document.querySelector('.checkout').addEventListener('click', redirectToCheckout);
