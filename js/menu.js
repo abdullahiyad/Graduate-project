@@ -52,11 +52,6 @@ function addToCart(event) {
   addObject(productId, productName, productPrice, 1);
 }
 
-// Ensure the addToCart function is called when the 'Add to Cart' button is clicked
-document.querySelectorAll(".add-to-cart-button").forEach((button) => {
-  button.addEventListener("click", addToCart);
-});
-
 //function to add proudct from database to menu page
 let hotDrinksContainer = document.querySelector(".hot-drinks .products");
 let coldDrinksContainer = document.querySelector(".cold-drinks .products");
@@ -112,11 +107,11 @@ document.addEventListener("DOMContentLoaded", function () {
     .then((data) => {
       // Redirect logic based on user status
       const user = data.user;
-      const loginIcon = document.getElementById('loginIc');
-      if (user.status === 'admin') {
-        loginIcon.href = 'admin/dashboard';
-      } else if (user.status === 'user') {
-        loginIcon.href = 'user/profile';
+      const loginIcon = document.getElementById("loginIc");
+      if (user.status === "admin") {
+        loginIcon.href = "admin/dashboard";
+      } else if (user.status === "user") {
+        loginIcon.href = "user/profile";
       }
 
       // Process products data
@@ -145,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return "data:image/jpeg;base64," + window.btoa(binary);
   }
-
 });
 
 //burger icon
@@ -253,115 +247,119 @@ function addObject(productId, productName, productPrice, productQuantity = 1) {
   sessionStorage.setItem("productsArray", JSON.stringify(array));
 }
 
-// // Function to add a product to the cart when the 'Add to Cart' button is clicked
-// function addToCart(event) {
-//   const clickedElement = event.target;
-//   const productContainer = clickedElement.parentElement.parentElement;
-//   const productId = productContainer.querySelector(".product-id").textContent;
-//   const productName =
-//     productContainer.querySelector(".product-title").textContent;
-//   const productPrice = productContainer.querySelector(".price-x").textContent;
+// Function to add a product to the cart when the 'Add to Cart' button is clicked
+function addToCart(event) {
+  const clickedElement = event.target;
+  const productContainer = clickedElement.parentElement.parentElement;
+  const productId = productContainer.querySelector(".product-id").textContent;
+  const productName =
+    productContainer.querySelector(".product-title").textContent;
+  const productPrice = productContainer.querySelector(".price-x").textContent;
 
-//   // Retrieve the array from session storage
-//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
-//   let productInArray = productsArray.find(
-//     (product) => product.id === productId
-//   );
+  // Retrieve the array from session storage
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
+  let productInArray = productsArray.find(
+    (product) => product.id === productId
+  );
 
-//   if (productInArray) {
-//     // Increase the quantity of the existing product in the session storage
-//     productInArray.quan += 1;
-//   } else {
-//     // Add the new product to the session storage
-//     const newProduct = {
-//       id: productId,
-//       name: productName,
-//       price: productPrice,
-//       quan: 1,
-//     };
-//     productsArray.push(newProduct);
-//   }
+  if (productInArray) {
+    // Increase the quantity of the existing product in the session storage
+    productInArray.quan += 1;
+  } else {
+    // Add the new product to the session storage
+    const newProduct = {
+      id: productId,
+      name: productName,
+      price: productPrice,
+      quan: 1,
+    };
+    productsArray.push(newProduct);
+  }
 
-//   // Update session storage
-//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+  // Update session storage
+  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
 
-//   // Update the cart list in the DOM
-//   updateCartList();
-// }
+  // Update the cart list in the DOM
+  updateCartList();
+}
 
-// // Function to update the cart list in the DOM based on session storage
-// function updateCartList() {
-//   cartList.innerHTML = ""; // Clear the current cart list
-//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
-//   productsArray.forEach((product) => {
-//     const productElement = document.createElement("div");
-//     productElement.innerHTML = `
-//       <div class="product">
-//         <div class="product-id">${product.id}</div>
-//         <h4>${product.name}</h4>
-//         <div class="quantity">
-//           <i class="fa-solid fa-circle-minus" onclick="decreaseQuantity(event)"></i>
-//           <span class="quan">${product.quan}</span>
-//           <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
-//         </div>
-//         <p><span>${product.price}</span>₪</p>
-//         <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
-//       </div>
-//     `;
-//     cartList.appendChild(productElement.firstElementChild);
-//   });
-// }
+// Function to update the cart list in the DOM based on session storage
+function updateCartList() {
+  cartList.innerHTML = ""; // Clear the current cart list
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray")) || [];
+  productsArray.forEach((product) => {
+    const productElement = document.createElement("div");
+    productElement.innerHTML = `
+      <div class="product">
+        <div class="product-id">${product.id}</div>
+        <h4>${product.name}</h4>
+        <div class="quantity">
+          <i class="fa-solid fa-circle-minus" onclick="decreaseQuantity(event)"></i>
+          <span class="quan">${product.quan}</span>
+          <i class="fa-solid fa-circle-plus" onclick="increaseQuantity(event)"></i>
+        </div>
+        <p><span>${product.price}</span>₪</p>
+        <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
+      </div>
+    `;
+    cartList.appendChild(productElement.firstElementChild);
+  });
+}
 
-// // Call the updateCartList function on page load to initialize the cart
-// window.addEventListener("load", updateCartList);
+// Call the updateCartList function on page load to initialize the cart
+window.addEventListener("load", updateCartList);
 
-// // Example increase and decrease quantity functions
-// function increaseQuantity(event) {
-//   const productElement = event.target.closest(".product");
-//   const productId = productElement.querySelector(".product-id").textContent;
-//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-//   let product = productsArray.find((item) => item.id === productId);
-//   product.quan += 1;
-//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
-//   updateCartList();
-// }
+// Example increase and decrease quantity functions
+function increaseQuantity(event) {
+  const productElement = event.target.closest(".product");
+  const productId = productElement.querySelector(".product-id").textContent;
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+  let product = productsArray.find((item) => item.id === productId);
+  product.quan += 1;
+  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+  updateCartList();
+}
 
-// function decreaseQuantity(event) {
-//   const productElement = event.target.closest(".product");
-//   const productId = productElement.querySelector(".product-id").textContent;
-//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-//   let product = productsArray.find((item) => item.id === productId);
-//   if (product.quan > 1) {
-//     product.quan -= 1;
-//   } else {
-//     productsArray = productsArray.filter((item) => item.id !== productId);
-//   }
-//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
-//   updateCartList();
-// }
+function decreaseQuantity(event) {
+  const productElement = event.target.closest(".product");
+  const productId = productElement.querySelector(".product-id").textContent;
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+  let product = productsArray.find((item) => item.id === productId);
+  if (product.quan > 1) {
+    product.quan -= 1;
+  } else {
+    productsArray = productsArray.filter((item) => item.id !== productId);
+  }
+  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+  updateCartList();
+}
 
-// function deleteProduct(event) {
-//   const productElement = event.target.closest(".product");
-//   const productId = productElement.querySelector(".product-id").textContent;
-//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-//   productsArray = productsArray.filter((item) => item.id !== productId);
-//   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
-//   updateCartList();
-// }
+function deleteProduct(event) {
+  const productElement = event.target.closest(".product");
+  const productId = productElement.querySelector(".product-id").textContent;
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+  productsArray = productsArray.filter((item) => item.id !== productId);
+  sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
+  updateCartList();
+}
 
-// // Ensure the addToCart function is called when the 'Add to Cart' button is clicked
-// document.querySelectorAll(".add-to-cart-button").forEach((button) => {
-//   button.addEventListener("click", addToCart);
-// });
+// Ensure the addToCart function is called when the 'Add to Cart' button is clicked
+document.querySelectorAll(".add-to-cart-button").forEach((button) => {
+  button.addEventListener("click", addToCart);
+});
 
-// function redirectToCheckout() {
-//   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-//   if (!productsArray || productsArray.length === 0) {
-//     alert("Your cart is empty. Please add items to the cart before proceeding to checkout.");
-//   } else {
-//     window.location.href = '/checkout'; // Change '/checkout' to the correct URL if needed
-//   }
-// }
+function redirectToCheckout() {
+  let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
+  if (!productsArray || productsArray.length === 0) {
+    alert(
+      "Your cart is empty. Please add items to the cart before proceeding to checkout."
+    );
+  } else {
+    window.location.href = "/checkout"; // Change '/checkout' to the correct URL if needed
+  }
+}
 
-// // Add event listener to the "Check out" button
-// document.querySelector('.checkout').addEventListener('click', redirectToCheckout);
+// Add event listener to the "Check out" button
+document
+  .querySelector(".checkout")
+  .addEventListener("click", redirectToCheckout);
