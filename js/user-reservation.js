@@ -225,7 +225,7 @@ here more details : [${moreDetails}]
 }
 
 window.logout = function () {
-  fetch("/admin/messages/logout", {
+  fetch("/user/reservation/logout", {
     method: "POST", // Change the method to POST
   })
     .then((result) => {

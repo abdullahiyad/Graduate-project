@@ -13,13 +13,12 @@ router.post("/login", authController.login_post);
 
 // home links
 router.get("/home", authController.home_get);
-router.get("/home/api", authController.home_get_data);
+router.get("/home/api", authController.switch_page);
 
 // menu links
 router.get("/menu", authController.menu_get);
-router.post("/menu", authController.menu_post);
 router.get("/menu/api", authController.menu_data_get);
-router.get("/menu/switch", authController.switch_page);
+router.get("/menu/", authController.switch_page);
 router.get("/checkout", authController.checkOut);
 router.post("/menu/checkout", authController.checkOut_post);
 
@@ -30,8 +29,6 @@ router.post("/admin/dashboard", authController.dashboard_post);
 //customer admin links
 router.get("/admin/customer", authController.customer_get);
 router.get("/admin/customer/api", authController.customer_data_get);
-router.post("/admin/customer", authController.customer_post); //this for create user
-router.put("/admin/customer", authController.update_user_data); //this for update data of user
 router.delete("/admin/customer", authController.delete_user_email); //this for delete user.
 
 // products for admin links
@@ -60,7 +57,6 @@ router.post("/admin/orders/logout", authController.logout_Del_Cookie);
 // admin profile links
 router.get("/admin/profile", authController.admin_profile_get);
 router.get("/admin/profile/api", authController.admin_profile_get_api);
-router.post("/admin/profile", authController.admin_profile_post);
 router.put("/admin/profile", authController.update_profile_data);
 router.delete("/admin/profile", authController.delete_loggedIn_user);
 
@@ -70,11 +66,14 @@ router.get("/admin/messages/api", authController.messages_data_get);
 router.put("/admin/messages", authController.message_acc_rej);
 
 router.get("/reservation", authController.reservation_get);
+router.get("/reservation/api", authController.switch_page);
 router.post("/reservation", authController.reservation_post);
 
 // logout user dashboards
 router.post("/user/profile/logout", authController.logout_Del_Cookie);
 router.post("/user/reservation/logout", authController.logout_Del_Cookie);
+router.post("/user/orders/logout", authController.logout_Del_Cookie);
+router.post("/user/dashboard/logout", authController.logout_Del_Cookie);
 
 // user profile links
 router.get("/user/profile", authController.user_profile_get);

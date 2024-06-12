@@ -119,10 +119,10 @@ function addProduct(productName, productQuantity) {
 }
 
 window.logout = function () {
-  fetch("/admin/messages/logout", {
+  fetch("/user/orders/logout", {
     method: "POST", // Change the method to POST
   })
-    .then((result) => {
+    .then(() => {
       window.location.href = "/home";
     })
     .catch((err) => {
