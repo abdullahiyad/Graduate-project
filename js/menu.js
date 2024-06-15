@@ -351,9 +351,11 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
 function redirectToCheckout() {
   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
   if (!productsArray || productsArray.length === 0) {
-    alert(
-      "Your cart is empty. Please add items to the cart before proceeding to checkout."
-    );
+    Swal.fire({
+      title: "",
+      text: "please add at least one product",
+      icon: "warning",
+    });
   } else {
     window.location.href = "/checkout"; // Change '/checkout' to the correct URL if needed
   }

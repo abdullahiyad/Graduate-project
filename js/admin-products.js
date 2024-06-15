@@ -31,7 +31,7 @@ function addProduct(
                         </div>
                         <div class="part ">
                             <label>product price :</label>
-                            $<input type="text" class="product-price" value="${productPrice}">
+                            <input type="number" class="product-price" value="${productPrice}"><span class="sign">₪</span>
                         </div>
                         <div class="part product-desc">
                             <label>product description :</label>
@@ -229,7 +229,7 @@ function updateProduct(event) {
   const price = product.querySelector(".product-price").value;
   const description = product.querySelector(".product-desc-input").value;
   const type = product.querySelector("#type").value;
-  console.log("this is imgInput",imgInput.value);
+  console.log("this is imgInput", imgInput.value);
   // Create a FormData object to handle the file upload
   const formData = new FormData();
   formData.append("id", id);
@@ -237,11 +237,12 @@ function updateProduct(event) {
   formData.append("product-price", price);
   formData.append("product-type", type);
   formData.append("product-desc", description);
-  
+
   if (imgInput.files.length > 0) {
     formData.append("choose-file", imgInput.files[0]);
   }
-  fetch('/admin/products', { // Ensure the URL matches the endpoint in your Node.js route
+  fetch("/admin/products", {
+    // Ensure the URL matches the endpoint in your Node.js route
     method: "PUT", // Specify the HTTP method as PUT for updating
     body: formData, // Send the FormData object
   })

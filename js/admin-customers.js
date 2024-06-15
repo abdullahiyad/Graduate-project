@@ -92,14 +92,14 @@ let newName;
 let newStatus;
 function editUserFunction(event) {
   const ele = event.target;
+  const parent = ele.parentElement;
+  nameFiled.value = parent.querySelector(".name").textContent;
 
-  nameFiled.value =
-    ele.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-  phoneFiled.value =
-    ele.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
-  emailFiled.value =
-    ele.previousElementSibling.previousElementSibling.textContent;
-  if (ele.previousElementSibling.textContent.toLocaleLowerCase() == "user") {
+  phoneFiled.value = parent.querySelector(".phone").textContent;
+  emailFiled.value = parent.querySelector(".email").textContent;
+  if (
+    parent.querySelector(".state").textContent.toLocaleLowerCase() == "user"
+  ) {
     stateFiled.value = "user";
   } else {
     stateFiled.value = "admin";
@@ -124,10 +124,6 @@ let cancelBtn = document.querySelector(".cancel-btn");
 let saveBtn = document.querySelector(".save-btn");
 //edit buttin
 editUserBtn.addEventListener("click", () => {
-  nameFiled.style = `
-    pointer-events: painted;
-    border:1px solid black;
-    `;
   stateFiled.style = `
     pointer-events: painted;
     border:1px solid black;
@@ -217,7 +213,7 @@ window.logout = function () {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
-      window.location.href='/home';
+      window.location.href = "/home";
     })
     .catch((err) => {
       console.log(err);
