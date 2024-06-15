@@ -67,7 +67,7 @@ function addOrder(
                                     </thead>
                                     ${products.innerHTML}
                                     <tfoot>
-                                        <td>total price :${totalPrice} $</td>
+                                        <td>total price :${totalPrice}₪</td>
                                         <td></td>
                                     </tfoot>
                                 </table>
@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       let data = await response.json();
-      console.log(data);
       return data;
     })
     .then((data) => {
@@ -122,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Extract user data
         const userName = order.userName;
         const userEmail = order.userEmail;
-        console.log(order.userName, order.userEmail);
         // Extract delivery data
         const orderName = order.customer.name;
         const orderPhone = order.customer.phone;

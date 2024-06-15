@@ -20,6 +20,7 @@ router.get("/menu", authController.menu_get);
 router.get("/menu/api", authController.menu_data_get);
 router.get("/menu/", authController.switch_page);
 router.get("/checkout", authController.checkOut);
+router.get("/checkout/", authController.switch_page);
 router.post("/menu/checkout", authController.checkOut_post);
 
 // dashboard admin links
