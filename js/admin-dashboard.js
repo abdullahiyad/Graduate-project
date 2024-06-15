@@ -94,21 +94,33 @@ function doneReservation(event) {
       // Extract reservation ID from the DOM
       const parent = clickedElement.parentElement.parentElement;
       const reservationID = parent.querySelector(".reservation-id").value;
-      // Send the reservation ID and state to the server
-      parent.remove();
-      //here put function to change the state of resrevation in database to complete
-      //
-      //
-      ////
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
+      console.log(reservationID);
+      // Send the reservation ID and state to the server side
+       fetch("/admin/dashboard", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: reservationID, state: "completed" }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("There was an error updating the reservation state.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Reservation marked as completed:", data);
+          parent.remove(); // Remove the reservation element from the DOM
+        })
+        .catch((error) => {
+          console.error("Error updating reservation state:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "There was an error updating the reservation state.",
+          });
+        });
     }
   });
 }
@@ -164,17 +176,6 @@ here more details : [${moreDetails}]
   messagesTable.appendChild(newMessage.firstElementChild);
 }
 
-addMessage(
-  "ali",
-  "asldfj@gmail.com",
-  5,
-  "ahmed",
-  "0651561981",
-  new Date(),
-  5,
-  "none"
-);
-
 window.logout = function () {
   fetch("/admin/messages/logout", {
     method: "POST", // Change the method to POST
@@ -197,3 +198,26 @@ function updateStatics(totalSalesN, totalOrdersN, totalUsersN) {
 }
 // updateStatics(350, 5, 10);
 // function to update statics in page
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/admin/dashboard/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      data.reserve.forEach((r) => {
+        addMessage(
+          r.userName,
+          r.userEmail,
+          r._id,
+          r.resName,
+          r.resPhone,
+          new Date(r.newDate).toLocaleString(), // Format date
+          r.numOfPersons,
+          r.details
+        );
+      });
+      updateStatics(data.totalSales,data.recentOrders,data.recentUsers)
+    })
+    .catch((error) => console.error("Error fetching dashboard data:", error));
+});

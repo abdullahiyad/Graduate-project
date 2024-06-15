@@ -145,8 +145,64 @@ module.exports.dashboard_get = async (req, res) => {
   }
 };
 
-module.exports.dashboard_post = (req, res) => {
-  res.send("This is dashboard page");
+module.exports.dashboard_get_data = async (req, res) => {
+  try {
+    // Step 1: Find all accepted reservations
+    const reservations = await reservation.find({ state: 'accepted' });
+    
+    // Step 2: Prepare an array to store formatted reservation data
+    let reservationsForm = [];
+    
+    // Step 3: Loop through each reservation to fetch user data and format the output
+    for (const reserve of reservations) {
+      // Fetch user data using userId
+      const userData = await user.findById(reserve.userId);
+      console.log(userData);
+      // Format the reservation data with userName and userEmail
+      const formattedReservation = {
+        _id: reserve._id,
+        userName: userData.name,
+        userEmail: userData.email,
+        resName: reserve.resName,
+        resPhone: reserve.phone,
+        newDate: reserve.newDate,
+        numOfPersons: reserve.numPerson,
+        details: reserve.details,
+      };
+      reservationsForm.push(formattedReservation);
+    };
+
+    console.log(reservationsForm);
+    // Step 2: Find users created in the last 24 hours
+    const H24 = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const recentUsers = await user.find({ createdAt: { $gte: H24 } });
+    // Step 3: Find orders created in the last 24 hours
+    const recentOrders = await Order.find({ createdAt: { $gte: H24 } });
+    // Step 4: Calculate the total sales for all orders
+    const totalSales = await Order.aggregate([
+      {
+        $match: { createdAt: { $gte: H24 } } // Filter to consider only recent orders
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: '$totalPrice' } // Summing totalPrice field for all matching orders
+        }
+      }
+    ]);
+    // Format totalSales to a number (0 if no orders found)
+    const totalSalesAmount = totalSales.length > 0 ? totalSales[0].totalAmount : 0;
+    // Step 5: Send the data in the response
+    res.json({
+      reserve: reservationsForm,
+      recentUsers: recentUsers.length,
+      recentOrders: recentOrders.length,
+      totalSales: totalSalesAmount
+    });
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+    res.status(500).json({ error: 'Error fetching dashboard data' });
+  }
 };
 
 module.exports.customer_get = async (req, res) => {
@@ -647,6 +703,7 @@ module.exports.messages_data_get = async (req, res) => {
           details: data.details
         });
       }
+      // console.log("this id test: ",data._id);
     });
     res.status(200).json(Reservations);
   } catch (err) {
@@ -656,19 +713,20 @@ module.exports.messages_data_get = async (req, res) => {
 };
 
 
-module.exports.message_acc_rej = async (req, res) => {
+module.exports.message_acc_rej_com = async (req, res) => {
   try {
     const { id, state } = req.body;
-
+    console.log("this id: ", id);
+    
     // Validate the state
-    if (state !== 'accepted' && state !== 'rejected') {
+    if (!['accepted', 'rejected', 'completed'].includes(state)) {
       return res.status(400).json({ error: "Invalid state value" });
     }
 
     // Update the reservation state based on the provided state
     const updatedReservation = await reservation.findByIdAndUpdate(
       id,
-      { state: state === 'accepted' ? 'accepted' : 'rejected' },
+      { state: state },
       { new: true } // Return the updated document
     );
 
@@ -676,8 +734,8 @@ module.exports.message_acc_rej = async (req, res) => {
       return res.status(404).json({ error: "Reservation not found" });
     }
 
-    // If the reservation is accepted, increment the user's reservationNumbers
-    if (state === 'accepted') {
+    // If the reservation is completed, increment the user's reservationNumbers
+    if (state === 'completed') {
       const userId = updatedReservation.userId; // Assuming the reservation document contains a userId field
       await user.findByIdAndUpdate(
         userId,
@@ -694,6 +752,7 @@ module.exports.message_acc_rej = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 module.exports.getOrders = (req, res) => {
   res.render('admin/orders');
@@ -762,7 +821,7 @@ module.exports.subscription_post = (req, res) => {
 };
 
 module.exports.user_dashboard_get = (req, res) => {
-    res.render("user/testNotify");
+    res.render("user/dashboard");
 }
 
 module.exports.get_user_orders = (req, res) => {
@@ -789,7 +848,7 @@ module.exports.get_user_messages = async (req, res) => {
     }
 
     // Format the reservations data with user details
-    const formattedReservations = userReservations.map(data => ({
+    const reservationsForm = userReservations.map(data => ({
       userName: userData.name,
       userEmail: userData.email,
       reservationId: data._id,
@@ -801,7 +860,7 @@ module.exports.get_user_messages = async (req, res) => {
       state: data.state
     }));
     // Send the formatted reservations in the response
-    res.status(200).json(formattedReservations);
+    res.status(200).json(reservationsForm);
   } catch (err) {
     console.error("Error fetching reservations:", err);
     res.status(500).json({ message: "Internal Server Error" });
@@ -856,3 +915,7 @@ module.exports.get_orders_user_data = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+module.exports.user_dashboard_get = (req, res) => {
+  res.render('user/dashboard')
+}

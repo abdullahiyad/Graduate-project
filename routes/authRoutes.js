@@ -25,7 +25,8 @@ router.post("/menu/checkout", authController.checkOut_post);
 
 // dashboard admin links
 router.get("/admin/dashboard", authController.dashboard_get);
-router.post("/admin/dashboard", authController.dashboard_post);
+router.get("/admin/dashboard/api", authController.dashboard_get_data);
+router.put("/admin/dashboard", authController.message_acc_rej_com);
 
 //customer admin links
 router.get("/admin/customer", authController.customer_get);
@@ -64,7 +65,7 @@ router.delete("/admin/profile", authController.delete_loggedIn_user);
 // admin messages
 router.get("/admin/messages", authController.messages_get);
 router.get("/admin/messages/api", authController.messages_data_get);
-router.put("/admin/messages", authController.message_acc_rej);
+router.put("/admin/messages", authController.message_acc_rej_com);
 
 router.get("/reservation", authController.reservation_get);
 router.get("/reservation/api", authController.switch_page);
@@ -85,10 +86,11 @@ router.get("/user/profile/api", authController.user_profile_get_api);
 router.get("/user/orders", authController.get_user_orders);
 router.get("/user/messages/api", authController.get_user_messages);
 router.get("/user/orders/api", authController.get_orders_user_data);
+router.get("/user/dashboard", authController.user_dashboard_get);
 
 // This is for test notifications
-router.get("/user/dashboard", authController.user_dashboard_get);
-// router.post('/user/dashboard', authController.subscription_post);
+// router.get("/user/dashboard", authController.user_dashboard_get);
+// // router.post('/user/dashboard', authController.subscription_post);
 // admin orders
 router.get("/admin/orders", authController.getOrders);
 router.get("/admin/orders/api", authController.get_orders_data);

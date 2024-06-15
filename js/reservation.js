@@ -21,11 +21,14 @@ window.addEventListener("load", function () {
 var today = new Date().toISOString().split("T")[0];
 document.getElementsByName("reservation-date")[0].setAttribute("min", today);
 
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Check if logged in
   const form = document.querySelector("form");
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
-
     const name = document.querySelector(".person-name").value;
     const phone = document.querySelector(".person-phone").value;
     const numOfPersons = parseInt(document.querySelector(".persons-number").value, 10);
