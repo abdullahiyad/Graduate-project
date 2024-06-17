@@ -915,7 +915,3 @@ module.exports.get_orders_user_data = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-module.exports.user_dashboard_get = (req, res) => {
-  res.render('user/dashboard')
-}
