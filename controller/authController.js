@@ -13,6 +13,7 @@ const path = require("path");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const { render } = require("ejs");
+const orders = require("../nodejs/Database/models/orders");
 const maxAge = 2 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
 // Notifications variable: vapid key
@@ -157,7 +158,6 @@ module.exports.dashboard_get_data = async (req, res) => {
     for (const reserve of reservations) {
       // Fetch user data using userId
       const userData = await user.findById(reserve.userId);
-      console.log(userData);
       // Format the reservation data with userName and userEmail
       const formattedReservation = {
         _id: reserve._id,
@@ -171,8 +171,6 @@ module.exports.dashboard_get_data = async (req, res) => {
       };
       reservationsForm.push(formattedReservation);
     };
-
-    console.log(reservationsForm);
     // Step 2: Find users created in the last 24 hours
     const H24 = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentUsers = await user.find({ createdAt: { $gte: H24 } });
@@ -192,13 +190,15 @@ module.exports.dashboard_get_data = async (req, res) => {
     ]);
     // Format totalSales to a number (0 if no orders found)
     const totalSalesAmount = totalSales.length > 0 ? totalSales[0].totalAmount : 0;
-    // Step 5: Send the data in the response
-    res.json({
+
+    const jData = {
       reserve: reservationsForm,
       recentUsers: recentUsers.length,
       recentOrders: recentOrders.length,
       totalSales: totalSalesAmount
-    });
+    }
+    // Step 5: Send the data in the response
+    res.json(jData);
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
     res.status(500).json({ error: 'Error fetching dashboard data' });
@@ -913,5 +913,27 @@ module.exports.get_orders_user_data = async (req, res) => {
   } catch (err) {
     console.error("Error fetching orders:", err);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+module.exports.user_dashboard_post = async (req, res) => {
+  try {
+    const userId = getUserData(req);
+    const userData = user.findById(userId);
+    const userOrders = await orders.find({userId: userId});
+    let userOrdersLen;
+    if(userOrders.length == 0){
+      userOrdersLen = 0;
+    } else {
+      userOrdersLen = userOrders.length;
+    }
+    const jData = {
+      userScore: userData.score,
+      ordersNumber: userOrdersLen,
+      userCreate: userData.createdAt
+    };
+    res.json(jData);
+  } catch (err) {
+    res.json(err);
   }
 };
