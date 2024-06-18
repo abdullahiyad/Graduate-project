@@ -93,9 +93,9 @@ function addProduct(
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize products
   initializeProducts();
-
-  // Fetch product data from the backend and populate the table
+  // Step 1: Fetch product data and user data from the backend
   fetch("/menu/api")
     .then(async (response) => {
       if (!response.ok) {
@@ -105,16 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return data;
     })
     .then((data) => {
-      // Redirect logic based on user status
-      const user = data.user;
-      const loginIcon = document.getElementById("loginIc");
-      if (user.status === "admin") {
-        loginIcon.href = "admin/dashboard";
-      } else if (user.status === "user") {
-        loginIcon.href = "user/profile";
-      }
-
-      // Process products data
+      // Step 2: Process products data
       data.products.forEach((product) => {
         let base64Image = arrayBufferToBase64(product.image.data.data);
         let imgSrc = base64Image;
@@ -127,8 +118,19 @@ document.addEventListener("DOMContentLoaded", function () {
           product.type
         );
       });
+      // Step 3: Check user login status if user data is available
+      if (data.user) {
+        const user = data.user;
+        const loginIcon = document.getElementById('loginIc');
+        loginIcon.removeAttribute('href');
+        if (user.status === 'admin') {
+          loginIcon.href = 'admin/dashboard';
+        } else if (user.status === 'user') {
+          loginIcon.href = 'user/profile';
+        }
+      }
     })
-    .catch((error) => console.error("Error fetching product data:", error));
+    .catch((error) => console.error("Error fetching data:", error));
 
   // Function to convert ArrayBuffer to Base64-encoded string
   function arrayBufferToBase64(buffer) {
@@ -350,15 +352,28 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
 
 function redirectToCheckout() {
   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  if (!productsArray || productsArray.length === 0) {
+  if ((!productsArray || productsArray.length === 0) && !checkLoggedIn()) {
     Swal.fire({
       title: "",
       text: "please add at least one product",
       icon: "warning",
     });
+  } else if(!checkLoggedIn()) {
+    Swal.fire({
+      title: "",
+      text: "Login :)",
+      icon: "warning",
+    });
   } else {
     window.location.href = "/checkout"; // Change '/checkout' to the correct URL if needed
   }
+}
+
+function checkLoggedIn() {
+  let token = null;
+  const value = document.cookie.split("jwt=");
+    if (value.length >= 2) token = value.pop().split(";");
+  return !!token;
 }
 
 // Add event listener to the "Check out" button

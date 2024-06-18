@@ -46,32 +46,52 @@ function rejectReservation(event) {
     confirmButtonText: "Yes, Reject it!",
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire({
-        title: "Rejected!",
-        text: "The reservation has been rejected.",
-        icon: "success",
-      });
       // Extract reservation ID from the DOM
       const parent = clickedElement.parentElement.parentElement;
       const reservationID = parent.querySelector(".reservation-id").value;
+
       // Send the reservation ID and state to the server
-      parent.remove();
-      //here put function to remove the resrvation request from database
-      //
-      //
-      ////
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
+      fetch(`/admin/dashboard/delete`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: reservationID}),
+      })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        if (data.message === "Reservation deleted successfully") {
+          // If successful, show success message and remove the reservation from the DOM
+          Swal.fire({
+            title: "Rejected!",
+            text: "The reservation has been rejected.",
+            icon: "success",
+          });
+          parent.remove();
+        } else {
+          // If there's an error, show error message
+          Swal.fire({
+            title: "Error!",
+            text: "There was a problem rejecting the reservation.",
+            icon: "error",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting reservation:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "There was a problem rejecting the reservation.",
+          icon: "error",
+        });
+      });
     }
   });
 }
+
 
 //functoin to delete the resrvatoin request
 function doneReservation(event) {
