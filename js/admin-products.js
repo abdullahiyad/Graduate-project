@@ -16,46 +16,20 @@ function addProduct(
   productId
 ) {
   const newProduct = ` 
-                    <form action="" method="none">
-                        <div class="product-id">${productId}</div>
-                        <div class="product-img part edit-class on-edit" name="product-img">
-                            <label for="product-img">product Image :</label>
-                            <img src="${imgSrc}" alt="productimage">
-                            <input type="file" id="choose-file" name="choose-file" accept="image/*">
-                            <p class="note">*chose new image if you want change the current
-                                image*</p>
-                        </div>
-                        <div class="part s">
-                            <label>product name :</label>
-                            <input type="text" class="product-title" value="${productName}">
-                        </div>
-                        <div class="part ">
-                            <label>product price :</label>
-                            <input type="number" class="product-price" value="${productPrice}"><span class="sign">₪</span>
-                        </div>
-                        <div class="part product-desc">
-                            <label>product description :</label>
-                            <input type="text" class="product-desc-input" value="${productDesc}">
-                        </div>
-                        <div class="type-container input-field-container part">
-                            <div class="type-show">${productType}</div>
-                               <label>type : </label>
-                               <select name="product-type" id="type">
-                               <option value="hot-drinks" selected>hot Drinks</option>
-                               <option value="cold-drinks">cold Drinks</option>
-                               <option value="food">food</option>
-                               <option value="dessert">dessert</option>
-                          </select>
-                        </div>
-                        <div class="edit" onclick="showDetails(event)" >more</div>
-                        <div class="product-btns part">
-                            <input type="button" value="Delete" class="delete-btn" onclick="deleteProduct(event)">
-                            <input type="button" value="Edit" class="edit-btn" onclick="eidtProductBtnFunction(event)">
-                            <input type="button" value="Done" class="done-btn" onclick="doneShowDetails(event)">
-                            <input type="button" value="Save" class="save-btn" onclick="updateProduct(event)"/>
-                            <input type="button" value="cancel" class="cancel-btn" onclick="cancelBtnFunction(event)">
-                        </div>
-                    </form>
+                    <div class="product">
+                    <div class="product-id">${productId}</div>
+                    <div class="product-img"><img src="${imgSrc}" alt="">
+                    </div>
+                    <div class="product-info">
+                        <p class="product-title">${productName}</p>
+                        <p class="product-description">${productDesc}</p>
+                    </div>
+                    <div class="price">
+                        <p><span class="price-x">${productPrice}</span> ₪</p>
+                        <button class="atc" onclick="activeMoreDetailsPage(event)">More Details</button>
+                    </div>
+                    <div class="type">${productType}</div>
+                </div>
   `;
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = newProduct;
@@ -109,6 +83,41 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+//function to show more details page
+function activeMoreDetailsPage(event) {
+  const clickedElement = event.target;
+  const product = clickedElement.parentElement.parentElement;
+  dashboard.classList.toggle("hide-content");
+  const detailsPage = document.querySelector(".details-page");
+  detailsPage.classList.toggle("more-details-active");
+  detailsPage.querySelector(".product-id").textContent =
+    product.querySelector(".product-id").textContent;
+
+  detailsPage.querySelector("img").src = product.querySelector("img").src;
+
+  detailsPage.querySelector(".product-title").value =
+    product.querySelector(".product-title").textContent;
+
+  detailsPage.querySelector(".product-desc").textContent =
+    product.querySelector(".product-description").textContent;
+
+  detailsPage.querySelector(".product-price").value =
+    product.querySelector(".price-x").textContent;
+
+  detailsPage.querySelector(".type-show").textContent =
+    product.querySelector(".type").textContent;
+
+  detailsPage.querySelector("#type").value = detailsPage
+    .querySelector(".type-show")
+    .textContent.toLocaleLowerCase();
+}
+//function to close more details page
+function closeMoreDetailsPage() {
+  dashboard.classList.toggle("hide-content");
+  const detailsPage = document.querySelector(".details-page");
+  detailsPage.classList.toggle("more-details-active");
+}
+
 let addProductBtn = document.querySelector(".new-product-btn");
 let productFormDiv = document.querySelector(".new-product");
 let productForm = document.querySelector(".product-form");
@@ -127,11 +136,13 @@ function deleteProduct(event) {
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
+      closeMoreDetailsPage();
       Swal.fire({
         title: "Deleted!",
         text: "the product has been deleted.",
         icon: "success",
       });
+
       //Start delete event
       const productId =
         clickedElement.parentElement.parentElement.firstElementChild.innerHTML;
@@ -168,30 +179,18 @@ function deleteProduct(event) {
 function eidtProductBtnFunction(event) {
   const ele = event.target;
   ele.parentElement.parentElement.classList.toggle("on-edit");
-  ele.style.display = "none";
-  ele.nextElementSibling.style.display = "none";
-  ele.nextElementSibling.nextElementSibling.style.display = "block";
-  ele.nextElementSibling.nextElementSibling.nextElementSibling.style.display =
-    "block";
-  ele.parentElement.parentElement.firstElementChild.nextElementSibling.lastElementChild.style.display =
-    "block";
 }
 
 //cancel edit on product
 function cancelBtnFunction(event) {
-  window.location.reload();
+  // window.location.reload();
+  closeMoreDetailsPage();
 }
 
 //active and disable add product page
 function activeAddProductPage() {
   productFormDiv.classList.toggle("active-page");
   content.classList.toggle("hide-content");
-}
-
-//close more details of product
-function doneShowDetails(event) {
-  const clickedElement = event.target;
-  clickedElement.parentElement.parentElement.classList.toggle("more-details");
 }
 
 //show more details of product
@@ -222,15 +221,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 //function to update btn
 function updateProduct(event) {
-  const clickedElement = event.target;
-  const product = clickedElement.parentElement.parentElement;
-  const id = product.querySelector(".product-id").textContent;
-  const imgInput = product.querySelector("#choose-file");
-  const name = product.querySelector(".product-title").value;
-  const price = product.querySelector(".product-price").value;
-  const description = product.querySelector(".product-desc-input").value;
-  const type = product.querySelector("#type").value;
-  console.log("this is imgInput", imgInput.value);
+  const id = document.querySelector(".details-page .product-id").textContent;
+  const imgInput = document.querySelector("#choose-file");
+  const name = document.querySelector(".details-page .product-title").value;
+  const price = document.querySelector(" .details-page .product-price").value;
+  const description = document.querySelector(
+    ".details-page .product-desc"
+  ).value;
+  const type = document.querySelector("#type").value;
   // Create a FormData object to handle the file upload
   const formData = new FormData();
   formData.append("id", id);

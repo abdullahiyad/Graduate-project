@@ -33,7 +33,7 @@
         </div>
     </div>
     <!-- end header -->
-    <div class="product-container hide-content">
+    <div class="product-container">
         <div class="aside">
             <ul>
                 <li class="dashboard"><a href="dashboard"><i class="fa-solid fa-house"></i> dashboard</a></li>
@@ -52,48 +52,7 @@
                 products
             </h1>
             <div class="products-table">
-                <form action="" method="none" class="more-details">
-                    <div class="product-id">${productId}</div>
-                    <div class="product-img part edit-class on-edit" name="product-img">
-                        <label for="product-img" class="display-none">product Image :</label>
-                        <!-- <img src="${imgSrc}" alt="productimage"> -->
-                        <img src="/images/croason.png" alt="">
-                        <input type="file" id="choose-file" class="display-none" name="choose-file" accept="image/*">
-                        <p class="note display-none">*chose new image if you want change the current
-                            image*</p>
-                    </div>
-                    <div class="product-name">
-                        <label class="display-none">product name :</label>
-                        <input type="text" class="product-title" value="${productName}">
-                    </div>
-                    <div class="part product-desc">
-                        <label class="display-none">product description :</label>
-                        <input type="text" class="product-desc-input"
-                            value="lorem la;ksdjf asd;flkj asd;fha sdfoasufoif sapofia sdifupoasdf">
-                    </div>
-                    <div class="type-container part">
-                        <div class="type-show">${productType}</div>
-                        <label class="display-none">type : </label>
-                        <select name="product-type" id="type">
-                            <option value="hot-drinks" selected>hot Drinks</option>
-                            <option value="cold-drinks">cold Drinks</option>
-                            <option value="food">food</option>
-                            <option value="dessert">dessert</option>
-                        </select>
-                    </div>
-                    <div class="part ">
-                        <label class="display-none">product price :</label>
-                        <input type="number" class="product-price" value="${productPrice}"><span class="sign">₪</span>
-                    </div>
-                    <div class="edit" onclick="showDetails(event)">more</div>
-                    <div class="product-btns part">
-                        <input type="button" value="Delete" class="delete-btn" onclick="deleteProduct(event)">
-                        <input type="button" value="Edit" class="edit-btn" onclick="eidtProductBtnFunction(event)">
-                        <input type="button" value="Done" class="done-btn" onclick="doneShowDetails(event)">
-                        <input type="button" value="Save" class="save-btn" onclick="updateProduct(event)" />
-                        <input type="button" value="cancel" class="cancel-btn" onclick="cancelBtnFunction(event)">
-                    </div>
-                </form>
+
 
             </div>
             <button class="new-product-btn" onclick="activeAddProductPage()"><i
@@ -144,7 +103,7 @@
             </form>
         </div>
     </div>
-    <div class=" more-details-disable more-details-active">
+    <div class=" more-details-disable details-page">
         <form action="" class="more-details">
             <div class="product-id">${productId}</div>
             <div class="labels">
@@ -156,7 +115,7 @@
             </div>
             <div class="input-fields">
                 <div class="input-section ">
-                    <img src="${imgSrc}" alt="productimage">
+                    <img src="" alt="productimage">
                     <input type="file" id="choose-file" name="choose-file" class="display-none" accept="image/*">
                     <p class="note display-none">*chose new image if you want change the current
                         image*</p>
@@ -165,10 +124,10 @@
                     <input type="text" class="product-title" value="${productName}">
                 </div>
                 <div class="input-section">
-                    <textarea class="product-desc-input">${productDesc}</textarea>
+                    <textarea class="product-desc">$.</textarea>
                 </div>
                 <div class="input-section">
-                    <input type="number" class="product-price" value="20"><span class="sign">₪</span>
+                    <input type="number" class="product-price" value="0"><span class="sign">₪</span>
                 </div>
                 <div class="input-section">
                     <div class="type-show">${productType}</div>
@@ -183,7 +142,7 @@
             <div class="buttons">
                 <input type="button" value="Delete" class="delete-btn btn-style" onclick="deleteProduct(event)">
                 <input type="button" value="Edit" class="edit-btn btn-style" onclick="eidtProductBtnFunction(event)">
-                <input type="button" value="Done" class="done-btn btn-style" onclick="doneShowDetails(event)">
+                <input type="button" value="Done" class="done-btn btn-style" onclick="closeMoreDetailsPage()">
                 <input type="button" value="Save" class="save-btn btn-style" onclick="updateProduct(event)" />
                 <input type="button" value="cancel" class="cancel-btn btn-style" onclick="cancelBtnFunction(event)">
             </div>
