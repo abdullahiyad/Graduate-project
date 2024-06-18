@@ -59,13 +59,10 @@ let pendingContainer = document.querySelector(
 );
 
 function addMessagePending(
-  userName,
-  userEmail,
   reservationId,
   reservationName,
   reservationPhone,
   reservationDate,
-  reservationTime,
   numOfPersons,
   moreDetails = "none"
 ) {
@@ -80,8 +77,8 @@ function addMessagePending(
                         </div>
 
                         <div>
-                            <input type="text" class="customer-name input-style" value="${userName}">
-                            <input type="email" class="customers-email input-style display-none" value="${userEmail}">
+                            <input type="text" class="customer-name input-style" value="YKPO Cafe">
+                            <input type="email" class="customers-email input-style display-none" value="Admin@YKPO.com">
                             <!-- <input type="text" class="customer-info input-style display-none" value="0569912325"> -->
                             <input type="text" class="reservation-id" value="${reservationId}">
                         </div>
@@ -96,7 +93,6 @@ Please find the reservation details below:
 Contact Name: [${reservationName}]
 Contact Phone: [${reservationPhone}]
 Date: [${reservationDate}]
-Time: [${reservationTime}]
 Number of persons: [${numOfPersons}]
 
 We would appreciate it if you could confirm our reservation at your earliest convenience. 
@@ -120,7 +116,6 @@ function addMessageAccepted(
   reservationName,
   reservationPhone,
   reservationDate,
-  reservationTime,
   numOfPersons,
   moreDetails = "none"
 ) {
@@ -151,7 +146,6 @@ the reservation details below:
 Contact Name: [${reservationName}]
 Contact Phone: [${reservationPhone}]
 Date: [${reservationDate}]
-Time: [${reservationTime}]
 Number of persons: [${numOfPersons}]
 
 
@@ -206,12 +200,12 @@ the reservation details below:
 Contact Name: [${reservationName}]
 Contact Phone: [${reservationPhone}]
 Date: [${reservationDate}]
-Time: [${reservationTime}]
 Number of persons: [${numOfPersons}]
-
-
 here more details : [${moreDetails}]
 
+
+
+reasons of reject : []
                         </textarea>
                     </div>
                     <p class="open-msg" onclick="readMessagge(event)">read</p>
@@ -251,34 +245,28 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(reservation.state);
         if (reservation.state === "pending") {
           addMessagePending(
-            reservation.userName,
-            reservation.userEmail,
             reservation._id,
             reservation.resName,
             reservation.phone,
-            new Date(reservation.newDate).toLocaleString(), // Format date
+            new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );
         } else if (reservation.state === "accepted") {
           addMessageAccepted(
-            reservation.userName,
-            reservation.userEmail,
             reservation._id,
             reservation.resName,
             reservation.phone,
-            new Date(reservation.newDate).toLocaleString(), // Format date
+            new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );
         } else if (reservation.state === "rejected") {
           addMessageRejected(
-            reservation.userName,
-            reservation.userEmail,
             reservation._id,
             reservation.resName,
             reservation.phone,
-            new Date(reservation.newDate).toLocaleString(), // Format date
+            new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );

@@ -20,17 +20,27 @@ function closeMessagge(event) {
 function rejectReservation(event) {
   event.preventDefault(); // Prevent default button behavior
   const clickedElement = event.target;
-  const parent = clickedElement.closest('.message');
+  const parent = clickedElement.closest(".message");
   const reservationID = parent.querySelector(".reservation-id").value;
-  console.log(reservationID);
   Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
     icon: "warning",
+    input: "text",
+    inputAttributes: {
+      placeholder: "Reasons of reject",
+      required: true,
+    },
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
     confirmButtonText: "Yes, Reject it!",
+    preConfirm: (inputValue) => {
+      if (!inputValue) {
+        Swal.showValidationMessage("Input is required");
+      }
+      let reason = inputValue;
+    },
   }).then((result) => {
     if (result.isConfirmed) {
       Swal.fire({
@@ -68,7 +78,7 @@ function rejectReservation(event) {
 function acceptReservation(event) {
   event.preventDefault(); // Prevent default button behavior
   const clickedElement = event.target;
-  const parent = clickedElement.closest('.message');
+  const parent = clickedElement.closest(".message");
   const reservationID = parent.querySelector(".reservation-id").value;
   console.log(reservationID);
   fetch("/admin/messages", {
@@ -171,7 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
           reservation.reservationId,
           reservation.resName,
           reservation.phone,
-          new Date(reservation.newDate).toLocaleString(), // Format date
+          new Date(reservation.reserveDate).toLocaleString(), // Format date
           reservation.numPerson,
           reservation.details
         );

@@ -109,7 +109,7 @@ document
           //here the info that should submitted for backend
           console.log(name, phone, city, address, address2);
           console.log(productsArray);
-          
+
           submitOrder(name, phone, city, address, address2, productsArray);
 
           setTimeout(() => {
@@ -129,9 +129,14 @@ function backFunc() {
   window.location.href = "/menu";
 }
 
-
-async function submitOrder(name, phone, city, address, address2, productsArray) {
-
+async function submitOrder(
+  name,
+  phone,
+  city,
+  address,
+  address2,
+  productsArray
+) {
   const orderData = {
     customer: {
       name: name,
@@ -165,10 +170,8 @@ async function submitOrder(name, phone, city, address, address2, productsArray) 
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  redirect();
-});
 
+document.addEventListener("DOMContentLoaded", function () {});
 function redirect() {
   fetch("/checkout/")
     .then(async (response) => {
@@ -180,14 +183,14 @@ function redirect() {
       data.users.forEach((user) => {
         users = user;
       });
-      document.getElementById('loginIc').removeAttribute('href');
-      const loginIcon = document.getElementById('loginIc');
-      if (users.status === 'admin') {
-        document.getElementById('loginIc').removeAttribute('href');
-        loginIcon.href = 'admin/dashboard';
-      } else if(users.status === 'user') {
-        document.getElementById('loginIc').removeAttribute('href');
-        loginIcon.href = 'user/profile';
+      document.getElementById("loginIc").removeAttribute("href");
+      const loginIcon = document.getElementById("loginIc");
+      if (users.status === "admin") {
+        document.getElementById("loginIc").removeAttribute("href");
+        loginIcon.href = "admin/dashboard";
+      } else if (users.status === "user") {
+        document.getElementById("loginIc").removeAttribute("href");
+        loginIcon.href = "user/profile";
       }
     })
     .catch((error) => console.error("Error fetching user data:", error));
