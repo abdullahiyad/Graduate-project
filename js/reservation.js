@@ -21,9 +21,6 @@ window.addEventListener("load", function () {
 var today = new Date().toISOString().split("T")[0];
 document.getElementsByName("reservation-date")[0].setAttribute("min", today);
 
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
   // Check if logged in
   const form = document.querySelector("form");
@@ -31,7 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault(); // Prevent the default form submission behavior
     const name = document.querySelector(".person-name").value;
     const phone = document.querySelector(".person-phone").value;
-    const numOfPersons = parseInt(document.querySelector(".persons-number").value, 10);
+    const numOfPersons = parseInt(
+      document.querySelector(".persons-number").value,
+      10
+    );
     let insertedDate = document.querySelector(".reservation-date").value;
     const details = document.querySelector(".more-details").value;
     // Send reservation data to the server
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         console.log("Reservation successful:", data);
-        window.location.href = '/reservation';
+        window.location.href = "/reservation";
       })
       .catch((error) => {
         console.error("Error making reservation:", error.message);
@@ -76,14 +76,14 @@ function redirect(event) {
       data.users.forEach((user) => {
         users = user;
       });
-      const loginIcon = document.getElementById('loginIc');
-      document.getElementById('loginIc').removeAttribute('href');
-      if (users.status === 'admin') {
-        document.getElementById('loginIc').removeAttribute('href');
-        loginIcon.href = 'admin/dashboard';
-      } else if(users.status === 'user') {
-        document.getElementById('loginIc').removeAttribute('href');
-        loginIcon.href = 'user/profile';
+      const loginIcon = document.getElementById("loginIc");
+      document.getElementById("loginIc").removeAttribute("href");
+      if (users.status === "admin") {
+        document.getElementById("loginIc").removeAttribute("href");
+        loginIcon.href = "admin/dashboard";
+      } else if (users.status === "user") {
+        document.getElementById("loginIc").removeAttribute("href");
+        loginIcon.href = "user/profile";
       }
     })
     .catch((error) => console.error("Error fetching user data:", error));
@@ -92,3 +92,8 @@ function redirect(event) {
 document.addEventListener("DOMContentLoaded", function () {
   redirect();
 });
+
+//function to set minmum date time to the input field
+function setMinDateTime() {
+  const now = new Date();
+}
