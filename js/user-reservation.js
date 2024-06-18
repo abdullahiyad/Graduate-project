@@ -205,7 +205,7 @@ here more details : [${moreDetails}]
 
 
 
-reasons of reject : [${}]
+reasons of reject : []
                         </textarea>
                     </div>
                     <p class="open-msg" onclick="readMessagge(event)">read</p>
