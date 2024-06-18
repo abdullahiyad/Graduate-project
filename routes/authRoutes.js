@@ -20,7 +20,7 @@ router.get("/menu", authController.menu_get);
 router.get("/menu/api", authController.menu_data_get);
 router.get("/menu/",  authController.switch_page);
 router.get("/checkout",  authController.checkOut);
-router.get("/checkout/", authController.switch_page);
+router.get("/checkout/switch", authController.switch_page);
 router.post("/menu/checkout", authController.checkOut_post);
 
 // dashboard admin links
@@ -29,10 +29,10 @@ router.get("/admin/dashboard/api", authController.dashboard_get_data);
 router.put("/admin/dashboard", authController.message_acc_rej_com);
 router.delete("/admin/dashboard/delete", authController.deleteReservation);
 
-//customer admin links
-router.get("/admin/customer", authController.customer_get);
-router.get("/admin/customer/api", authController.customer_data_get);
-router.delete("/admin/customer", authController.delete_user_email); //this for delete user.
+//users admin links
+router.get("/admin/users", authController.admin_users_get);
+router.get("/admin/users/api", authController.users_data_get);
+router.delete("/admin/users", authController.delete_user_email); //this for delete user.
 
 // products for admin links
 router.get("/admin/products", authController.products_get);
@@ -50,8 +50,8 @@ router.put(
 );
 
 // logout admin dashboards
-router.post("/admin/customer/logout", authController.logout_Del_Cookie);
 router.post("/admin/dashboard/logout", authController.logout_Del_Cookie);
+router.post("/admin/users/logout", authController.logout_Del_Cookie);
 router.post("/admin/messages/logout", authController.logout_Del_Cookie);
 router.post("/admin/product/logout", authController.logout_Del_Cookie);
 router.post("/admin/profile/logout", authController.logout_Del_Cookie);

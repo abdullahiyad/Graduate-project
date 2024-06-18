@@ -25,12 +25,32 @@ let billTable = document.querySelector(".product-table");
 let totalAmount = 0;
 let amountContainer = document.querySelector(".total .price .number");
 document.addEventListener("DOMContentLoaded", () => {
-  // to redirect to profile page
-  redirect();
   // Function to format currency
   function formatCurrency(amount) {
     return `$${amount.toFixed(2)}`;
   }
+
+  // Redirect logic
+  fetch("/checkout/switch")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let data = await response.json();
+      var users;
+      data.users.forEach((user) => {
+        users = user;
+      });
+      const loginIcon = document.getElementById('loginIc');
+      if (users.status === 'admin') {
+        loginIcon.removeAttribute('href');
+        loginIcon.href = 'admin/dashboard';
+      } else if (users.status === 'user') {
+        loginIcon.removeAttribute('href');
+        loginIcon.href = 'user/profile';
+      }
+    })
+    .catch((error) => console.error("Error fetching user data:", error));
 
   // Retrieve the product details from session storage
   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
@@ -41,19 +61,21 @@ document.addEventListener("DOMContentLoaded", () => {
     totalAmount += total;
     productElement.innerHTML = `
       <div class="product">
-            <div class="product-name">${product.name}</div>
-            <div class="product-quantity">X <span class="quan">${product.quan}</span></div>
-            <div class="price">
-            <div class="number">${product.price}</div>
-            <div class="sign">₪</div>
+        <div class="product-name">${product.name}</div>
+        <div class="product-quantity">X <span class="quan">${product.quan}</span></div>
+        <div class="price">
+          <div class="number">${product.price}</div>
+          <div class="sign">₪</div>
         </div>
-    </div>
+      </div>
     `;
     billTable.appendChild(productElement.firstElementChild);
   });
+
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
 });
+
 
 //form submition
 document
@@ -144,7 +166,7 @@ async function submitOrder(name, phone, city, address, address2, productsArray) 
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-
+  redirect();
 });
 
 function redirect() {

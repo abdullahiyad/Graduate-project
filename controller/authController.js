@@ -197,16 +197,16 @@ module.exports.dashboard_get_data = async (req, res) => {
   }
 };
 
-module.exports.customer_get = async (req, res) => {
+module.exports.admin_users_get = async (req, res) => {
   const userId = getUserData(req);
   const User = user.findById(userId);
   if( User.status === 'user'){
     res.render("home");
   } else {
-    res.render("admin/customer");
+    res.render("admin/users");
   }
 };
-module.exports.customer_data_get = async (req, res) => {
+module.exports.users_data_get = async (req, res) => {
   try {
     const users = await user.find();
     res.json({ users });

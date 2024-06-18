@@ -352,7 +352,7 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
 
 function redirectToCheckout() {
   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  if ((!productsArray || productsArray.length === 0) && !checkLoggedIn()) {
+  if ((!productsArray || productsArray.length === 0)) {
     Swal.fire({
       title: "",
       text: "please add at least one product",

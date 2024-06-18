@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Fetch user data from backend and populate the table
-  fetch("/admin/customer/api")
+  fetch("/admin/users/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to handle form submission and update user data
   function updateUser(email, newName, newState) {
     email = document.querySelector(".email-container .email").value;
-    fetch("/admin/customer", {
+    fetch("/admin/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -178,7 +178,7 @@ deleteBtn.addEventListener("click", () => {
       });
       const userEmail = document.querySelector(".email-container .email").value;
       //function to delete
-      fetch("/admin/customer", {
+      fetch("/admin/users", {
         method: "DELETE", // Specify the HTTP method as DELETE
         headers: {
           "Content-Type": "application/json", // Specify the content type
@@ -193,13 +193,13 @@ deleteBtn.addEventListener("click", () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Customer deletion successful:", data);
+          console.log("users deletion successful:", data);
           // Handle the success response here
           // For example, remove the deleted product from the DOM
           clickedElement.parentElement.parentElement.parentElement.remove();
         })
         .catch((err) => {
-          console.error("Customer deletion failed:", err);
+          console.error("users deletion failed:", err);
           // Handle the error here
         });
       window.location.reload();
@@ -209,7 +209,7 @@ deleteBtn.addEventListener("click", () => {
 
 //Logout Button
 window.logout = function () {
-  fetch("/admin/customer/logout", {
+  fetch("/admin/users/logout", {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
@@ -232,7 +232,7 @@ function updateData() {
     .value.toLocaleLowerCase();
 
   //function to update
-  fetch("/admin/customer", {
+  fetch("/admin/users", {
     method: "PUT", // Specify the HTTP method as PUT for updating
     headers: {
       "Content-Type": "application/json", // Specify the content type
