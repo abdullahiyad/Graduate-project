@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (user.status === 'admin') {
           loginIcon.href = 'admin/dashboard';
         } else if (user.status === 'user') {
-          loginIcon.href = 'user/profile';
+          loginIcon.href = 'user/dashboard';
         }
       }
     })

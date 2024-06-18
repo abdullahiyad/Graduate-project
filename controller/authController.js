@@ -14,7 +14,7 @@ let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
 const { render } = require("ejs");
 const orders = require("../nodejs/Database/models/orders");
-const maxAge = 2 * 24 * 60 * 60;
+const maxAge = 1 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
 // Notifications variable: vapid key
 const publicVapidKey = 'BIfnXiQ8o1KKEM75QjeKg9Q16hA956r7RolBrUmbHnBcuBrk3Giyvk3sb2feXYiE9Vkk-ObPF9Nmf4DhG8J_Hfo';
@@ -609,11 +609,11 @@ module.exports.checkOut_post = async (req, res) => {
       return res.status(400).json({ error: "Customer information is incomplete" });
     }
 
-    // Check for recent orders within the last 10 minutes
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    // Check for recent orders within the last 1 minutes
+    const tenMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
     const recentOrder = await Order.findOne({ userId: userId, createdAt: { $gte: tenMinutesAgo } }).exec();
     if (recentOrder) {
-      return res.status(429).json({ error: "You can only place an order every 10 minutes" });
+      return res.status(429).json({ error: "You can only place an order every one minute" });
     }
 
     // Process cart items and calculate total price
@@ -629,7 +629,7 @@ module.exports.checkOut_post = async (req, res) => {
         quantity: item.quan,
       };
     }));
-
+    console.log("this is new Date of Order: ",Date.now);
     const orderData = {
       userId: userId,
       customer: {

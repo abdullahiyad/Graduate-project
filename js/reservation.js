@@ -85,7 +85,7 @@ function redirect(event) {
         loginIcon.href = "admin/dashboard";
       } else if (users.status === "user") {
         document.getElementById("loginIc").removeAttribute("href");
-        loginIcon.href = "user/profile";
+        loginIcon.href = "user/dashboard";
       }
     })
     .catch((error) => console.error("Error fetching user data:", error));

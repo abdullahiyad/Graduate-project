@@ -46,6 +46,11 @@ const reservationSchema = new mongoose.Schema({
         type: String,
         require: false,
         default: ""
+    },
+    givenScores: {
+        type: Number,
+        required: false,
+        default: 0,
     }
 });
 
