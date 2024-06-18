@@ -58,12 +58,13 @@ function addProduct(
                     </form>
   `;
   const tempDiv = document.createElement("div");
-  tempDiv.classList = "product-item";
   tempDiv.innerHTML = newProduct;
-  const newProductElement = tempDiv;
+  // tempDiv.classList = "product-item";
+  // tempDiv.innerHTML = newProduct;
+  // const newProductElement = tempDiv;
 
   // Append the new product element to the product table
-  productTable.appendChild(newProductElement);
+  productTable.appendChild(tempDiv.firstElementChild);
 }
 //adding proudct from data base to page
 document.addEventListener("DOMContentLoaded", function () {

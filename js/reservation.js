@@ -1,3 +1,5 @@
+// const { CURSOR_FLAGS } = require("mongodb");
+
 let linkIcon = document.querySelector(".burger-icon");
 let linkList = document.querySelector("ul");
 
@@ -92,8 +94,36 @@ function redirect(event) {
 document.addEventListener("DOMContentLoaded", function () {
   redirect();
 });
-
-//function to set minmum date time to the input field
-function setMinDateTime() {
+function getMinDateTime() {
   const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const hours = String(now.getHours() + 5).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+  const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  return minDateTime;
+}
+//function to set minmum date time to the input field
+// function setMinDateTime() {
+//   const dateTimeInput = document.querySelector(".reservation-date");
+//   dateTimeInput.min = getMinDateTime();
+// }
+// setMinDateTime();
+let dateCheck = false;
+function validateDateTime() {
+  const datetimeInput = document.querySelector(".reservation-date");
+  const selectedDateTime = new Date(datetimeInput.value);
+  const minDateTime = getMinDateTime();
+  if (selectedDateTime > new Date(minDateTime)) {
+    dateCheck = true;
+  } else {
+    dateCheck = false;
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "The selected date and time must be at least 5 hours from now.",
+    });
+  }
 }

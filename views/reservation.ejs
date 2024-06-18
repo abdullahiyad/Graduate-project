@@ -51,7 +51,8 @@
             <input type="text" class="person-name" placeholder="your name" required>
             <input type="text" class="person-phone" placeholder="phone number" required>
             <input type="number" class="persons-number" placeholder="number of persons" min="1" max="10" required>
-            <input type="datetime-local" class="reservation-date" id="date-time" name="reservation-date" required>
+            <input type="datetime-local" class="reservation-date" id="date-time" name="reservation-date"
+                onchange="validateDateTime() " required>
             <!-- <input type="time" class="reservation-time" required> -->
             <textarea type="text" class="more-details" placeholder="more details(Optional)"></textarea>
             <input type="submit" class="send-button" value="book table">
@@ -99,6 +100,7 @@
     <!-- end preloading -->
 
     <!-- connect javascript file -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/reservation.js"></script>
 </body>
 
