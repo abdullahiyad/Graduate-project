@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="product-quantity">X <span class="quan">${product.quan}</span></div>
             <div class="price">
             <div class="number">${product.price}</div>
-            <div class="sign">$</div>
+            <div class="sign">₪</div>
         </div>
     </div>
     `;

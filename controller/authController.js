@@ -51,7 +51,7 @@ module.exports.signup_post = async (req, res) => {
     const token = createToken(users._id);
     res
       .status(201)
-      .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+      .cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 })
       .redirect("/home");
   } catch (err) {
     console.log(err);
@@ -74,13 +74,13 @@ module.exports.login_post = async (req, res) => {
         const token = createToken(check._id);
         res
           .status(201)
-          .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+          .cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 })
           .json({state: "admin"});
       } else if (isPassMatch && userState === "user") {
         const token = createToken(check._id);
         res
           .status(201)
-          .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
+          .cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 })
           .json({state: "user"})
       } else {
         res.status(500).json({ error: "the email or password is not correct. please try again"});
@@ -114,14 +114,11 @@ module.exports.menu_get = (req, res) => {
 };
 module.exports.menu_data_get = async (req, res) => {
   try {
+    let userData = null;
     const userId = getUserData(req);
-    if (!userId) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
 
-    const userData = await user.findById(userId);
-    if (!userData) {
-      return res.status(404).json({ error: "User not found" });
+    if (userId) {
+      userData = await user.findById(userId);
     }
 
     const products = await Product.find();
@@ -132,13 +129,8 @@ module.exports.menu_data_get = async (req, res) => {
   }
 };
 module.exports.dashboard_get = async (req, res) => {
-  const token = req.cookies.jwt;
-  if (!token) {
-    res.send("You don't have access to this page");
-  }
-  const decodedToken = jwt.verify(token, secretKey);
-  const userId = decodedToken.id;
-  const User = await user.findOne({_id: userId});
+  const userId = getUserData(req);
+  const User = user.findById(userId);
   if( User.status === 'user'){
     res.render("user/dashboard");
   } else {
@@ -206,13 +198,8 @@ module.exports.dashboard_get_data = async (req, res) => {
 };
 
 module.exports.customer_get = async (req, res) => {
-  const token = req.cookies.jwt;
-  if (!token) {
-    res.send("You don't have access to this page");
-  }
-  const decodedToken = jwt.verify(token, secretKey);
-  const userId = decodedToken.id;
-  const User = await user.findOne({_id: userId});
+  const userId = getUserData(req);
+  const User = user.findById(userId);
   if( User.status === 'user'){
     res.render("home");
   } else {
@@ -306,13 +293,8 @@ module.exports.edit_product = async (req, res) => {
 };
 
 module.exports.products_get = async (req, res) => {
-  const token = req.cookies.jwt;
-  if (!token) {
-    res.send("You don't have access to this page");
-  }
-  const decodedToken = jwt.verify(token, secretKey);
-  const userId = decodedToken.id;
-  const User = await user.findOne({_id: userId});
+  const userId = getUserData(req);
+  const User = user.findById(userId);
   if( User.status === 'user'){
     res.render("home");
   } else {
@@ -332,13 +314,8 @@ module.exports.products_data_get = async (req, res) => {
 };
 
 module.exports.admin_profile_get = async (req, res) => {
-  const token = req.cookies.jwt;
-  if (!token) {
-    res.send("You don't have access to this page");
-  }
-  const decodedToken = jwt.verify(token, secretKey);
-  const userId = decodedToken.id;
-  const User = await user.findOne({_id: userId});
+  const userId = getUserData(req);
+  const User = user.findById(userId);
   if( User.status === 'user'){
     res.render("user/profile");
   } else {
@@ -360,6 +337,7 @@ function getUserData(req) {
     return null;
   }
 }
+
 
 async function getProduct(req) {
   try {
@@ -540,7 +518,14 @@ module.exports.delete_loggedIn_user = async (req, res) => {
 };
 
 module.exports.messages_get = (req, res) => {
-  res.render('admin/messages');
+  const userId = getUserData(req);
+  const User = user.findById(userId);
+  if(User.status === 'user'){
+    res.render('user/profile');
+  }else {
+    res.render('admin/messages');
+  }
+  
 }
 
 module.exports.user_profile_get = (req, res) => {
@@ -716,7 +701,6 @@ module.exports.messages_data_get = async (req, res) => {
 module.exports.message_acc_rej_com = async (req, res) => {
   try {
     const { id, state } = req.body;
-    console.log("this id: ", id);
     
     // Validate the state
     if (!['accepted', 'rejected', 'completed'].includes(state)) {
@@ -755,7 +739,13 @@ module.exports.message_acc_rej_com = async (req, res) => {
 
 
 module.exports.getOrders = (req, res) => {
-  res.render('admin/orders');
+  const userId = getUserData(req);
+  const User = user.findById(userId);
+  if(User.status === 'user') {
+    res.render('user/orders');
+  }else { 
+    res.render('admin/orders');
+  }
 };
 
 module.exports.get_orders_data = async (req, res) => {
@@ -937,3 +927,22 @@ module.exports.user_dashboard_post = async (req, res) => {
     res.json(err);
   }
 };
+
+module.exports.deleteReservation = async (req, res) => {
+  try {
+    const reservationId = req.body.id; // Assuming the reservation ID is passed as a URL parameter
+
+    // Attempt to delete the reservation
+    const deletedReservation = await reservation.findByIdAndDelete(reservationId);
+
+    if (!deletedReservation) {
+      return res.status(404).json({ error: "Reservation not found" });
+    }
+
+    res.status(200).json({ message: "Reservation deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting reservation:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+

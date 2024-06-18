@@ -18,8 +18,8 @@ router.get("/home/api", authController.switch_page);
 // menu links
 router.get("/menu", authController.menu_get);
 router.get("/menu/api", authController.menu_data_get);
-router.get("/menu/", authController.switch_page);
-router.get("/checkout", authController.checkOut);
+router.get("/menu/",  authController.switch_page);
+router.get("/checkout",  authController.checkOut);
 router.get("/checkout/", authController.switch_page);
 router.post("/menu/checkout", authController.checkOut_post);
 
@@ -27,6 +27,7 @@ router.post("/menu/checkout", authController.checkOut_post);
 router.get("/admin/dashboard", authController.dashboard_get);
 router.get("/admin/dashboard/api", authController.dashboard_get_data);
 router.put("/admin/dashboard", authController.message_acc_rej_com);
+router.delete("/admin/dashboard/delete", authController.deleteReservation);
 
 //customer admin links
 router.get("/admin/customer", authController.customer_get);
