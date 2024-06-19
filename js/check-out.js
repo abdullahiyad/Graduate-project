@@ -1,18 +1,6 @@
 // const { config } = require("dotenv");
 // const { ConnectionPoolMonitoringEvent } = require("mongodb");
 
-let linkIcon = document.querySelector(".burger-icon");
-let linkList = document.querySelector("ul");
-linkIcon.addEventListener("click", function () {
-  if (linkIcon.classList.contains("clicked")) {
-    linkList.style.display = "none";
-    linkIcon.classList.remove("clicked");
-  } else {
-    linkList.style.display = "block";
-    linkIcon.classList.add("clicked");
-  }
-});
-
 //function add product to bill
 let billTable = document.querySelector(".product-table");
 let totalAmount = 0;
