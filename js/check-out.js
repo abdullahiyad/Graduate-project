@@ -13,13 +13,6 @@ linkIcon.addEventListener("click", function () {
   }
 });
 
-/* loading */
-let loading = document.querySelector(".loader");
-window.addEventListener("load", function () {
-  loading.style.display = "none";
-});
-/* loading end */
-
 //function add product to bill
 let billTable = document.querySelector(".product-table");
 let totalAmount = 0;
@@ -41,13 +34,13 @@ document.addEventListener("DOMContentLoaded", () => {
       data.users.forEach((user) => {
         users = user;
       });
-      const loginIcon = document.getElementById('loginIc');
-      if (users.status === 'admin') {
-        loginIcon.removeAttribute('href');
-        loginIcon.href = 'admin/dashboard';
-      } else if (users.status === 'user') {
-        loginIcon.removeAttribute('href');
-        loginIcon.href = 'user/dashboard';
+      const loginIcon = document.getElementById("loginIc");
+      if (users.status === "admin") {
+        loginIcon.removeAttribute("href");
+        loginIcon.href = "admin/dashboard";
+      } else if (users.status === "user") {
+        loginIcon.removeAttribute("href");
+        loginIcon.href = "user/dashboard";
       }
     })
     .catch((error) => console.error("Error fetching user data:", error));
@@ -75,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
 });
-
 
 //form submition
 document

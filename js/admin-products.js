@@ -81,6 +81,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return btoa(binary);
   }
+  const loadingScreen = document.querySelector(".loader");
+  setTimeout(() => {
+    loadingScreen.style.display = "none";
+  }, 700);
 });
 
 //function to show more details page
@@ -184,6 +188,7 @@ function eidtProductBtnFunction(event) {
 //cancel edit on product
 function cancelBtnFunction(event) {
   // window.location.reload();
+  document.querySelector(".more-details").classList.toggle("on-edit");
   closeMoreDetailsPage();
 }
 

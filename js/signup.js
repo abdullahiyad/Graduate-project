@@ -1,24 +1,19 @@
-let loading = document.querySelector(".loader");
-window.addEventListener("load", function () {
-  loading.style.display = "none";
-});
-
 //function to check the values of inputs filed
-// let emailValidate = false;
+let emailValidate = false;
 let phoneValidate = false;
 let passwordValidate = false;
 //function to check email
-// function checkEmail(event) {
-//   const email = event.target.value;
-//   if (true) {
-//     event.target.classList.remove("notValid");
-//     event.target.classList.add("valid");
-//     emailValidate = true;
-//   } else {
-//     event.target.classList.add("notValid");
-//     emailValidate = false;
-//   }
-// }
+function checkEmail(event) {
+  const email = event.target.value;
+  if (true) {
+    event.target.classList.remove("notValid");
+    event.target.classList.add("valid");
+    emailValidate = true;
+  } else {
+    event.target.classList.add("notValid");
+    emailValidate = false;
+  }
+}
 //function to check phone number
 function checkPhone(event) {
   const phone = event.target.value;

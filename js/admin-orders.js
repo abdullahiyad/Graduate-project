@@ -14,9 +14,15 @@ function closeMessagge(event) {
   const clickedElement = event.target;
   clickedElement.parentElement.parentElement.classList.toggle("more-details");
 }
+function doneMessagge(event) {
+  const clickedElement = event.target;
+  const parent = clickedElement.parentElement.parentElement;
+  const orderId = parent.querySelector(".order-id").textContent;
+}
 
 let ordersTable = document.querySelector(".orders-table");
 function addOrder(
+  orderId,
   userName,
   userEmail,
   orderName,
@@ -38,6 +44,7 @@ function addOrder(
                         <div class="icon flex-row">
                             <i class="fa-solid fa-utensils"></i>
                             <p class="input-style .new-message">new order</p>
+                            <div style="display:none" class="order-id">${orderId}</div>
                         </div>
 
                         <div class="user-details">
@@ -77,6 +84,7 @@ function addOrder(
                     <p class="open-order" onclick="readMessagge(event)">details</p>
                     <div class="btns display-none ">
                         <input type="button" class="close-msg btn-style" value="close" onclick="closeMessagge(event)">
+                        <input type="button" class="done-msg btn-style" value="finished" onclick="doneMessagge(event)">
                     </div>
                 </div>
   `;
@@ -129,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const address2 = order.customer.address2 || "";
 
         // Extract product data
-        const productsArray = order.products.map(product => ({
+        const productsArray = order.products.map((product) => ({
           name: product.productName,
           quantity: product.quantity,
         }));
@@ -138,13 +146,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const totalPrice = order.totalPrice;
 
         // Add the order data to the HTML
-        addOrder(userName, userEmail, orderName, orderPhone, city, address1, address2, productsArray, totalPrice);
+        addOrder(
+          order.orderId,
+          userName,
+          userEmail,
+          orderName,
+          orderPhone,
+          city,
+          address1,
+          address2,
+          productsArray,
+          totalPrice
+        );
       });
     })
     .catch((error) => console.error("Error fetching user data:", error));
 });
 
-
-// Change status to processing when click on processing 
+// Change status to processing when click on processing
 
 // Change status to finished, with message the order will arrive within minutes

@@ -10,13 +10,6 @@ linkIcon.addEventListener("click", function () {
   }
 });
 
-/* loading */
-let loading = document.querySelector(".loader");
-window.addEventListener("load", function () {
-  loading.style.display = "none";
-});
-/* loading end */
-
 /* home links list */
 
 let link = document.querySelectorAll(".links li");
@@ -49,14 +42,14 @@ function redirect() {
       data.users.forEach((user) => {
         users = user;
       });
-      document.getElementById('loginIc').removeAttribute('href');
-      const loginIcon = document.getElementById('loginIc');
-      if (users.status === 'admin') {
-        document.getElementById('loginIc').removeAttribute('href');
-        loginIcon.href = 'admin/dashboard';
-      } else if(users.status === 'user') {
-        document.getElementById('loginIc').removeAttribute('href');
-        loginIcon.href = 'user/dashboard';
+      document.getElementById("loginIc").removeAttribute("href");
+      const loginIcon = document.getElementById("loginIc");
+      if (users.status === "admin") {
+        document.getElementById("loginIc").removeAttribute("href");
+        loginIcon.href = "admin/dashboard";
+      } else if (users.status === "user") {
+        document.getElementById("loginIc").removeAttribute("href");
+        loginIcon.href = "user/dashboard";
       }
     })
     .catch((error) => console.error("Error fetching user data:", error));

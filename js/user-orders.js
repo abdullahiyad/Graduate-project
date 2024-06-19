@@ -88,23 +88,18 @@ function addOrder(
       <input type="button" class="close-msg btn-style" value="close" onclick="closeMessagge(event)">
     </div>
   `;
-
   // Add the new order to pending or old orders based on the conditions
   const currentTime = new Date();
   const orderTime = new Date(orderDate);
   const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
   const timeDifference = currentTime - orderTime;
 
-  if (
-    timeDifference > millisecondsIn24Hours ||
-    orderState.toLowerCase() === "submitted"
-  ) {
+  if (timeDifference > millisecondsIn24Hours || orderState === "submitted") {
     oldOrders.appendChild(newOrder);
   } else {
     pendingOrders.appendChild(newOrder);
   }
 }
-
 
 //function add products
 function addProduct(productName, productQuantity) {
@@ -135,13 +130,17 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
       }
       let data = await response.json();
       return data;
     })
     .then((data) => {
       data.forEach((Order) => {
-        console.log(Order.productArray);
         addOrder(
           Order.userName,
           Order.userEmail,
@@ -153,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
           new Date(Order.createdAt).toLocaleString(),
           Order.state,
           Order.products,
-          Order.totalPrice,
+          Order.totalPrice
         );
       });
     })

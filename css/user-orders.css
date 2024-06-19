@@ -252,7 +252,7 @@ body {
   height: 100%;
   position: absolute;
   right: 0;
-  box-shadow: var(--box-shadow);
+  padding: 0px 0px 0px 15px;
 }
 /* content style for phones and medium screens */
 @media (max-width: 1200px) {
@@ -278,6 +278,8 @@ body {
     -moz-border-radius: var(--border-radius-1);
     -ms-border-radius: var(--border-radius-1);
     -o-border-radius: var(--border-radius-1);
+    height: fit-content;
+
   }
 }
 
@@ -490,7 +492,7 @@ form.more-details{
   font-size: 20px;
   padding: 30px 10px;
   min-width: 370px;
-  width: 95%;
+  width: 97%;
   height: fit-content;
   display: flex;
   flex-direction: column;

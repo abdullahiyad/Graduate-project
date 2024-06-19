@@ -252,7 +252,8 @@ body {
   height: 100%;
   position: absolute;
   right: 0;
-  box-shadow: var(--box-shadow);
+  /* box-shadow: var(--box-shadow); */
+  padding: 0 0 0 15px;
 }
 /* content style for phones and medium screens */
 @media (max-width: 1200px) {
@@ -287,7 +288,7 @@ body {
   font-size: 20px;
   padding: 30px 10px;
   min-width: 370px;
-  width: 95%;
+  width: 97%;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -424,6 +425,12 @@ table td {
 .more-details .info-container .input-style{
   font-size: 12px;
 }
+.more-details .user-details {
+  width: fit-content;
+}
+.more-details .user-details .input-style{
+  width: 100%;
+}
 .more-details .info-container .customer-name{
   font-size: 16px ;
   font-weight: bold;
@@ -438,6 +445,10 @@ table td {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.done-msg{
+  background-color: rgba(255, 68, 0, 0.804);
+  color: var(--color-white);
 }
 
 

@@ -13,13 +13,6 @@ linkIcon.addEventListener("click", function () {
   }
 });
 
-/* loading */
-let loading = document.querySelector(".loader");
-window.addEventListener("load", function () {
-  loading.style.display = "none";
-});
-/* loading end */
-
 var today = new Date().toISOString().split("T")[0];
 document.getElementsByName("reservation-date")[0].setAttribute("min", today);
 

@@ -121,12 +121,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // Step 3: Check user login status if user data is available
       if (data.user) {
         const user = data.user;
-        const loginIcon = document.getElementById('loginIc');
-        loginIcon.removeAttribute('href');
-        if (user.status === 'admin') {
-          loginIcon.href = 'admin/dashboard';
-        } else if (user.status === 'user') {
-          loginIcon.href = 'user/dashboard';
+        const loginIcon = document.getElementById("loginIc");
+        loginIcon.removeAttribute("href");
+        if (user.status === "admin") {
+          loginIcon.href = "admin/dashboard";
+        } else if (user.status === "user") {
+          loginIcon.href = "user/dashboard";
         }
       }
     })
@@ -156,13 +156,6 @@ linkIcon.addEventListener("click", function () {
     linkIcon.classList.add("clicked");
   }
 });
-
-/* loading */
-let loading = document.querySelector(".loader");
-window.addEventListener("load", function () {
-  loading.style.display = "none";
-});
-/* loading end */
 
 /* home links list */
 let link = document.querySelectorAll(".links li");
@@ -204,10 +197,13 @@ function initializeProducts(
       <i class="fa-solid fa-trash-can remove" onclick="deleteProduct(event)"></i>
   </div>
 `;
-
       cartList.appendChild(newProduct.firstElementChild);
     });
   }
+  const loadingScreen = document.querySelector(".loader");
+  setTimeout(() => {
+    loadingScreen.style.display = "none";
+  }, 700);
 }
 
 //function to create array Products
@@ -352,13 +348,13 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
 
 function redirectToCheckout() {
   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
-  if ((!productsArray || productsArray.length === 0)) {
+  if (!productsArray || productsArray.length === 0) {
     Swal.fire({
       title: "",
       text: "please add at least one product",
       icon: "warning",
     });
-  } else if(!checkLoggedIn()) {
+  } else if (!checkLoggedIn()) {
     Swal.fire({
       title: "",
       text: "Login :)",
@@ -372,7 +368,7 @@ function redirectToCheckout() {
 function checkLoggedIn() {
   let token = null;
   const value = document.cookie.split("jwt=");
-    if (value.length >= 2) token = value.pop().split(";");
+  if (value.length >= 2) token = value.pop().split(";");
   return !!token;
 }
 
