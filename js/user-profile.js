@@ -14,7 +14,7 @@ let deleteAccountBtn = document.querySelector(".delete-btn");
 deleteAccountBtn.addEventListener("click", () => {
   Swal.fire({
     title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    text: "If you delete your account you will lose everything",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -22,36 +22,45 @@ deleteAccountBtn.addEventListener("click", () => {
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
+      // Show deletion confirmation message
       Swal.fire({
         title: "Deleted!",
-        text: "Your account has been deleted.",
+        text: "Account Deleted Successfully.",
         icon: "success",
+        timer: 1500,
+        showConfirmButton: false
       });
-      //function()
-      const userEmail = document.querySelector(".email-container .email").value;
-      fetch("/user/profile", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: userEmail }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("There is something error");
-          }
-          return response.text();
+
+      // Wait for the Swal.fire timer to complete before executing the next steps
+      setTimeout(() => {
+        const userEmail = document.querySelector(".email-container .email").value;
+        fetch("/user/profile", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: userEmail }),
         })
-        .then((data) => {
-          console.log("Customer deletion successful:", data);
-          window.location.href = "/home";
-        })
-        .catch((err) => {
-          console.error("Customer deletion failed:", err);
-        });
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("There is something wrong");
+            }
+            return response.text();
+          })
+          .then((data) => {
+            // Redirect to home page after a short delay
+            setTimeout(() => {
+              window.location.href = "/home";
+            }, 500); // Adjust the delay as needed
+          })
+          .catch((err) => {
+            console.error("Customer deletion failed:", err);
+          });
+      }, 2000); // Delay matches the Swal.fire timer
     }
   });
 });
+
 
 let changePasswordBtn = document.querySelector(".change-pass-btn");
 let passwordContainer = document.querySelectorAll(".password-container");

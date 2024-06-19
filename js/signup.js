@@ -4,21 +4,21 @@ window.addEventListener("load", function () {
 });
 
 //function to check the values of inputs filed
-let emailValidate = false;
+// let emailValidate = false;
 let phoneValidate = false;
 let passwordValidate = false;
 //function to check email
-function checkEmail(event) {
-  const email = event.target.value;
-  if (true) {
-    event.target.classList.remove("notValid");
-    event.target.classList.add("valid");
-    emailValidate = true;
-  } else {
-    event.target.classList.add("notValid");
-    emailValidate = false;
-  }
-}
+// function checkEmail(event) {
+//   const email = event.target.value;
+//   if (true) {
+//     event.target.classList.remove("notValid");
+//     event.target.classList.add("valid");
+//     emailValidate = true;
+//   } else {
+//     event.target.classList.add("notValid");
+//     emailValidate = false;
+//   }
+// }
 //function to check phone number
 function checkPhone(event) {
   const phone = event.target.value;
@@ -34,10 +34,10 @@ function checkPhone(event) {
 }
 //function to check password
 function checkPassword(event) {
-  const passwrod = event.target.value;
+  const password = event.target.value;
   const passwordRegex =
     /^(?=.*[!@#$%^&*(),.?":{}|<>])(?=.*\d)(?=.*[A-Z]).{8,}$/;
-  if (passwordRegex.test(passwrod)) {
+  if (passwordRegex.test(password)) {
     passwordValidate = true;
     event.target.classList.remove("notValid");
     event.target.classList.add("valid");
@@ -46,8 +46,6 @@ function checkPassword(event) {
     event.target.classList.add("notValid");
   }
 }
-
-const form = document.querySelector(".signup-form");
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector(".signup-form");
@@ -59,9 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    if (phoneValidate && emailValidate && passwordValidate) {
+    if (phoneValidate && passwordValidate) {
       try {
-        await fetch("/signup", {
+        const response = await fetch("/signup", {
           method: "POST",
           body: JSON.stringify({
             name: name,
@@ -71,19 +69,48 @@ document.addEventListener("DOMContentLoaded", () => {
           }),
           headers: { "Content-Type": "application/json" },
         });
+
+        if (response.status === 409) {
+          const data = await response.json();
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: data.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } else if (response.ok) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Thank you for signing up! Your account is ready.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          setTimeout(() => {
+            window.location.href = "user/dashboard";
+          }, 1500);
+        } else {
+          throw new Error("Unexpected error");
+        }
+      } catch (err) {
+        console.log(err);
         Swal.fire({
           position: "center",
-          icon: "success",
-          title: "Thank you for signing up! Your account is ready.",
+          icon: "error",
+          title: "Something went wrong. Please try again.",
           showConfirmButton: false,
           timer: 1500,
         });
-        setTimeout(() => {
-          window.location.href = "user/dashboard";
-        }, 1500);
-      } catch (err) {
-        console.log(err);
       }
+    } else {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Please ensure all fields are valid.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   });
 });

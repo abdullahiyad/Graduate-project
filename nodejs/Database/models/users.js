@@ -57,10 +57,13 @@ const user_schema = new mongoose.Schema({
 user_schema.pre("save", async function (next) {
   const added = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, added);
+  const now = new Date();
+  const gmtPlus3 = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+  this.createdAt = gmtPlus3;
   next();
 });
-//Static for Login
 
+//Static for Login
 user_schema.static.login = async function (email, password) {
   const user = await this.findOne({ email });
   if (user) {

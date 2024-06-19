@@ -21,19 +21,6 @@ const publicVapidKey = 'BIfnXiQ8o1KKEM75QjeKg9Q16hA956r7RolBrUmbHnBcuBrk3Giyvk3s
 const privateVapidKey = 'ZmtVuSTm9tMvIHMr0jkFvj5_crXS2gh7ci6blnBIiCo';
 
 var userState;
-const handleErrors = (err) => {
-  if (err.code === 11000) {
-    errors.email = "AIU";
-    errors.phone = "AIU";
-    return errors;
-  }
-  if (err.message.includes("user validation failed")) {
-    Object.values(err.errors).forEach(({ properties }) => {
-      errors[properties.path] = properties.message;
-    });
-  }
-  return errors;
-};
 
 const createToken = (id) => {
   return jwt.sign({ id }, secretKey, { expiresIn: maxAge });
@@ -47,15 +34,18 @@ module.exports.login_get = (req, res) => {
 module.exports.signup_post = async (req, res) => {
   const { name, phone, email, password } = req.body;
   try {
-    const users = await user.create({ name, phone, email, password });
-    const token = createToken(users._id);
-    res
-      .status(201)
-      .cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 })
-      .redirect("/home");
-  } catch (err) {
-    console.log(err);
-    const errors = handleErrors(err);
+    const userFound = await user.findOne({email: email});
+    if(userFound) {
+      return res.status(409).json({message: "Email is already in use"})
+    } else {
+      const users = await user.create({ name, phone, email, password });
+      const token = createToken(users._id);
+      res
+        .status(201)
+        .cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 })
+        .redirect("/home");
+      }
+  } catch (err) {``
     res.status(400).send(errors);
   }
 };
@@ -141,7 +131,7 @@ module.exports.dashboard_get = async (req, res) => {
 module.exports.dashboard_get_data = async (req, res) => {
   try {
     // Step 1: Find all accepted reservations
-    const reservations = await reservation.find({ state: 'accepted' });
+    const reservations = await reservation.find({ status: 'accepted' });
     
     // Step 2: Prepare an array to store formatted reservation data
     let reservationsForm = [];
@@ -167,7 +157,7 @@ module.exports.dashboard_get_data = async (req, res) => {
     const H24 = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentUsers = await user.find({ createdAt: { $gte: H24 } });
     // Step 3: Find orders created in the last 24 hours
-    const recentOrders = await Order.find({ createdAt: { $gte: H24 } });
+    const recentOrders = await Order.find({ createdAt: { $gte: H24 }, status: "completed"});
     // Step 4: Calculate the total sales for all orders
     const totalSales = await Order.aggregate([
       {
@@ -502,14 +492,24 @@ module.exports.update_profile_data = async (req, res) => {
   }
 };
 
-
 module.exports.delete_loggedIn_user = async (req, res) => {
   try {
     const userEmail = req.body.email;
-    const result = await user.findOneAndDelete({ email: userEmail });
-    if (!result) {
+    const userToDelete = await user.findOne({ email: userEmail });
+    
+    if (!userToDelete) {
       return res.status(404).send("User not found");
     }
+
+    // Delete associated orders
+    await Order.deleteMany({ userId: userToDelete._id });
+
+    // Delete associated reservations
+    await reservation.deleteMany({ userId: userToDelete._id });
+
+    // Delete the user
+    await user.findByIdAndDelete(userToDelete._id);
+
     res.clearCookie("jwt").send("Deleted Successfully");
   } catch (error) {
     console.error("Error deleting user:", error);
@@ -664,7 +664,7 @@ module.exports.checkOut_post = async (req, res) => {
 
 module.exports.messages_data_get = async (req, res) => {
   try {
-    const reservations = await reservation.find({ state: "pending" });
+    const reservations = await reservation.find({ status: "pending" });
     const usersData = [];
     
     reservations.forEach((data) => {
@@ -700,17 +700,17 @@ module.exports.messages_data_get = async (req, res) => {
 
 module.exports.message_acc_rej_com = async (req, res) => {
   try {
-    const { id, state } = req.body;
+    const { id, status } = req.body;
     
     // Validate the state
-    if (!['accepted', 'rejected', 'completed'].includes(state)) {
+    if (!['accepted', 'rejected', 'completed'].includes(status)) {
       return res.status(400).json({ error: "Invalid state value" });
     }
 
     // Update the reservation state based on the provided state
     const updatedReservation = await reservation.findByIdAndUpdate(
       id,
-      { state: state },
+      { status: status },
       { new: true } // Return the updated document
     );
 
@@ -719,12 +719,16 @@ module.exports.message_acc_rej_com = async (req, res) => {
     }
 
     // If the reservation is completed, increment the user's reservationNumbers
-    if (state === 'completed') {
+    if (status === 'completed') {
       const userId = updatedReservation.userId; // Assuming the reservation document contains a userId field
       await user.findByIdAndUpdate(
         userId,
-        { $inc: { reservationNumbers: 1 } },
-        { new: true }
+        { 
+          $inc: { 
+          reservationNumbers: 1,
+          score: 10,
+         }
+        }, { new: true }
       );
     }
 
@@ -847,7 +851,7 @@ module.exports.get_user_messages = async (req, res) => {
       reserveDate: data.newDate,
       numPerson: data.numPerson,
       details: data.details,
-      state: data.state
+      status: data.status
     }));
     // Send the formatted reservations in the response
     res.status(200).json(reservationsForm);
@@ -895,7 +899,7 @@ module.exports.get_orders_user_data = async (req, res) => {
         products,
         totalPrice: order.totalPrice,
         createdAt: order.createdAt,
-        state: order.status,
+        status: order.status,
       };
     }));
     // Send the formatted orders in the response
@@ -945,4 +949,3 @@ module.exports.deleteReservation = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-

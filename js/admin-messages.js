@@ -1,3 +1,4 @@
+
 // Function to show the links list in medium and small screens
 let listIcon = document.querySelector("#menu-icon");
 let dashboard = document.querySelector(".messages-container");
@@ -54,7 +55,7 @@ function rejectReservation(event) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: reservationID, state: "rejected" }),
+        body: JSON.stringify({ id: reservationID, status: "rejected" }),
       })
         .then((response) => {
           if (!response.ok) {
@@ -86,7 +87,7 @@ function acceptReservation(event) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ id: reservationID, state: "accepted" }),
+    body: JSON.stringify({ id: reservationID, status: "accepted" }),
   })
     .then((response) => {
       if (!response.ok) {
@@ -185,7 +186,9 @@ document.addEventListener("DOMContentLoaded", () => {
           reservation.numPerson,
           reservation.details
         );
+        console.log(reservation);
       });
+     
     })
     .catch((error) => console.error("Error fetching user data:", error));
 });

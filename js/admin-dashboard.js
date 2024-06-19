@@ -121,7 +121,7 @@ function doneReservation(event) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: reservationID, state: "completed" }),
+        body: JSON.stringify({ id: reservationID, status: "completed" }),
       })
         .then((response) => {
           if (!response.ok) {
