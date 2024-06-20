@@ -219,20 +219,17 @@ module.exports.products_post = async (req, res) => {
     contentType: req.file.mimetype,
   };
   try {
-    const givenScore = parseInt(price, 10) / 10;
     let prod = new Product({
       name: name,
       price: price,
       type: type,
       image: image,
-      givenScore: givenScore,
       description: description,
     });
     await prod.save();
     res.redirect("products");
   } catch (err) {
-    console.log(err);
-    res.send(err);
+    res.status(500).json({message: "Internal Server Error" + err})
   }
 };
 
@@ -378,7 +375,6 @@ module.exports.delete_product_id = async (req, res) => {
 module.exports.delete_user_email = async (req, res) => {
   try {
     const userEmail = req.body.email;
-    console.log(userEmail);
     const result = await user.findOneAndDelete({ email: userEmail });
     if (!result) {
       return res.status(404).send("user not found");
@@ -391,14 +387,11 @@ module.exports.delete_user_email = async (req, res) => {
 };
 
 module.exports.update_data = async (req, res) => {
-  console.log("inside update method");
   try {
     const email = req.body.email;
-    console.log(email);
     user
       .findOne({ email: email })
       .then((usr) => {
-        console.log("inside find");
         user
           .update(usr._id, req.body)
           .then((users) => {
@@ -408,8 +401,8 @@ module.exports.update_data = async (req, res) => {
             res.send(err);
           });
       })
-      .catch((err) => {
-        console.log("Can't find user");
+      .catch((err) => {        
+        res.status(404).json({message: "Can't find user"});
       });
   } catch (error) {
     res.status(500).send(error);
@@ -424,7 +417,6 @@ module.exports.update_user_data = async (req, res) => {
       { $set: { name: req.body.name, status: req.body.status } },
       { new: true }
     );
-    console.log(updatedUser);
     if (!updatedUser) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -445,7 +437,6 @@ async function checkPass(userId, oldPassword) {
 }
 
 module.exports.update_profile_data = async (req, res) => {
-  console.log("Test1");
   try {
     const token = req.cookies.jwt;
     if (!token) {
@@ -453,13 +444,11 @@ module.exports.update_profile_data = async (req, res) => {
     }
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
-    console.log(userId);
     const newPassword = req.body.newPassword.trim();
     if (newPassword !== '') {
       const oldPassword = req.body.oldPassword;
       const isPasswordCorrect = await checkPass(userId, oldPassword);
       if (!isPasswordCorrect) {
-        console.log("Incorrect Password");
         return res.status(400).json({ error: "Old password is incorrect" });
       }
       const salt = await bcrypt.genSalt(10);
@@ -474,13 +463,11 @@ module.exports.update_profile_data = async (req, res) => {
       }
       return res.status(200).json(updatedUser);
     } else {
-      console.log("Else condition");
       const updatedUser = await user.findOneAndUpdate(
         { _id: userId },
         { $set: { name: req.body.name, email: req.body.email, phone: req.body.phone } },
         { new: true }
       );
-      console.log(updatedUser);
       if (!updatedUser) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -546,19 +533,29 @@ module.exports.reservation_post = async (req, res) => {
     if (!token) {
       return res.status(401).json({ error: "Unauthorized" });
     }
+    
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
     const userData = await user.findById(userId);
-    console.log(userData);
+    
+    if (!userData) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    
+    if (userData.status === 'admin') { // Assuming user roles are defined, and admin is one of them
+      return res.status(403).json({ error: "Admins cannot make reservations" });
+    }
+
     const { name, phone, numOfPersons, insDate, details } = req.body;
     if (!name || !phone || !numOfPersons || !insDate) {
       return res.status(400).json({ error: "All fields are required" });
     }
-    const alreadyReserved = await reservation.findOne({userId: userId});
-    console.log(alreadyReserved);
-    if(alreadyReserved){
-      return res.status(400).json({ error: "you already reserved" });
+    
+    const alreadyReserved = await reservation.findOne({ userId: userId });
+    if (alreadyReserved) {
+      return res.status(400).json({ error: "You already have a reservation" });
     }
+    
     const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
     const newReservation = new reservation({
       userId: userId,
@@ -568,10 +565,11 @@ module.exports.reservation_post = async (req, res) => {
       newDate: reservationDate,
       details: details || "No details",
     });
-    console.log("New Reservation: ", newReservation);
+    
     await newReservation.save();
     res.status(201).json({ message: "Reservation created successfully" });
   } catch (error) {
+    console.error("Error creating reservation:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -598,9 +596,7 @@ module.exports.checkOut_post = async (req, res) => {
     if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });
     }
-    console.log(userId);
     const { customer, cart } = req.body;
-    console.log("Customer: ", customer, "\n cart: ", cart);
     if (!cart || cart.length === 0) {
       return res.status(400).json({ error: "Cart is empty" });
     }
@@ -629,7 +625,6 @@ module.exports.checkOut_post = async (req, res) => {
         quantity: item.quan,
       };
     }));
-    console.log("this is new Date of Order: ",Date.now);
     const orderData = {
       userId: userId,
       customer: {
@@ -688,7 +683,6 @@ module.exports.messages_data_get = async (req, res) => {
           details: data.details
         });
       }
-      // console.log("this id test: ",data._id);
     });
     res.status(200).json(Reservations);
   } catch (err) {
@@ -754,8 +748,8 @@ module.exports.getOrders = (req, res) => {
 
 module.exports.get_orders_data = async (req, res) => {
   try {
-    // Fetch all orders
-    const orders = await Order.find();
+    // Fetch all pending orders
+    const orders = await Order.find({ status: "pending" });
 
     // Process each order to get user and product information
     const ordersData = await Promise.all(orders.map(async order => {
@@ -777,6 +771,7 @@ module.exports.get_orders_data = async (req, res) => {
           quantity: productItem.quantity
         };
       }));
+
       // Construct order data with user and product information
       return {
         orderId: order._id,
@@ -786,9 +781,11 @@ module.exports.get_orders_data = async (req, res) => {
         customer: order.customer,
         products: products,
         totalPrice: order.totalPrice,
+        scores: order.totalPrice,
         createdAt: order.createdAt
       };
     }));
+
     // Send the combined data back to the client
     res.status(200).json({ orders: ordersData });
   } catch (err) {
@@ -796,6 +793,7 @@ module.exports.get_orders_data = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 webPush.setVapidDetails('mailto:ooday2424@gmail.com', publicVapidKey, privateVapidKey);
@@ -949,3 +947,28 @@ module.exports.deleteReservation = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
+module.exports.finishedOrders = async (req, res) => {
+  try {
+    const OrderId = req.body.orderId;
+    const OrderData = await reservation.findByIdAndUpdate(
+      OrderId,
+      { status: 'completed' },
+      { new: true }
+    );
+    res.status(200).json({ message: "Order updated successfully", Order: OrderData});
+  } catch (err) {
+    res.status(500).json({message: 'Internal Server Error'});
+  }
+};
+
+module.exports.checkEmail = async (req, res) => {
+  const newEmail = req.body.email;
+  const User = await user.findOne({email: newEmail});
+  if(User) {
+    return res.status(409).json({message: "exist"});
+  } else { 
+    return res.status(404).json({message: "not exist"})
+  }
+}

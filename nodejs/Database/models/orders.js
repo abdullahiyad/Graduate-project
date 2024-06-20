@@ -49,6 +49,10 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  scores: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

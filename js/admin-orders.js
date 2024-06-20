@@ -18,6 +18,34 @@ function doneMessagge(event) {
   const clickedElement = event.target;
   const parent = clickedElement.parentElement.parentElement;
   const orderId = parent.querySelector(".order-id").textContent;
+
+  fetch('/admin/orders', {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json", // Specify the content type
+    },
+    body: JSON.stringify({orderId}),
+    }
+  ).then((response) => {
+    if(!response.ok) {
+      throw new Error("Response Was Not Ok!!");
+    }
+    return response.text();
+  }).then((data) => {
+    Swal.fire({
+      title: "Finished!",
+      text: "The Order is completed.",
+      icon: "success",
+    });
+    clickedElement.parentElement.parentElement.parentElement.remove();
+  }).catch((err) => {
+    Swal.fire({
+      title: "Failed!",
+      text: "There is something error." + err,
+      icon: "failed",
+    });
+  });
+
 }
 
 let ordersTable = document.querySelector(".orders-table");
