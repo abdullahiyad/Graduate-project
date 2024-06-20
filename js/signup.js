@@ -4,16 +4,7 @@ let phoneValidate = false;
 let passwordValidate = false;
 //function to check email
 async function checkEmail(event) {
-  const email = event.target.value;
-  if (true) {
-    event.target.classList.remove("notValid");
-    event.target.classList.add("valid");
-    emailValidate = true;
-  } else {
-    event.target.classList.add("notValid");
-    emailValidate = false;
-  }
-
+  const Email = event.target.value;
   try {
     // Send a request to the server to check if the email exists
     const response = await fetch("/signup/", {
@@ -21,17 +12,22 @@ async function checkEmail(event) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: email }),
+      body: JSON.stringify({ email: Email }),
     });
+    console.log("hi");
     const data = await response.data();
+    console.log(data);
+    if (data.message == "not exist") {
+      event.target.classList.remove("notValid");
+      event.target.classList.add("valid");
+      emailValidate = true;
+    } else {
+      event.target.classList.add("notValid");
+      emailValidate = false;
+    }
     // data.message: exist
     // data.message: not exist
-
-    
-  }catch(err) {
-
-    
-  }
+  } catch (err) {}
 }
 //function to check phone number
 function checkPhone(event) {
@@ -71,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    if (phoneValidate && passwordValidate) {
+    if (phoneValidate && passwordValidate && emailValidate) {
       try {
         const response = await fetch("/signup", {
           method: "POST",
