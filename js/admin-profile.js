@@ -85,6 +85,8 @@ fetch("/admin/profile/api")
   })
   .then((data) => {
     updateInfo(data.name, data.email, data.phone);
+    updateName(data.name);
+    window.globalValue = data.name;
   })
   .catch((error) => console.error("Error fetching user data:", error));
 

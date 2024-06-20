@@ -28,7 +28,7 @@ const user_schema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["user", "manager", "admin"],
+    enum: ["user", "admin"],
     default: "user",
   },
   score: {

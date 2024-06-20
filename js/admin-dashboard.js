@@ -208,7 +208,7 @@ window.logout = function () {
       console.log(err);
     });
 };
-
+console.log(window.globalValue);
 function updateStatics(totalSalesN, totalOrdersN, totalUsersN) {
   const totalSales = document.querySelector(".sales .num span");
   totalSales.innerHTML = totalSalesN;
@@ -243,9 +243,4 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });
 
-//function to update the name of Admin/user in header
-function updateName(name) {
-  const nameSpan = document.querySelector(".header .user-name .name");
-  nameSpan.textContent = name;
-}
-updateName("ahmed");
+

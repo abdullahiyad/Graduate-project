@@ -130,6 +130,9 @@ module.exports.dashboard_get = async (req, res) => {
 
 module.exports.dashboard_get_data = async (req, res) => {
   try {
+    const userId = getUserData(req);
+
+    const U = await user.findById(userId);
     // Step 1: Find all accepted reservations
     const reservations = await reservation.find({ status: 'accepted' });
     
