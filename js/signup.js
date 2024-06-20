@@ -4,31 +4,38 @@ let phoneValidate = false;
 let passwordValidate = false;
 //function to check email
 async function checkEmail(event) {
-  console.log(event.target.value);
   const Email = event.target.value;
-  try {
-    // Send a request to the server to check if the email exists
-    const response = await fetch("/signup/api", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: Email }),
-    });
-    console.log("hi");
-    const data = await response.data();
-    console.log(data);
-    if (data.message == "not exist") {
-      event.target.classList.remove("notValid");
-      event.target.classList.add("valid");
-      emailValidate = true;
-    } else {
-      event.target.classList.add("notValid");
-      emailValidate = false;
-    }
-    // data.message: exist
-    // data.message: not exist
-  } catch (err) {}
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (emailRegex.test(Email)) {
+    console.log(Email);
+    try {
+      // Send a request to the server to check if the email exists
+      const response = await fetch("/signup/api", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: Email }),
+      });
+      console.log("hi");
+      const data = await response.data();
+      console.log(data);
+      if (data.message == "not exist") {
+        event.target.classList.remove("notValid");
+        event.target.classList.add("valid");
+        emailValidate = true;
+      } else {
+        event.target.classList.add("notValid");
+        emailValidate = false;
+      }
+      // data.message: exist
+      // data.message: not exist
+    } catch (err) {}
+  } else {
+    console.log(Email);
+    event.target.classList.add("notValid");
+    emailValidate = false;
+  }
 }
 //function to check phone number
 function checkPhone(event) {
