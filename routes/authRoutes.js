@@ -6,6 +6,7 @@ const router = Router();
 // signup links
 router.get("/signup", isLoggedIn, authController.signup_get);
 router.post("/signup", authController.signup_post);
+router.get("/signup/", authController.checkEmail);
 
 // login links
 router.get("/login", isLoggedIn, authController.login_get);
@@ -95,5 +96,6 @@ router.get("/user/dashboard", authController.user_dashboard_get);
 // admin orders
 router.get("/admin/orders", authController.getOrders);
 router.get("/admin/orders/api", authController.get_orders_data);
+router.put("/admin/orders", authController.finishedOrders);
 
 module.exports = router;

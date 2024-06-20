@@ -22,10 +22,6 @@ const product_schema = new mongoose.Schema({
         data: Buffer,
         contentType: String,
     },
-    givenScore: {
-        type: Number,
-        default:0
-    },
     description: {
         type: String,
         require:true

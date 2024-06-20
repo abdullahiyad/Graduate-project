@@ -37,11 +37,24 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.json();
       })
       .then((data) => {
-        console.log("Reservation successful:", data);
+        Swal.fire({
+          title: "Success!",
+          text: "Your reservation has been created successfully.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        });
         window.location.href = "/reservation";
       })
       .catch((error) => {
         console.error("Error making reservation:", error.message);
+        Swal.fire({
+          title: "Error!",
+          text: "There is error when creating the reservation.",
+          icon: "error",
+          timer: 1500,
+          showConfirmButton: false,
+        });
       });
   });
 });

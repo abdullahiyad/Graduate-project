@@ -3,7 +3,7 @@ let emailValidate = false;
 let phoneValidate = false;
 let passwordValidate = false;
 //function to check email
-function checkEmail(event) {
+async function checkEmail(event) {
   const email = event.target.value;
   if (true) {
     event.target.classList.remove("notValid");
@@ -12,6 +12,25 @@ function checkEmail(event) {
   } else {
     event.target.classList.add("notValid");
     emailValidate = false;
+  }
+
+  try {
+    // Send a request to the server to check if the email exists
+    const response = await fetch("/signup/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    });
+    const data = await response.data();
+    // data.message: exist
+    // data.message: not exist
+
+    
+  }catch(err) {
+
+    
   }
 }
 //function to check phone number
