@@ -968,10 +968,13 @@ module.exports.finishedOrders = async (req, res) => {
 
 module.exports.checkEmail = async (req, res) => {
   const newEmail = req.body.email;
+  console.log(newEmail);
   const User = await user.findOne({email: newEmail});
   if(User) {
-    return res.status(409).json({message: "exist"});
+    console.log("exists");
+    return res.json({message: "exist"});
   } else { 
-    return res.status(404).json({message: "not exist"})
+    console.log('Not exist');
+    return res.json({message: "not exist"})
   }
 }

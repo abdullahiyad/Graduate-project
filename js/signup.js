@@ -6,37 +6,62 @@ let passwordValidate = false;
 async function checkEmail(event) {
   const Email = event.target.value;
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  
   if (emailRegex.test(Email)) {
-    console.log(Email);
     try {
-      // Send a request to the server to check if the email exists
-      const response = await fetch("/signup/api", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: Email }),
-      });
-      console.log("hi");
-      const data = await response.data();
-      console.log(data);
-      if (data.message == "not exist") {
-        event.target.classList.remove("notValid");
-        event.target.classList.add("valid");
-        emailValidate = true;
-      } else {
+      const emailExists = await checkDB(Email);
+      if (emailExists) {
+        // Email exists
+        console.log("Email exists.");
+        // Handle accordingly, for example:
         event.target.classList.add("notValid");
-        emailValidate = false;
+        // Update UI to indicate email is not valid
+        // emailValidate = false;
+      } else {
+        // Email does not exist
+        console.log("Email does not exist.");
+        // Handle accordingly, for example:
+        // emailValidate = true;
       }
-      // data.message: exist
-      // data.message: not exist
-    } catch (err) {}
+    } catch (err) {
+      console.error("Error checking email:", err);
+      // Handle error, for example:
+      // emailValidate = false;
+    }
   } else {
     console.log(Email);
     event.target.classList.add("notValid");
-    emailValidate = false;
+    // emailValidate = false;
   }
 }
+
+async function checkDB(email) {
+  try {
+    const response = await fetch("/signup/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Server responded with error status: ' + response.status);
+    }
+    const data = await response.json();
+    if (data.message === 'exist') {
+      console.log(true);
+      return true; // Email exists
+    } else {
+      console.log(false);
+      return false; // Email does not exist
+    }
+  } catch (error) {
+    console.error("Error checking email:", error);
+    throw error;
+  }
+}
+
 //function to check phone number
 function checkPhone(event) {
   const phone = event.target.value;
