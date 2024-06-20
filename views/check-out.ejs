@@ -84,8 +84,12 @@
                         <input type="text" class="address2 input-style" placeholder="address 2 (optional)">
                         <label for="" class="method-payment">payment methods :</label>
                         <div class="cod">
-                            <input type="radio" name="cod" id="cod" value="cod" checked required>
+                            <input type="radio" name="paymentRadio" id="cod" value="cod" checked>
                             <label for="cod" class="cod-label">Cash on Delivery</label>
+                        </div>
+                        <div class="coins">
+                            <input type="radio" name="paymentRadio" class="disabled" id="coins" value="coins">
+                            <label for="coins" class="cod-label">Score</label>
                         </div>
                         <div class="submit-btn">
                             <input type="button" class="back" onclick="backFunc()" value="back">

@@ -17,7 +17,7 @@
   --border-radius-1: 6.4px;
   --border-radius-2: 12.8px;
   --border-radius-3: 19.2px;
-
+  --button-color:orangered;
   --card-padding: 28.8px;
   --padding-1: 19.2;
   --statics-font: poppins, sans-serif;
@@ -320,12 +320,17 @@ body {
   background-color: transparent;
   border: 1px solid var(--button-color);
   color: var(--button-color);
-  border-radius: var(--button-radius-deg);
+  border-radius: var(--border-radius-3);
   transition-duration: 0.4s;
+  -webkit-border-radius: var(--border-radius-3);
+  -moz-border-radius: var(--border-radius-3);
+  -ms-border-radius: var(--border-radius-3);
+  -o-border-radius: var(--border-radius-3);
+  cursor: pointer;
 }
 .product .price button:hover {
   background-color: var(--button-color);
-  color: var(--main-background-color);
+  color: var(--color-white);
 }
 
 /* more details page */

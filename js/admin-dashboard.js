@@ -52,46 +52,45 @@ function rejectReservation(event) {
 
       // Send the reservation ID and state to the server
       fetch(`/admin/dashboard/delete`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({id: reservationID}),
+        body: JSON.stringify({ id: reservationID }),
       })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        if (data.message === "Reservation deleted successfully") {
-          // If successful, show success message and remove the reservation from the DOM
-          Swal.fire({
-            title: "Rejected!",
-            text: "The reservation has been rejected.",
-            icon: "success",
-          });
-          parent.remove();
-        } else {
-          // If there's an error, show error message
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          if (data.message === "Reservation deleted successfully") {
+            // If successful, show success message and remove the reservation from the DOM
+            Swal.fire({
+              title: "Rejected!",
+              text: "The reservation has been rejected.",
+              icon: "success",
+            });
+            parent.remove();
+          } else {
+            // If there's an error, show error message
+            Swal.fire({
+              title: "Error!",
+              text: "There was a problem rejecting the reservation.",
+              icon: "error",
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error deleting reservation:", error);
           Swal.fire({
             title: "Error!",
             text: "There was a problem rejecting the reservation.",
             icon: "error",
           });
-        }
-      })
-      .catch((error) => {
-        console.error("Error deleting reservation:", error);
-        Swal.fire({
-          title: "Error!",
-          text: "There was a problem rejecting the reservation.",
-          icon: "error",
         });
-      });
     }
   });
 }
-
 
 //functoin to delete the resrvatoin request
 function doneReservation(event) {
@@ -116,7 +115,7 @@ function doneReservation(event) {
       const reservationID = parent.querySelector(".reservation-id").value;
       console.log(reservationID);
       // Send the reservation ID and state to the server side
-       fetch("/admin/dashboard", {
+      fetch("/admin/dashboard", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -125,7 +124,9 @@ function doneReservation(event) {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("There was an error updating the reservation state.");
+            throw new Error(
+              "There was an error updating the reservation state."
+            );
           }
           return response.json();
         })
@@ -237,7 +238,14 @@ document.addEventListener("DOMContentLoaded", () => {
           r.details
         );
       });
-      updateStatics(data.totalSales,data.recentOrders,data.recentUsers)
+      updateStatics(data.totalSales, data.recentOrders, data.recentUsers);
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });
+
+//function to update the name of Admin/user in header
+function updateName(name) {
+  const nameSpan = document.querySelector(".header .user-name .name");
+  nameSpan.textContent = name;
+}
+updateName("ahmed");

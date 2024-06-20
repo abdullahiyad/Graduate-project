@@ -269,6 +269,7 @@ body {
     -moz-transform: translateX(0px);
     -ms-transform: translateX(0px);
     -o-transform: translateX(0px);
+    z-index: 5;
   }
   .messages-container .content {
     width: 100%;

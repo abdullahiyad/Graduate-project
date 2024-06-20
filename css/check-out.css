@@ -45,6 +45,9 @@ html {
 button {
   cursor: pointer;
 }
+.disabled {
+  pointer-events: none;
+}
 
 .page-container {
   width: 100%;
@@ -119,11 +122,15 @@ button {
   padding: 0 15px;
   grid-area: 6/1 / span 1 / span 3;
 }
+.address .coins {
+  padding: 0 15px;
+  grid-area: 7/1 / span 1 / span 3;
+}
 /* .address .cod-label {
   grid-area: 6/1 / span 1 / span 1;
 } */
 .address .submit-btn {
-  grid-area: 7/1 / span 1 / span 3;
+  grid-area: 8/1 / span 1 / span 3;
 }
 
 .input-style {

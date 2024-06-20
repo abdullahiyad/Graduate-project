@@ -298,7 +298,7 @@ body {
   -ms-border-radius: var(--border-radius-3);
   -o-border-radius: var(--border-radius-3);
   box-shadow: var(--box-shadow);
-  padding: 20px;
+  padding: 0 30px;
   margin: 10px;
   font-size: 35px;
   font-family: var(--statics-font);
@@ -313,13 +313,13 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-.content .statics div::after {
+/* .content .statics div::after {
   content: "Last 24 Hours";
   color: rgb(159, 162, 188);
   font-size: 20px;
-}
+} */
 .dashboard-container .content .statics div i {
-  font-size: 65px;
+  font-size: 70px;
   color: var(--color-warning);
 }
 .dashboard-container .content .statics div:hover {

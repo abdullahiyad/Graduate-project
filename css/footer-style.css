@@ -21,6 +21,12 @@
   background-color: #333;
   color: var(--main-background-color);
 }
+.footer .left {
+  color: var(--background-main-color);
+}
+.footer .right {
+  color: var(--background-main-color);
+}
 .footer .left .footer-loc {
   display: flex;
   align-items: center;

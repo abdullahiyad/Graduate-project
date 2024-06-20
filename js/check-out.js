@@ -149,3 +149,12 @@ async function submitOrder(
     console.error("Error submitting order:", error);
   }
 }
+
+//function to make an element disabled
+function disabledFunc() {
+  const scoreRadio = document.querySelector("#coins");
+  scoreRadio.classList.toggle("disabled");
+}
+
+//function to claculate the score need to pay the order
+function calcScore() {}
