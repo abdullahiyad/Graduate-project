@@ -89,6 +89,7 @@ router.get("/user/orders", authController.get_user_orders);
 router.get("/user/messages/api", authController.get_user_messages);
 router.get("/user/orders/api", authController.get_orders_user_data);
 router.get("/user/dashboard", authController.user_dashboard_get);
+router.get("/user/dashboard/api", authController.get_user_statics);
 
 // This is for test notifications
 // router.get("/user/dashboard", authController.user_dashboard_get);

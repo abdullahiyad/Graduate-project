@@ -596,12 +596,17 @@ module.exports.checkOut = (req, res) => {
 module.exports.checkOut_post = async (req, res) => {
   try {
     const userId = getUserData(req);
+    const userData = await user.findById(userId);
     if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });
     }
     const { customer, cart } = req.body;
     if (!cart || cart.length === 0) {
       return res.status(400).json({ error: "Cart is empty" });
+    }
+
+    if (userData.status === 'admin') { // Assuming user roles are defined, and admin is one of them
+      return res.status(403).json({ error: "Admins cannot make reservations" });
     }
 
     if (!customer || !customer.name || !customer.phone || !customer.City || !customer.address1) {
@@ -976,5 +981,21 @@ module.exports.checkEmail = async (req, res) => {
   } else { 
     console.log('Not exist');
     return res.json({message: "not exist"})
+  }
+}
+
+module.exports.get_user_statics = async (req, res) => {
+  const userId = getUserData(req);
+  const userData = await user.findById(userId);
+  console.log(userData);
+  if(userData){
+    return res.json({
+      name: userData.name,
+      Score: userData.score,
+      tOrders: userData.orderNumbers,
+      tReservations: userData.reservationNumbers,
+    });
+  } else {
+    res.status(404).json("there is fucking Error");
   }
 }

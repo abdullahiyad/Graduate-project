@@ -46,3 +46,17 @@ function updateStatics(totalSalesN, totalOrdersN, totalUsersN) {
   );
   totalReservations.innerHTML = totalUsersN;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/user/dashboard/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      console.log(data);
+      updateStatics(data.Score, data.tOrders, data.tReservations);
+      updateName(data.name)
+    })
+    .catch((error) => console.error("Error fetching dashboard data:", error));
+});
