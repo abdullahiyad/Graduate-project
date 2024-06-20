@@ -157,4 +157,12 @@ function disabledFunc() {
 }
 
 //function to claculate the score need to pay the order
-function calcScore() {}
+function calcScore() {
+  const orderSalaryInScore = document.querySelector(
+    ".bill .total .price .number"
+  );
+  while (orderSalaryInScore.textContent == 1) {
+    console.log(orderSalaryInScore.textContent);
+  }
+}
+calcScore();
