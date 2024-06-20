@@ -6,32 +6,27 @@ let passwordValidate = false;
 async function checkEmail(event) {
   const Email = event.target.value;
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  
+
   if (emailRegex.test(Email)) {
     try {
       const emailExists = await checkDB(Email);
       if (emailExists) {
-        // Email exists
-        console.log("Email exists.");
-        // Handle accordingly, for example:
+        showEmailError();
         event.target.classList.add("notValid");
-        // Update UI to indicate email is not valid
-        // emailValidate = false;
+        emailValidate = false;
       } else {
         // Email does not exist
-        console.log("Email does not exist.");
-        // Handle accordingly, for example:
-        // emailValidate = true;
+        event.target.classList.remove("notValid");
+        event.target.classList.add("valid");
+        removeEmailError();
+        emailValidate = true;
       }
     } catch (err) {
       console.error("Error checking email:", err);
-      // Handle error, for example:
-      // emailValidate = false;
     }
   } else {
-    console.log(Email);
     event.target.classList.add("notValid");
-    // emailValidate = false;
+    emailValidate = false;
   }
 }
 
@@ -46,20 +41,29 @@ async function checkDB(email) {
     });
 
     if (!response.ok) {
-      throw new Error('Server responded with error status: ' + response.status);
+      throw new Error("Server responded with error status: " + response.status);
     }
     const data = await response.json();
-    if (data.message === 'exist') {
-      console.log(true);
+    if (data.message === "exist") {
       return true; // Email exists
     } else {
-      console.log(false);
       return false; // Email does not exist
     }
   } catch (error) {
     console.error("Error checking email:", error);
     throw error;
   }
+}
+
+//function to show error message when user use already used email
+function showEmailError() {
+  const emailMsg = document.querySelector(".emailExist");
+  emailMsg.classList.remove("disaper");
+}
+//function to remove error message when user use already used email
+function removeEmailError() {
+  const emailMsg = document.querySelector(".emailExist");
+  emailMsg.classList.add("disaper");
 }
 
 //function to check phone number
