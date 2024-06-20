@@ -4,10 +4,11 @@ let phoneValidate = false;
 let passwordValidate = false;
 //function to check email
 async function checkEmail(event) {
+  console.log(event.target.value);
   const Email = event.target.value;
   try {
     // Send a request to the server to check if the email exists
-    const response = await fetch("/signup/", {
+    const response = await fetch("/signup/api", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

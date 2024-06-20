@@ -6,7 +6,7 @@ const router = Router();
 // signup links
 router.get("/signup", isLoggedIn, authController.signup_get);
 router.post("/signup", authController.signup_post);
-router.get("/signup/", authController.checkEmail);
+router.get("/signup/api", authController.checkEmail);
 
 // login links
 router.get("/login", isLoggedIn, authController.login_get);
