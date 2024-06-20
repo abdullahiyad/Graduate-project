@@ -257,3 +257,15 @@ function updateData() {
     });
   window.location.reload();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/user/dashboard/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      updateName(data.name)
+    })
+    .catch((error) => console.error("Error fetching dashboard data:", error));
+});
