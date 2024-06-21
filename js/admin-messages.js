@@ -16,7 +16,7 @@ function closeMessagge(event) {
   const clickedElement = event.target;
   clickedElement.parentElement.parentElement.classList.toggle("more-details");
 }
-
+let reason;
 // Function to reject reservation
 function rejectReservation(event) {
   event.preventDefault(); // Prevent default button behavior
@@ -40,7 +40,8 @@ function rejectReservation(event) {
       if (!inputValue) {
         Swal.showValidationMessage("Input is required");
       }
-      let reason = inputValue;
+      console.log(inputValue);
+      reason = inputValue;
     },
   }).then((result) => {
     if (result.isConfirmed) {
@@ -55,7 +56,7 @@ function rejectReservation(event) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: reservationID, status: "rejected" }),
+        body: JSON.stringify({ id: reservationID, status: "rejected", message: reason }),
       })
         .then((response) => {
           if (!response.ok) {

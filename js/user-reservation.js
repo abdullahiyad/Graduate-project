@@ -169,9 +169,9 @@ function addMessageRejected(
   reservationName,
   reservationPhone,
   reservationDate,
-  reservationTime,
   numOfPersons,
-  moreDetails = "none"
+  moreDetails = "none",
+  rejectedMessage
 ) {
   const newMessage = document.createElement("div");
 
@@ -205,7 +205,7 @@ here more details : [${moreDetails}]
 
 
 
-reasons of reject : []
+reasons of reject : [ ${rejectedMessage}]
                         </textarea>
                     </div>
                     <p class="open-msg" onclick="readMessagge(event)">read</p>
@@ -242,33 +242,33 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       data.forEach((reservation) => {
-        console.log(reservation.state);
-        if (reservation.state === "pending") {
+        if (reservation.status === "pending") {
           addMessagePending(
-            reservation._id,
+            reservation.reservationId,
             reservation.resName,
             reservation.phone,
             new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );
-        } else if (reservation.state === "accepted") {
+        } else if (reservation.status === "accepted") {
           addMessageAccepted(
-            reservation._id,
+            reservation.reservationId,
             reservation.resName,
             reservation.phone,
             new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );
-        } else if (reservation.state === "rejected") {
+        } else if (reservation.status === "rejected") {
           addMessageRejected(
-            reservation._id,
+            reservation.reservationId,
             reservation.resName,
             reservation.phone,
             new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
-            reservation.details
+            reservation.details,
+            reservation.RejMessage
           );
         }
       });

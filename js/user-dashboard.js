@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      console.log(data);
       updateStatics(data.Score, data.tOrders, data.tReservations);
       updateName(data.name)
     })

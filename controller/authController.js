@@ -554,8 +554,14 @@ module.exports.reservation_post = async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
     
-    const alreadyReserved = await reservation.findOne({ userId: userId });
+    const alreadyReserved = await reservation.findOne({ 
+      userId: userId,
+      status: { "$in": ["pending", "accepted"] },
+     });
+
+    console.log(alreadyReserved);
     if (alreadyReserved) {
+      console.log("user must not make any reservation");
       return res.status(400).json({ error: "You already have a reservation" });
     }
     
@@ -702,46 +708,48 @@ module.exports.messages_data_get = async (req, res) => {
 
 module.exports.message_acc_rej_com = async (req, res) => {
   try {
-    const { id, status } = req.body;
-    
-    // Validate the state
-    if (!['accepted', 'rejected', 'completed'].includes(status)) {
+    const { id, status, message } = req.body;
+    if (!['accepted', 'rejected', 'completed', 'pending'].includes(status)) {
       return res.status(400).json({ error: "Invalid state value" });
     }
 
-    // Update the reservation state based on the provided state
+    const updateFields = { status: status };
+    
+    if (status === 'rejected' && message) {
+      updateFields.message = message;
+    }
+
     const updatedReservation = await reservation.findByIdAndUpdate(
       id,
-      { status: status },
-      { new: true } // Return the updated document
+      updateFields,
+      { new: true }
     );
 
     if (!updatedReservation) {
       return res.status(404).json({ error: "Reservation not found" });
     }
 
-    // If the reservation is completed, increment the user's reservationNumbers
     if (status === 'completed') {
-      const userId = updatedReservation.userId; // Assuming the reservation document contains a userId field
+      const userId = updatedReservation.userId;
       await user.findByIdAndUpdate(
         userId,
         { 
           $inc: { 
-          reservationNumbers: 1,
-          score: 10,
-         }
-        }, { new: true }
+            reservationNumbers: 1,
+            score: 10,
+          }
+        },
+        { new: true }
       );
     }
 
-    // Send a success response
     res.status(200).json({ message: "Reservation updated successfully", reservation: updatedReservation });
-
   } catch (err) {
     console.error("Error updating reservation state:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 module.exports.getOrders = (req, res) => {
@@ -857,7 +865,8 @@ module.exports.get_user_messages = async (req, res) => {
       reserveDate: data.newDate,
       numPerson: data.numPerson,
       details: data.details,
-      status: data.status
+      status: data.status,
+      RejMessage: data.message
     }));
     // Send the formatted reservations in the response
     res.status(200).json(reservationsForm);
@@ -973,13 +982,10 @@ module.exports.finishedOrders = async (req, res) => {
 
 module.exports.checkEmail = async (req, res) => {
   const newEmail = req.body.email;
-  console.log(newEmail);
   const User = await user.findOne({email: newEmail});
   if(User) {
-    console.log("exists");
     return res.json({message: "exist"});
   } else { 
-    console.log('Not exist');
     return res.json({message: "not exist"})
   }
 }
@@ -987,7 +993,6 @@ module.exports.checkEmail = async (req, res) => {
 module.exports.get_user_statics = async (req, res) => {
   const userId = getUserData(req);
   const userData = await user.findById(userId);
-  console.log(userData);
   if(userData){
     return res.json({
       name: userData.name,
@@ -996,6 +1001,6 @@ module.exports.get_user_statics = async (req, res) => {
       tReservations: userData.reservationNumbers,
     });
   } else {
-    res.status(404).json("there is fucking Error");
+    res.status(404).json("there is something error");
   }
 }
