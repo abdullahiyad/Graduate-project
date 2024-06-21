@@ -4,6 +4,7 @@ var today = new Date().toISOString().split("T")[0];
 document.getElementsByName("reservation-date")[0].setAttribute("min", today);
 
 document.addEventListener("DOMContentLoaded", function () {
+  setMinDateTime();
   // Check if logged in
   const form = document.querySelector("form");
   form.addEventListener("submit", function (event) {
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error making reservation:", error.message);
         Swal.fire({
           title: "Error!",
-          text: "There is error when creating the reservation.",
+          text: "You have already have a reservation in cafe",
           icon: "error",
           timer: 1500,
           showConfirmButton: false,
@@ -104,19 +105,33 @@ function getMinDateTime() {
 //   dateTimeInput.min = getMinDateTime();
 // }
 // setMinDateTime();
-let dateCheck = false;
-function validateDateTime() {
-  const datetimeInput = document.querySelector(".reservation-date");
-  const selectedDateTime = new Date(datetimeInput.value);
-  const minDateTime = getMinDateTime();
-  if (selectedDateTime > new Date(minDateTime)) {
-    dateCheck = true;
-  } else {
-    dateCheck = false;
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "The selected date and time must be at least 5 hours from now.",
-    });
-  }
+// let dateCheck = false;
+// function validateDateTime() {
+//   const datetimeInput = document.querySelector(".reservation-date");
+//   const selectedDateTime = new Date(datetimeInput.value);
+//   const minDateTime = getMinDateTime();
+//   if (selectedDateTime > new Date(minDateTime)) {
+//     dateCheck = true;
+//   } else {
+//     dateCheck = false;
+//     Swal.fire({
+//       icon: "error",
+//       title: "Oops...",
+//       text: "The selected date and time must be at least 5 hours from now.",
+//     });
+//   }
+// }
+function setMinDateTime() {
+  const input = document.querySelector(".reservation-date");
+  const now = new Date();
+  now.setDate(now.getDate() + 1); // Move to the next day (tomorrow)
+
+  const year = now.getFullYear();
+  const month = ("0" + (now.getMonth() + 1)).slice(-2); // Months are zero-indexed
+  const day = ("0" + now.getDate()).slice(-2);
+  const hours = ("0" + now.getHours()).slice(-2);
+  const minutes = ("0" + now.getMinutes()).slice(-2);
+
+  const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  input.min = minDateTime;
 }

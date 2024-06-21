@@ -242,28 +242,28 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       data.forEach((reservation) => {
-        console.log(reservation.state);
-        if (reservation.state === "pending") {
+        console.log(reservation.status);
+        if (reservation.status === "pending") {
           addMessagePending(
-            reservation._id,
+            reservation.reservationId,
             reservation.resName,
             reservation.phone,
             new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );
-        } else if (reservation.state === "accepted") {
+        } else if (reservation.status === "accepted") {
           addMessageAccepted(
-            reservation._id,
+            reservation.reservationId,
             reservation.resName,
             reservation.phone,
             new Date(reservation.reserveDate).toLocaleString(), // Format date
             reservation.numPerson,
             reservation.details
           );
-        } else if (reservation.state === "rejected") {
+        } else if (reservation.status === "rejected") {
           addMessageRejected(
-            reservation._id,
+            reservation.reservationId,
             reservation.resName,
             reservation.phone,
             new Date(reservation.reserveDate).toLocaleString(), // Format date
@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      updateName(data.name)
+      updateName(data.name);
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });

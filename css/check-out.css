@@ -126,6 +126,9 @@ button {
   padding: 0 15px;
   grid-area: 7/1 / span 1 / span 3;
 }
+#coinsLabel-notEnough {
+  color: rgba(255, 0, 0, 0.8);
+}
 /* .address .cod-label {
   grid-area: 6/1 / span 1 / span 1;
 } */
