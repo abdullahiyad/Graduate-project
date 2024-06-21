@@ -242,7 +242,8 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       data.forEach((reservation) => {
-        if (reservation.status === "pending") {
+        console.log(reservation.state);
+        if (reservation.state === "pending") {
           addMessagePending(
             reservation.reservationId,
             reservation.resName,
@@ -283,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      updateName(data.name)
+      updateName(data.name);
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });

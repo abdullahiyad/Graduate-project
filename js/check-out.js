@@ -4,6 +4,8 @@
 //function add product to bill
 let billTable = document.querySelector(".product-table");
 let totalAmount = 0;
+let neededScore = 0;
+let userScore = 0;
 let amountContainer = document.querySelector(".total .price .number");
 document.addEventListener("DOMContentLoaded", () => {
   // Function to format currency
@@ -55,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
+  checkScore();
 });
 
 //form submition
@@ -161,8 +164,35 @@ function calcScore() {
   const orderSalaryInScore = document.querySelector(
     ".bill .total .price .number"
   );
-  while (orderSalaryInScore.textContent == 1) {
-    console.log(orderSalaryInScore.textContent);
+  if (orderSalaryInScore.textContent == 0) {
+    setTimeout(() => {
+      calcScore();
+    }, 50);
+  } else {
+    neededScore = orderSalaryInScore.textContent * 50;
+    // console.log("needed Score for order =", neededScore);
   }
 }
-calcScore();
+
+function checkScore() {
+  calcScore();
+  if (neededScore <= userScore) {
+    document.querySelector("#coinsR").disabled = false;
+    document.querySelector("#coinsLabel").disabled = false;
+    document.querySelector("#coinsLabel-notEnough").style.display = "none";
+  } else {
+    document.querySelector("#coinsLabel").style.display = "none";
+    document.querySelector("#coinsR").disabled = true;
+    document.querySelector("#coinsLabel-notEnough").style.display = "contents";
+  }
+}
+
+function checkRadio() {
+  if (document.querySelector("#coinsR").disabled) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "You don't have enough score to pay for this order!",
+    });
+  }
+}

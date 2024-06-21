@@ -181,6 +181,7 @@ body {
   .reservation-container form .send-button {
     grid-area: 8/1 / span 1 / span 1;
     font-weight: bold;
+    height: 60px;
     background-color: var(--color-dark);
     color: var(--color-white);
     cursor: pointer;
