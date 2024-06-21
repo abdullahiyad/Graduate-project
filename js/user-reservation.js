@@ -242,8 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then((data) => {
       data.forEach((reservation) => {
-        console.log(reservation.state);
-        if (reservation.state === "pending") {
+        if (reservation.status === "pending") {
           addMessagePending(
             reservation.reservationId,
             reservation.resName,
