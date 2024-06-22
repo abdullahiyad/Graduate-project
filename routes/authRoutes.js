@@ -23,6 +23,7 @@ router.get("/menu/",  authController.switch_page);
 router.get("/checkout",  authController.checkOut);
 router.get("/checkout/switch", authController.switch_page);
 router.post("/menu/checkout", authController.checkOut_post);
+router.post("/checkout", authController.checkout_data);
 
 // dashboard admin links
 router.get("/admin/dashboard", authController.dashboard_get);

@@ -95,6 +95,7 @@ function addProduct(
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize products
   initializeProducts();
+  
   // Step 1: Fetch product data and user data from the backend
   fetch("/menu/api")
     .then(async (response) => {
@@ -142,6 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     return "data:image/jpeg;base64," + window.btoa(binary);
   }
+
+  const loadingScreen = document.querySelector(".loader");
+  setTimeout(() => {
+    loadingScreen.style.display = "none";
+  }, 700);
 });
 
 // Function to run on page load to initialize products
@@ -171,10 +177,7 @@ function initializeProducts(
       cartList.appendChild(newProduct.firstElementChild);
     });
   }
-  const loadingScreen = document.querySelector(".loader");
-  setTimeout(() => {
-    loadingScreen.style.display = "none";
-  }, 700);
+
 }
 
 //function to create array Products

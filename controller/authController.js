@@ -4,7 +4,7 @@ const webPush = require("web-push");
 const user = require("../nodejs/Database/models/users");
 const Product = require("../nodejs/Database/models/products");
 const reservation = require('../nodejs/Database/models/reservation');
-const Order = require('../nodejs/Database/models/orders')
+const Order = require('../nodejs/Database/models/orders');
 const moment = require('moment-timezone');
 const multer = require("multer");
 const cookie = require("cookie-parser");
@@ -134,7 +134,7 @@ module.exports.dashboard_get_data = async (req, res) => {
 
     const U = await user.findById(userId);
     // Step 1: Find all accepted reservations
-    const reservations = await reservation.find({ status: 'accepted' });
+    const reservations = await reservation.find({ status: 'pending' });
     
     // Step 2: Prepare an array to store formatted reservation data
     let reservationsForm = [];
@@ -154,6 +154,7 @@ module.exports.dashboard_get_data = async (req, res) => {
         numOfPersons: reserve.numPerson,
         details: reserve.details,
       };
+      console.log(formattedReservation);
       reservationsForm.push(formattedReservation);
     };
     // Step 2: Find users created in the last 24 hours
@@ -532,21 +533,14 @@ module.exports.reservation_get = (req, res) => {
 
 module.exports.reservation_post = async (req, res) => {
   try {
-    const token = req.cookies.jwt;
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
+  const userId = getUserData(req);
     
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.id;
+    if (!userId) {
+      return res.status(404).json({ error: "User not found. Please log in before making a reservation." });
+    }
     const userData = await user.findById(userId);
-    
-    if (!userData) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    
     if (userData.status === 'admin') { // Assuming user roles are defined, and admin is one of them
-      return res.status(403).json({ error: "Admins cannot make reservations" });
+      return res.status(403).json({ error: "You are an admin. Admins cannot make reservations." });
     }
 
     const { name, phone, numOfPersons, insDate, details } = req.body;
@@ -559,10 +553,8 @@ module.exports.reservation_post = async (req, res) => {
       status: { "$in": ["pending", "accepted"] },
      });
 
-    console.log(alreadyReserved);
     if (alreadyReserved) {
-      console.log("user must not make any reservation");
-      return res.status(400).json({ error: "You already have a reservation" });
+      return res.status(400).json({ error: "You already have a reservation. Please wait until the current reservation ends before making another one." });
     }
     
     const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
@@ -606,13 +598,13 @@ module.exports.checkOut_post = async (req, res) => {
     if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });
     }
-    const { customer, cart } = req.body;
+    const { customer, cart, pM } = req.body;
     if (!cart || cart.length === 0) {
       return res.status(400).json({ error: "Cart is empty" });
     }
 
     if (userData.status === 'admin') { // Assuming user roles are defined, and admin is one of them
-      return res.status(403).json({ error: "Admins cannot make reservations" });
+      return res.status(403).json({ error: "Admins cannot make orders" });
     }
 
     if (!customer || !customer.name || !customer.phone || !customer.City || !customer.address1) {
@@ -620,8 +612,8 @@ module.exports.checkOut_post = async (req, res) => {
     }
 
     // Check for recent orders within the last 1 minutes
-    const tenMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
-    const recentOrder = await Order.findOne({ userId: userId, createdAt: { $gte: tenMinutesAgo } }).exec();
+    const oneMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
+    const recentOrder = await Order.findOne({ userId: userId, createdAt: { $gte: oneMinutesAgo } }).exec();
     if (recentOrder) {
       return res.status(429).json({ error: "You can only place an order every one minute" });
     }
@@ -634,6 +626,18 @@ module.exports.checkOut_post = async (req, res) => {
         throw new Error(`Product with ID ${item.id} not found`);
       }
       totalPrice += product.price * item.quan;
+      neededScore = totalPrice * 50;
+      if(pM === "Score") {
+        if(neededScore >= userData.score) {
+          await user.findByIdAndUpdate(
+            userId,
+            { $inc: { score: -neededScore } },
+            { new: true }
+          );
+        } else { 
+          return res.json({message: "you don't have enough score."});
+        }
+      }
       return {
         productId: item.id,
         quantity: item.quan,
@@ -650,6 +654,7 @@ module.exports.checkOut_post = async (req, res) => {
       },
       products: products,
       totalPrice: totalPrice,
+      paymentType: pM,
     };
     
     const newOrder = new Order(orderData);
@@ -662,7 +667,7 @@ module.exports.checkOut_post = async (req, res) => {
       { new: true }
     );
 
-    res.status(201).json({ message: "Order created successfully", order: newOrder });
+    res.status(201).json({ message: "Order created successfully" });
   } catch (err) {
     console.error("Error processing order:", err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -968,15 +973,42 @@ module.exports.deleteReservation = async (req, res) => {
 
 module.exports.finishedOrders = async (req, res) => {
   try {
-    const OrderId = req.body.orderId;
-    const OrderData = await reservation.findByIdAndUpdate(
-      OrderId,
+    const orderId = req.body.orderId;
+
+    // Find and update the order status
+    const orderData = await Order.findByIdAndUpdate(
+      orderId,
       { status: 'completed' },
       { new: true }
     );
-    res.status(200).json({ message: "Order updated successfully", Order: OrderData});
+
+    // Check if order was found
+    if (!orderData) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    // If payment method is Cash, update the user's score
+    if (orderData.paymentType === 'Cash') {
+      const userId = orderData.userId;
+      const totalPrice = orderData.totalPrice;
+
+      // Find and update the user's score
+      const updatedUser = await user.findByIdAndUpdate(
+        userId,
+        { $inc: { score: totalPrice } },
+        { new: true }
+      );
+
+      // Check if user was found
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+    }
+    // Send success response
+    res.status(200).json({ message: "Order updated successfully", order: orderData });
   } catch (err) {
-    res.status(500).json({message: 'Internal Server Error'});
+    console.error("Error updating order:", err);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -1004,3 +1036,14 @@ module.exports.get_user_statics = async (req, res) => {
     res.status(404).json("there is something error");
   }
 }
+
+module.exports.checkout_data = async (req, res) => {
+  try {
+    const userData = await user.findById(getUserData(req));
+    res.status(200).json({
+      score: userData.score,
+    })
+  } catch (error) {
+    
+  }
+};

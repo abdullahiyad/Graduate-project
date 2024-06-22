@@ -5,18 +5,17 @@ document.getElementsByName("reservation-date")[0].setAttribute("min", today);
 
 document.addEventListener("DOMContentLoaded", function () {
   setMinDateTime();
-  // Check if logged in
+  
   const form = document.querySelector("form");
   form.addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
+    
     const name = document.querySelector(".person-name").value;
     const phone = document.querySelector(".person-phone").value;
-    const numOfPersons = parseInt(
-      document.querySelector(".persons-number").value,
-      10
-    );
-    let insertedDate = document.querySelector(".reservation-date").value;
+    const numOfPersons = parseInt(document.querySelector(".persons-number").value, 10);
+    const insertedDate = document.querySelector(".reservation-date").value;
     const details = document.querySelector(".more-details").value;
+    
     // Send reservation data to the server
     fetch("/reservation", {
       method: "POST",
@@ -33,32 +32,36 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Server response was not ok");
+          return response.json().then(errData => {
+            throw new Error(errData.error);
+          });
         }
         return response.json();
       })
       .then((data) => {
         Swal.fire({
           title: "Success!",
-          text: "Your reservation has been created successfully.",
+          text: data.message,
           icon: "success",
           timer: 1500,
           showConfirmButton: false,
         });
-        window.location.href = "/reservation";
+        setTimeout(() => {
+          window.location.href = "/reservation";
+        }, 1500);
       })
       .catch((error) => {
-        // console.error("Error making reservation:", error.message);
+        console.error("Error making reservation:", error.message);
         Swal.fire({
           title: "Error!",
-          text: "You have already have a reservation in cafe",
+          text: error.message || "There is something wrong.",
           icon: "error",
-          timer: 1500,
-          showConfirmButton: false,
+          showConfirmButton: true,
         });
       });
   });
 });
+
 
 function redirect(event) {
   // Change /home/api to /reservation/api
