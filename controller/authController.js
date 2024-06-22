@@ -134,7 +134,7 @@ module.exports.dashboard_get_data = async (req, res) => {
 
     const U = await user.findById(userId);
     // Step 1: Find all accepted reservations
-    const reservations = await reservation.find({ status: 'accepted' });
+    const reservations = await reservation.find({ status: 'pending' });
     
     // Step 2: Prepare an array to store formatted reservation data
     let reservationsForm = [];
@@ -154,6 +154,7 @@ module.exports.dashboard_get_data = async (req, res) => {
         numOfPersons: reserve.numPerson,
         details: reserve.details,
       };
+      console.log(formattedReservation);
       reservationsForm.push(formattedReservation);
     };
     // Step 2: Find users created in the last 24 hours
@@ -532,21 +533,14 @@ module.exports.reservation_get = (req, res) => {
 
 module.exports.reservation_post = async (req, res) => {
   try {
-    const token = req.cookies.jwt;
-    if (!token) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
+  const userId = getUserData(req);
     
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.id;
+    if (!userId) {
+      return res.status(404).json({ error: "User not found. Please log in before making a reservation." });
+    }
     const userData = await user.findById(userId);
-    
-    if (!userData) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    
     if (userData.status === 'admin') { // Assuming user roles are defined, and admin is one of them
-      return res.status(403).json({ error: "Admins cannot make reservations" });
+      return res.status(403).json({ error: "You are an admin. Admins cannot make reservations." });
     }
 
     const { name, phone, numOfPersons, insDate, details } = req.body;
@@ -559,10 +553,8 @@ module.exports.reservation_post = async (req, res) => {
       status: { "$in": ["pending", "accepted"] },
      });
 
-    console.log(alreadyReserved);
     if (alreadyReserved) {
-      console.log("user must not make any reservation");
-      return res.status(400).json({ error: "You already have a reservation" });
+      return res.status(400).json({ error: "You already have a reservation. Please wait until the current reservation ends before making another one." });
     }
     
     const reservationDate = moment.tz(insDate, "UTC").tz("Etc/GMT-3").toDate();
@@ -1004,3 +996,14 @@ module.exports.get_user_statics = async (req, res) => {
     res.status(404).json("there is something error");
   }
 }
+
+module.exports.checkout_data = async (req, res) => {
+  try {
+    const userData = await user.findById(getUserData(req));
+    res.status(200).json({
+      score: userData.score,
+    })
+  } catch (error) {
+    
+  }
+};

@@ -57,6 +57,11 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  paymentType: {
+    type: String,
+    enum: ["Cash", "Score"],
+    default: "Cash",
+  }
 });
 
 orderSchema.pre('save', function (next) {

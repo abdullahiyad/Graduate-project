@@ -208,7 +208,6 @@ window.logout = function () {
       console.log(err);
     });
 };
-console.log(window.globalValue);
 function updateStatics(totalSalesN, totalOrdersN, totalUsersN) {
   const totalSales = document.querySelector(".sales .num span");
   totalSales.innerHTML = totalSalesN;
@@ -227,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const data = await response.json();
       data.reserve.forEach((r) => {
+        console.log(r);
         addMessage(
           r.userName,
           r.userEmail,
@@ -242,6 +242,9 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/dashboard/api")
     .then(async (response) => {
