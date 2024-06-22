@@ -130,7 +130,7 @@
     overflow: hidden;
     width: 100% !important;
     height: 300px !important;
-    position: fixed;
+    position: absolute;
     backdrop-filter: blur(20px);
     box-shadow: var(--box-shadow);
     transition: 0.3s;
