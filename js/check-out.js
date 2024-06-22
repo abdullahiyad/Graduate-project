@@ -71,6 +71,15 @@ document
     let city = document.querySelector(".address .city").value;
     let address = document.querySelector(".address .address1").value;
     let address2 = document.querySelector(".address .address2").value;
+    let PayCash = document.querySelector(".Cash");   
+    let PayScore = document.querySelector(".Score");
+    let payMethod;
+
+    if(PayCash.checked) {
+      payMethod = "Cash";
+    } else if(PayScore.checked) {
+      payMethod = "Score"
+    }
     // Check if the form is valid
     if (this.checkValidity()) {
       // If the form is valid, show the SweetAlert confirmation
@@ -90,11 +99,7 @@ document
             icon: "success",
           });
           //here the info that should submitted for backend
-          console.log(name, phone, city, address, address2);
-          console.log(productsArray);
-
           submitOrder(name, phone, city, address, address2, productsArray);
-
           setTimeout(() => {
             sessionStorage.removeItem("productsArray");
             window.location.href = "/menu";
@@ -118,7 +123,8 @@ async function submitOrder(
   city,
   address,
   address2,
-  productsArray
+  productsArray,
+  paymentMethod
 ) {
   const orderData = {
     customer: {
@@ -129,9 +135,9 @@ async function submitOrder(
       address2: address2,
     },
     cart: productsArray,
+    pM: paymentMethod,
   };
 
-  console.log(orderData);
 
   try {
     const response = await fetch("/menu/checkout", {
@@ -197,3 +203,14 @@ function checkRadio() {
   }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/user/dashboard/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      userScore = data.Score;
+    })
+    .catch((error) => console.error("Error fetching dashboard data:", error));
+});
