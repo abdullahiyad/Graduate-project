@@ -39,17 +39,9 @@ router.delete("/admin/users", authController.delete_user_email); //this for dele
 // products for admin links
 router.get("/admin/products", authController.products_get);
 router.get("/admin/products/api", authController.products_data_get);
-router.post(
-  "/admin/products",
-  upload.single("product-image"),
-  authController.products_post
-);
+router.post("/admin/products", upload.single("product-image"), authController.products_post);
 router.delete("/admin/products", authController.delete_product_id);
-router.put(
-  "/admin/products",
-  upload.single("choose-file"),
-  authController.edit_product
-);
+router.put("/admin/products", upload.single("choose-file"), authController.edit_product);
 
 // logout admin dashboards
 router.post("/admin/dashboard/logout", authController.logout_Del_Cookie);
@@ -92,12 +84,9 @@ router.get("/user/orders/api", authController.get_orders_user_data);
 router.get("/user/dashboard", authController.user_dashboard_get);
 router.get("/user/dashboard/api", authController.get_user_statics);
 
-// This is for test notifications
-// router.get("/user/dashboard", authController.user_dashboard_get);
-// // router.post('/user/dashboard', authController.subscription_post);
-// admin orders
 router.get("/admin/orders", authController.getOrders);
 router.get("/admin/orders/api", authController.get_orders_data);
 router.put("/admin/orders", authController.finishedOrders);
 
+router.get('/getUserName', authController.storeName)
 module.exports = router;

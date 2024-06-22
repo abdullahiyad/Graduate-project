@@ -153,7 +153,7 @@ async function submitOrder(
     }
 
     const data = await response.json();
-    console.log("Order created successfully:", data);
+    // console.log("Order created successfully:", data);
   } catch (error) {
     console.error("Error submitting order:", error);
   }

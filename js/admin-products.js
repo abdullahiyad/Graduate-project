@@ -165,7 +165,7 @@ function deleteProduct(event) {
           return response.text();
         })
         .then((data) => {
-          console.log("Product deletion successful:", data);
+          // console.log("Product deletion successful:", data);
           // Handle the success response here
           // For example, remove the deleted product from the DOM
           clickedElement.parentElement.parentElement.parentElement.remove();
@@ -212,7 +212,7 @@ window.logout = function () {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
-      console.log("logout success");
+      // console.log("logout success");
       window.location.href = "/home";
     })
     .catch((err) => {
@@ -257,7 +257,7 @@ function updateProduct(event) {
       return response.json(); // Expecting JSON response
     })
     .then((data) => {
-      console.log("Update Successful:", data);
+      // console.log("Update Successful:", data);
       window.location.reload(); // Reload the page after successful update
     })
     .catch((err) => {
@@ -265,14 +265,15 @@ function updateProduct(event) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      updateName(data.name)
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/getUserName');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user name');
+    }
+    const data = await response.json();
+    updateName(data.name);
+  } catch (error) {
+    console.error('Error:', error);
+  }
 });

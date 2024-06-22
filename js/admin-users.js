@@ -58,21 +58,10 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.json();
       })
       .then((data) => {
-        console.log("User data updated:", data);
+        // console.log("User data updated:", data);
       })
       .catch((error) => console.error("Error updating user data:", error));
   }
-
-  // Event listener for submit button click
-  // document
-  //   .querySelector(".save-btn")
-  //   .addEventListener("click", function (event) {
-  //     const email = document.querySelector(".phone").value;
-  //     const newName = document.querySelector(".name").value;
-  //     const newState = document.querySelector(".state").value;
-  //     console.log(email, newName, newState);
-  //     updateUser(email, newName, newState);
-  //   });
 });
 
 //get details and show details page
@@ -193,7 +182,7 @@ deleteBtn.addEventListener("click", () => {
           return response.text();
         })
         .then((data) => {
-          console.log("users deletion successful:", data);
+          // console.log("users deletion successful:", data);
           // Handle the success response here
           // For example, remove the deleted product from the DOM
           clickedElement.parentElement.parentElement.parentElement.remove();
@@ -250,7 +239,7 @@ function updateData() {
       return response.text();
     })
     .then((data) => {
-      console.log("User update successful:", data);
+      // console.log("User update successful:", data);
     })
     .catch((err) => {
       console.error("User update failed:", err);
@@ -258,14 +247,17 @@ function updateData() {
   window.location.reload();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      updateName(data.name)
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/getUserName');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user name');
+    }
+    const data = await response.json();
+    updateName(data.name);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  const logoutButton = document.querySelector(".logout");
+  logoutButton.addEventListener("click", logout);
 });

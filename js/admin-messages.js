@@ -40,7 +40,6 @@ function rejectReservation(event) {
       if (!inputValue) {
         Swal.showValidationMessage("Input is required");
       }
-      console.log(inputValue);
       reason = inputValue;
     },
   }).then((result) => {
@@ -65,12 +64,12 @@ function rejectReservation(event) {
           return response.json();
         })
         .then((data) => {
-          console.log("Reservation update successful:", data);
+          // console.log("Reservation update successful:", data);
           // Handle the success response here
           parent.remove();
         })
         .catch((err) => {
-          console.error("Reservation update failed:", err);
+          // console.error("Reservation update failed:", err);
         });
     }
   });
@@ -82,7 +81,6 @@ function acceptReservation(event) {
   const clickedElement = event.target;
   const parent = clickedElement.closest(".message");
   const reservationID = parent.querySelector(".reservation-id").value;
-  console.log(reservationID);
   fetch("/admin/messages", {
     method: "PUT",
     headers: {
@@ -97,7 +95,7 @@ function acceptReservation(event) {
       return response.json();
     })
     .then((data) => {
-      console.log("Reservation accepted successfully:", data);
+      // console.log("Reservation accepted successfully:", data);
       Swal.fire({
         title: "Accepted!",
         text: "The reservation request has been accepted.",
@@ -107,7 +105,7 @@ function acceptReservation(event) {
       parent.remove();
     })
     .catch((err) => {
-      console.error("Reservation acceptance failed:", err);
+      // console.error("Reservation acceptance failed:", err);
       Swal.fire({
         title: "Error!",
         text: "There was an error accepting the reservation.",
@@ -187,7 +185,6 @@ document.addEventListener("DOMContentLoaded", () => {
           reservation.numPerson,
           reservation.details
         );
-        console.log(reservation);
       });
      
     })
@@ -202,18 +199,21 @@ window.logout = function () {
       window.location.href = "/home";
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      updateName(data.name)
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/getUserName');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user name');
+    }
+    const data = await response.json();
+    updateName(data.name);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  const logoutButton = document.querySelector(".logout");
+  logoutButton.addEventListener("click", logout);
 });

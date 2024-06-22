@@ -10,11 +10,11 @@ window.logout = function () {
     method: "POST", // Change the method to POST
   })
     .then((result) => {
-      console.log("logout success");
+      // console.log("logout success");
       window.location.href = "/home";
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 };
 
@@ -113,7 +113,6 @@ function doneReservation(event) {
       // Extract reservation ID from the DOM
       const parent = clickedElement.parentElement.parentElement;
       const reservationID = parent.querySelector(".reservation-id").value;
-      console.log(reservationID);
       // Send the reservation ID and state to the server side
       fetch("/admin/dashboard", {
         method: "PUT",
@@ -131,7 +130,7 @@ function doneReservation(event) {
           return response.json();
         })
         .then((data) => {
-          console.log("Reservation marked as completed:", data);
+          // console.log("Reservation marked as completed:", data);
           parent.remove(); // Remove the reservation element from the DOM
         })
         .catch((error) => {
@@ -205,7 +204,7 @@ window.logout = function () {
       window.location.href = "/home";
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 };
 function updateStatics(totalSalesN, totalOrdersN, totalUsersN) {
@@ -226,7 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const data = await response.json();
       data.reserve.forEach((r) => {
-        console.log(r);
         addMessage(
           r.userName,
           r.userEmail,
@@ -257,4 +255,17 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });
 
-
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/getUserName');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user name');
+    }
+    const data = await response.json();
+    updateName(data.name);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  const logoutButton = document.querySelector(".logout");
+  logoutButton.addEventListener("click", logout);
+});
