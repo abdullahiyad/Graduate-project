@@ -194,10 +194,11 @@ body {
 }
 .product-container .content {
   width: calc(100% - 290px);
-  height: 100%;
+  min-height: 100%;
+  height: fit-content;
   position: absolute;
   right: 0;
-  box-shadow: var(--box-shadow);
+  /* box-shadow: var(--box-shadow); */
 }
 /* content style for phones and medium screens */
 @media (max-width: 1200px) {
@@ -234,7 +235,7 @@ body {
   padding: 30px 10px;
   width: 98%;
   height: fit-content;
-  box-shadow: var(--box-shadow);
+  /* box-shadow: var(--box-shadow); */
   border-radius: var(--border-radius-3);
   -webkit-border-radius: var(--border-radius-3);
   -moz-border-radius: var(--border-radius-3);
@@ -256,11 +257,11 @@ body {
   height: 350px;
   overflow: hidden;
   background-color: var(--product-background-color);
-  border-radius: var(--product-radius-deg);
-  -webkit-border-radius: var(--product-radius-deg);
-  -moz-border-radius: var(--product-radius-deg);
-  -ms-border-radius: var(--product-radius-deg);
-  -o-border-radius: var(--product-radius-deg);
+  border-radius: var(--border-radius-3);
+  -webkit-border-radius: var(--border-radius-3);
+  -moz-border-radius: var(--border-radius-3);
+  -ms-border-radius: var(--border-radius-3);
+  -o-border-radius: var(--border-radius-3);
   font-family: var(--product-font);
   padding: 10px;
   text-transform: capitalize;
@@ -295,9 +296,13 @@ body {
   font-size: var(--product-font-size);
 }
 .product .product-info .product-description {
-  text-transform: capitalize;
-  font-size: 14px;
-  color: var(--description-color);
+    text-transform: capitalize;
+    font-size: 14px;
+    width: 100%;
+    color: var(--description-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 60%;
 }
 .product .price {
   width: 100%;

@@ -59,6 +59,8 @@ let pendingContainer = document.querySelector(
 );
 
 function addMessagePending(
+  Name,
+  Email,
   reservationId,
   reservationName,
   reservationPhone,
@@ -76,9 +78,9 @@ function addMessagePending(
                             <p class="input-style .new-message">new message</p>
                         </div>
 
-                        <div>
-                            <input type="text" class="customer-name input-style" value="YKPO Cafe">
-                            <input type="email" class="customers-email input-style display-none" value="Admin@YKPO.com">
+                        <div class="user-info">
+                            <input type="text" class="customer-name input-style" value="${Name}">
+                            <input type="email" class="customers-email input-style display-none" value="${Email}">
                             <!-- <input type="text" class="customer-info input-style display-none" value="0569912325"> -->
                             <input type="text" class="reservation-id" value="${reservationId}">
                         </div>
@@ -244,6 +246,8 @@ document.addEventListener("DOMContentLoaded", () => {
       data.forEach((reservation) => {
         if (reservation.status === "pending") {
           addMessagePending(
+            reservation.userName,
+            reservation.userEmail,
             reservation.reservationId,
             reservation.resName,
             reservation.phone,

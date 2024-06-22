@@ -426,7 +426,7 @@ table td {
   font-size: 12px;
 }
 .more-details .user-details {
-  width: fit-content;
+  width: 100%;
 }
 .more-details .user-details .input-style{
   width: 100%;
