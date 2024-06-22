@@ -55,7 +55,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const data = await response.json();
       updateStatics(data.Score, data.tOrders, data.tReservations);
-      updateName(data.name)
+      updateName(data.name);
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });
+
+const infoButton = document.querySelector(
+  ".dashboard-container .content .statics .sales-box .info-btn"
+);
+function flipCard() {
+  const card = document.querySelector(".sales-box");
+  card.classList.toggle("sales-box-flipped");
+}
