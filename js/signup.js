@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Unexpected error");
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         Swal.fire({
           position: "center",
           icon: "error",

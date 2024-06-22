@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 1500);
       })
       .catch((error) => {
-        console.error("Error making reservation:", error.message);
+        // console.error("Error making reservation:", error.message);
         Swal.fire({
           title: "Error!",
           text: error.message || "There is something wrong.",

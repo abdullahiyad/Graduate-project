@@ -25,7 +25,6 @@ document
         return data;
       })
       .then((data) => {
-        console.log(data);
         if (data.state) {
           if (data.state === "admin") {
             window.location.href = "/admin/dashboard";

@@ -139,7 +139,7 @@ window.logout = function () {
       window.location.href = "/home";
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 };
 
@@ -191,19 +191,17 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => console.error("Error fetching user data:", error));
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      updateName(data.name)
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/getUserName');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user name');
+    }
+    const data = await response.json();
+    updateName(data.name);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  const logoutButton = document.querySelector(".logout");
+  logoutButton.addEventListener("click", logout);
 });
-
-
-// Change status to processing when click on processing
-
-// Change status to finished, with message the order will arrive within minutes

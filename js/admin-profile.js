@@ -43,7 +43,7 @@ deleteAccountBtn.addEventListener("click", () => {
           return response.text();
         })
         .then((data) => {
-          console.log("Customer deletion successful:", data);
+          // console.log("Customer deletion successful:", data);
           window.location.href = "/home";
         })
         .catch((err) => {
@@ -147,7 +147,7 @@ function updateData() {
       return response.text();
     })
     .then((data) => {
-      console.log("Update Successful:", data);
+      // console.log("Update Successful:", data);
       window.location.reload(); // Reload the page after successful update
     })
     .catch((err) => {
@@ -155,14 +155,17 @@ function updateData() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      updateName(data.name)
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
+document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await fetch('/getUserName');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user name');
+    }
+    const data = await response.json();
+    updateName(data.name);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+  const logoutButton = document.querySelector(".logout");
+  logoutButton.addEventListener("click", logout);
 });

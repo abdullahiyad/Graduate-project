@@ -94,7 +94,6 @@ module.exports.switch_page = async (req, res) => {
     const users = await user.find({ _id: userId });
     res.json({ users });
   } catch (error) {
-    console.error("Error fetching products:", error);
     res.status(500).json({ error: "Error fetching products" });
   }
 };
@@ -114,7 +113,6 @@ module.exports.menu_data_get = async (req, res) => {
     const products = await Product.find();
     res.json({ user: userData, products });
   } catch (error) {
-    console.error("Error fetching products and user data:", error);
     res.status(500).json({ error: "Error fetching products and user data" });
   }
 };
@@ -154,7 +152,6 @@ module.exports.dashboard_get_data = async (req, res) => {
         numOfPersons: reserve.numPerson,
         details: reserve.details,
       };
-      console.log(formattedReservation);
       reservationsForm.push(formattedReservation);
     };
     // Step 2: Find users created in the last 24 hours
@@ -186,7 +183,6 @@ module.exports.dashboard_get_data = async (req, res) => {
     // Step 5: Send the data in the response
     res.json(jData);
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
     res.status(500).json({ error: 'Error fetching dashboard data' });
   }
 };
@@ -278,7 +274,6 @@ module.exports.edit_product = async (req, res) => {
     
     res.status(200).json(updatedProduct);
   } catch (error) {
-    console.error("Error updating product:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -299,7 +294,6 @@ module.exports.products_data_get = async (req, res) => {
     const products = await Product.find();
     res.json({ products });
   } catch (error) {
-    console.error("Error fetching products:", error);
     res.status(500).json({ error: "Error fetching products" });
   }
 };
@@ -324,28 +318,27 @@ function getUserData(req) {
     const userId = decodedToken.id;
     return userId;
   } catch (err) {
-    console.error("Error decoding JWT:", err);
     return null;
   }
 }
 
 
-async function getProduct(req) {
-  try {
-    const productId = req.params.productId || req.body.productId;
-    if (!productId) {
-      return null;
-    }
-    const product = await Product.findById(productId);
-    if (!product) {
-      return null;
-    }
-    return product;
-  } catch (err) {
-    console.error("Error fetching product data:", err);
-    return null;
-  }
-}
+// async function getProduct(req) {
+//   try {
+//     const productId = req.params.productId || req.body.productId;
+//     if (!productId) {
+//       return null;
+//     }
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return null;
+//     }
+//     return product;
+//   } catch (err) {
+//     console.error("Error fetching product data:", err);
+//     return null;
+//   }
+// }
 
 
 module.exports.admin_profile_get_api = async (req, res) => {
@@ -354,7 +347,6 @@ module.exports.admin_profile_get_api = async (req, res) => {
     const userData = await user.findById(userId);
     res.json(userData);
   } catch (err) {
-    console.error("Error fetching user data:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -372,7 +364,6 @@ module.exports.delete_product_id = async (req, res) => {
     }
     res.send("Product deleted successfully");
   } catch (error) {
-    console.error("Error deleting product:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -385,7 +376,6 @@ module.exports.delete_user_email = async (req, res) => {
     }
     res.send("user deleted successfully");
   } catch (error) {
-    console.error("Error deleting user:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -426,7 +416,6 @@ module.exports.update_user_data = async (req, res) => {
     }
     res.status(200).json(updatedUser);
   } catch (error) {
-    console.error("Error updating user data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -478,7 +467,6 @@ module.exports.update_profile_data = async (req, res) => {
       return res.status(200).json(updatedUser);
     }
   } catch (error) {
-    console.error("Error updating user data:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -503,7 +491,6 @@ module.exports.delete_loggedIn_user = async (req, res) => {
 
     res.clearCookie("jwt").send("Deleted Successfully");
   } catch (error) {
-    console.error("Error deleting user:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -570,7 +557,6 @@ module.exports.reservation_post = async (req, res) => {
     await newReservation.save();
     res.status(201).json({ message: "Reservation created successfully" });
   } catch (error) {
-    console.error("Error creating reservation:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -581,7 +567,6 @@ module.exports.user_profile_get_api = async (req, res) => {
     const userData = await user.findById(userId);
     res.json(userData);
   } catch (err) {
-    console.error("Error fetching user data:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -669,7 +654,6 @@ module.exports.checkOut_post = async (req, res) => {
 
     res.status(201).json({ message: "Order created successfully" });
   } catch (err) {
-    console.error("Error processing order:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -705,7 +689,6 @@ module.exports.messages_data_get = async (req, res) => {
     });
     res.status(200).json(Reservations);
   } catch (err) {
-    console.error("Error fetching reservations:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -750,7 +733,6 @@ module.exports.message_acc_rej_com = async (req, res) => {
 
     res.status(200).json({ message: "Reservation updated successfully", reservation: updatedReservation });
   } catch (err) {
-    console.error("Error updating reservation state:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -810,7 +792,6 @@ module.exports.get_orders_data = async (req, res) => {
     // Send the combined data back to the client
     res.status(200).json({ orders: ordersData });
   } catch (err) {
-    console.error("Error fetching orders data:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -876,7 +857,6 @@ module.exports.get_user_messages = async (req, res) => {
     // Send the formatted reservations in the response
     res.status(200).json(reservationsForm);
   } catch (err) {
-    console.error("Error fetching reservations:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -925,7 +905,6 @@ module.exports.get_orders_user_data = async (req, res) => {
     // Send the formatted orders in the response
     res.status(200).json(ordersData);
   } catch (err) {
-    console.error("Error fetching orders:", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -965,7 +944,6 @@ module.exports.deleteReservation = async (req, res) => {
 
     res.status(200).json({ message: "Reservation deleted successfully" });
   } catch (err) {
-    console.error("Error deleting reservation:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -1007,7 +985,6 @@ module.exports.finishedOrders = async (req, res) => {
     // Send success response
     res.status(200).json({ message: "Order updated successfully", order: orderData });
   } catch (err) {
-    console.error("Error updating order:", err);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -1047,3 +1024,18 @@ module.exports.checkout_data = async (req, res) => {
     
   }
 };
+
+module.exports.storeName = async (req, res) => {
+  try {
+    const userId = getUserData(req);
+    const userData = await user.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.status(200).json({ name: userData.name });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
