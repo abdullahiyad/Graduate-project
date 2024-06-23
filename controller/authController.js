@@ -312,7 +312,7 @@ function getUserData(req) {
   try {
     const token = req.cookies.jwt;
     if (!token) {
-      return null;
+      return res.status(404).json({message: "User not found"});
     }
     const decodedToken = jwt.verify(token, secretKey);
     const userId = decodedToken.id;
@@ -431,24 +431,20 @@ async function checkPass(userId, oldPassword) {
 
 module.exports.update_profile_data = async (req, res) => {
   try {
-    const token = req.cookies.jwt;
-    if (!token) {
-      return null;
-    }
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.id;
+    const userId = getUserData(req);
+    const { name, email, phone } = req.body;
     const newPassword = req.body.newPassword.trim();
     if (newPassword !== '') {
       const oldPassword = req.body.oldPassword;
       const isPasswordCorrect = await checkPass(userId, oldPassword);
       if (!isPasswordCorrect) {
-        return res.status(400).json({ error: "Old password is incorrect" });
+        return res.status(400).json({ error: "Old password is incorrect, Please try again" });
       }
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
       const updatedUser = await user.findOneAndUpdate(
         { _id: userId },
-        { $set: { name: req.body.name, email: req.body.email, phone: req.body.phone, password: hashedPassword } },
+        { $set: { name: name, email: email, phone: phone, password: hashedPassword } },
         { new: true }
       );
       if (!updatedUser) {
@@ -456,9 +452,23 @@ module.exports.update_profile_data = async (req, res) => {
       }
       return res.status(200).json(updatedUser);
     } else {
+      
+      if (!name) {
+        return res.status(400).json({ error: "Name field is empty, please enter name" });
+      } 
+      if (!email) {
+        return res.status(400).json({ error: "Email field is empty, please enter email" });
+      } 
+      if (!phone) {
+        return res.status(400).json({ error: "Phone field is empty, Please enter a phone number" });
+      } 
+      const foundedEmail = await user.findOne({ email: email });
+      if (foundedEmail && foundedEmail._id.toString() !== userId) {
+        return res.status(409).json({ error: "Email is already in use, please try another email" });
+      }
       const updatedUser = await user.findOneAndUpdate(
         { _id: userId },
-        { $set: { name: req.body.name, email: req.body.email, phone: req.body.phone } },
+        { $set: { name: name, email: email, phone: phone } },
         { new: true }
       );
       if (!updatedUser) {
