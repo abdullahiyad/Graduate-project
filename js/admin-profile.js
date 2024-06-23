@@ -62,6 +62,7 @@ changePasswordBtn.addEventListener("click", () => {
   changePasswordBtn.classList.toggle("change");
   cancelBtn.style.display = "block";
   saveBtn.style.display = "block";
+  changePasswordBtn.style.display = "none !important";
 });
 
 //canccel button
@@ -114,7 +115,6 @@ window.logout = function () {
     });
 };
 
-
 function updateData() {
   // Extract values from form fields
   const name = document.querySelector(".nameField").value;
@@ -122,16 +122,16 @@ function updateData() {
   const phone = document.querySelector(".phone").value;
   const oldPassword = document.querySelector(".old-password").value;
   const newPassword = document.querySelector(".new-password").value;
-  
+
   // Create an object with the data to be sent in the request body
   const userData = {
     name: name,
     email: email,
     phone: phone,
     oldPassword: oldPassword,
-    newPassword: newPassword
+    newPassword: newPassword,
   };
-  
+
   // Send a PUT request to update the user's profile
   fetch("/user/profile", {
     method: "PUT", // Specify the HTTP method as PUT for updating
@@ -147,24 +147,38 @@ function updateData() {
       return response.text();
     })
     .then((data) => {
-      // console.log("Update Successful:", data);
-      window.location.reload(); // Reload the page after successful update
+      Swal.fire({
+        title: "Success!",
+        text: data.message,
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      setTimeout(() => {
+        window.location.href = "/reservation";
+      }, 1500);
     })
-    .catch((err) => {
-      console.error("Update Failed:", err);
+    .catch((error) => {
+      // console.error("Error making reservation:", error.message);
+      Swal.fire({
+        title: "Error!",
+        text: error.message || "There is something wrong.",
+        icon: "error",
+        showConfirmButton: true,
+      });
     });
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch('/getUserName');
+    const response = await fetch("/getUserName");
     if (!response.ok) {
-      throw new Error('Failed to fetch user name');
+      throw new Error("Failed to fetch user name");
     }
     const data = await response.json();
     updateName(data.name);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);
