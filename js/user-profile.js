@@ -132,20 +132,32 @@ function updateData() {
     },
     body: JSON.stringify(userData), // Convert userData object to JSON string
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("There is something error");
+    .then((response) => response.json().then(data => ({ status: response.status, body: data })))
+    .then((result) => {
+      if (result.status === 200) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your profile has been updated successfully.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.reload(); // Reload the page after successful update
+        });
+      } else {
+        throw new Error(result.body.error);
       }
-      return response.text();
-    })
-    .then((data) => {
-      // console.log("Update Successful:", data);
-      window.location.reload(); // Reload the page after successful update
     })
     .catch((err) => {
-      console.error("Update Failed:", err);
+      Swal.fire({
+        title: "Error!",
+        text: err.message,
+        icon: "error",
+        showConfirmButton: true,
+      });
     });
 }
+
 
 
 window.logout = function () {

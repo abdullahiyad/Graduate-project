@@ -122,16 +122,14 @@ function updateData() {
   const phone = document.querySelector(".phone").value;
   const oldPassword = document.querySelector(".old-password").value;
   const newPassword = document.querySelector(".new-password").value;
-
   // Create an object with the data to be sent in the request body
   const userData = {
     name: name,
     email: email,
     phone: phone,
     oldPassword: oldPassword,
-    newPassword: newPassword,
+    newPassword: newPassword
   };
-
   // Send a PUT request to update the user's profile
   fetch("/user/profile", {
     method: "PUT", // Specify the HTTP method as PUT for updating
@@ -140,29 +138,26 @@ function updateData() {
     },
     body: JSON.stringify(userData), // Convert userData object to JSON string
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("There is something error");
+    .then((response) => response.json().then(data => ({ status: response.status, body: data })))
+    .then((result) => {
+      if (result.status === 200) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your profile has been updated successfully.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.reload(); // Reload the page after successful update
+        });
+      } else {
+        throw new Error(result.body.error);
       }
-      return response.text();
     })
-    .then((data) => {
-      Swal.fire({
-        title: "Success!",
-        text: data.message,
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false,
-      });
-      setTimeout(() => {
-        window.location.href = "/reservation";
-      }, 1500);
-    })
-    .catch((error) => {
-      // console.error("Error making reservation:", error.message);
+    .catch((err) => {
       Swal.fire({
         title: "Error!",
-        text: error.message || "There is something wrong.",
+        text: err.message,
         icon: "error",
         showConfirmButton: true,
       });
