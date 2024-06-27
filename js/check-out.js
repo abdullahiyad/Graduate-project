@@ -6,11 +6,12 @@ let billTable = document.querySelector(".product-table");
 let totalAmount = 0;
 let neededScore = 0;
 let userScore = 0;
+let phoneValidate = false;
 let amountContainer = document.querySelector(".total .price .number");
 document.addEventListener("DOMContentLoaded", () => {
   // Function to format currency
   function formatCurrency(amount) {
-    return `$${amount.toFixed(2)}`;
+    return `${amount.toFixed(2)}`;
   }
 
   // Redirect logic
@@ -60,6 +61,21 @@ document.addEventListener("DOMContentLoaded", () => {
   checkScore();
 });
 
+//check the phone validty
+//function to check phone number
+function checkPhone(event) {
+  const phone = event.target.value;
+  const phoneRegex = /^(059|056)\d{7}$/;
+  if (phoneRegex.test(phone)) {
+    phoneValidate = true;
+    event.target.classList.remove("notValid");
+    event.target.classList.add("valid");
+  } else {
+    event.target.classList.add("notValid");
+    phoneValidate = false;
+  }
+}
+
 //form submition
 document
   .getElementById("orderForm")
@@ -71,17 +87,17 @@ document
     let city = document.querySelector(".address .city").value;
     let address = document.querySelector(".address .address1").value;
     let address2 = document.querySelector(".address .address2").value;
-    let PayCash = document.querySelector(".Cash");   
+    let PayCash = document.querySelector(".Cash");
     let PayScore = document.querySelector(".Score");
     let payMethod;
 
-    if(PayCash.checked) {
+    if (PayCash.checked) {
       payMethod = "Cash";
-    } else if(PayScore.checked) {
-      payMethod = "Score"
+    } else if (PayScore.checked) {
+      payMethod = "Score";
     }
     // Check if the form is valid
-    if (this.checkValidity()) {
+    if (this.checkValidity() && phoneValidate) {
       // If the form is valid, show the SweetAlert confirmation
       Swal.fire({
         title: "confirm order?",
@@ -137,7 +153,6 @@ async function submitOrder(
     cart: productsArray,
     pM: paymentMethod,
   };
-
 
   try {
     const response = await fetch("/menu/checkout", {

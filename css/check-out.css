@@ -181,7 +181,6 @@ button {
   font-family: var(--statics-font);
   font-size: 15px;
   cursor: pointer;
-
   -webkit-transition: 0.3s;
   -moz-transition: 0.3s;
   -ms-transition: 0.3s;
@@ -250,6 +249,16 @@ input[type="radio"] {
   justify-content: center;
   align-items: flex-start;
 }
+.bill .dashed {
+  background-color: var(--color-dark);
+  margin: 5px 0;
+  width: 100%;
+}
+.bill .dashed hr {
+  border: 0.5px dashed var(--color-dark);
+  margin: 5px 0;
+  width: 100%;
+}
 .product-table .product {
   width: 320px;
   display: grid;
@@ -291,4 +300,12 @@ input[type="radio"] {
     height: fit-content;
     background-color: var(--color-background);
   }
+}
+
+.valid {
+  border: 0.5px solid green;
+  /* outline-color: green !important; */
+}
+.notValid {
+  border: 0.5px solid red;
 }
