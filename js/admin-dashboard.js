@@ -225,6 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const data = await response.json();
       data.reserve.forEach((r) => {
+        console.log(r);
         addMessage(
           r.userName,
           r.userEmail,
@@ -237,20 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       });
       updateStatics(data.totalSales, data.recentOrders, data.recentUsers);
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      updateName(data.name)
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
 });

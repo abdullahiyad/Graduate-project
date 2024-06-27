@@ -94,7 +94,7 @@ function addOrder(
   const millisecondsIn24Hours = 24 * 60 * 60 * 1000;
   const timeDifference = currentTime - orderTime;
 
-  if (timeDifference > millisecondsIn24Hours || orderState === "submitted") {
+  if (timeDifference > millisecondsIn24Hours || orderState == "completed") {
     oldOrders.appendChild(newOrder);
   } else {
     pendingOrders.appendChild(newOrder);
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/orders/api")
     .then(async (response) => {
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // throw new Error("Network response was not ok");
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -137,9 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
       let data = await response.json();
+      // console.log(data);
       return data;
     })
     .then((data) => {
+      console.log(data);
       data.forEach((Order) => {
         addOrder(
           Order.userName,
@@ -150,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
           Order.address1,
           Order.address2,
           new Date(Order.createdAt).toLocaleString(),
-          Order.state,
+          Order.status,
           Order.products,
           Order.totalPrice
         );

@@ -338,20 +338,13 @@ async function redirectToCheckout() {
     try {
       const response = await fetch("/checkout", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Network response was not ok");
-      }
-
-      const data = await response.json();
-      // If no error and user is not admin, redirect to checkout page
-      if (data.message === "Proceed to checkout") {
-        window.location.href = "/checkout"; // Change '/checkout' to the correct URL if needed
+      } else {
+        window.location.href = '/checkout';
       }
     } catch (error) {
       Swal.fire({
