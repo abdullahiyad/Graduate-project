@@ -585,9 +585,25 @@ module.exports.user_profile_get_api = async (req, res) => {
 };
 
 
-module.exports.checkOut = (req, res) => {
-  res.render('check-out');
+module.exports.checkOut = async (req, res) => {
+  try {
+    const userId = getUserData(req);
+    const userData = await user.findById(userId);
+
+    if (!userData) {
+      return res.status(404).json({ message: "Can't find user, please Login" });
+    }
+
+    if (userData.status === "admin") {
+      return res.status(403).json({ message: "Admins cannot make checkouts" });
+    }
+
+    res.render('check-out');
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
+
 
 module.exports.checkOut_post = async (req, res) => {
   try {

@@ -320,22 +320,46 @@ document.querySelectorAll(".add-to-cart-button").forEach((button) => {
   button.addEventListener("click", addToCart);
 });
 
-function redirectToCheckout() {
+async function redirectToCheckout() {
   let productsArray = JSON.parse(sessionStorage.getItem("productsArray"));
   if (!productsArray || productsArray.length === 0) {
     Swal.fire({
       title: "",
-      text: "please add at least one product",
+      text: "Please add at least one product",
       icon: "warning",
     });
   } else if (!checkLoggedIn()) {
     Swal.fire({
       title: "",
-      text: "Login :)",
+      text: "Please login",
       icon: "warning",
     });
   } else {
-    window.location.href = "/checkout"; // Change '/checkout' to the correct URL if needed
+    try {
+      const response = await fetch("/checkout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Network response was not ok");
+      }
+
+      const data = await response.json();
+      // If no error and user is not admin, redirect to checkout page
+      if (data.message === "Proceed to checkout") {
+        window.location.href = "/checkout"; // Change '/checkout' to the correct URL if needed
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: error.message,
+        icon: "error",
+      });
+    }
   }
 }
 
