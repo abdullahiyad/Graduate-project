@@ -138,7 +138,6 @@ async function submitOrder(
     pM: paymentMethod,
   };
 
-
   try {
     const response = await fetch("/menu/checkout", {
       method: "POST",
@@ -149,15 +148,30 @@ async function submitOrder(
     });
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Network response was not ok");
     }
 
     const data = await response.json();
-    // console.log("Order created successfully:", data);
+    Swal.fire({
+      title: "Success!",
+      text: "Your order has been created successfully.",
+      icon: "success",
+      timer: 1500,
+      showConfirmButton: false,
+    });
   } catch (error) {
-    console.error("Error submitting order:", error);
+    console.error("Error submitting order:", error.message);
+    Swal.fire({
+      title: "Error!",
+      text: error.message,
+      icon: "error",
+      timer: 1500,
+      showConfirmButton: false,
+    });
   }
 }
+
 
 //function to make an element disabled
 function disabledFunc() {

@@ -1,4 +1,3 @@
-const express = require("express");
 const jwt = require("jsonwebtoken");
 const webPush = require("web-push");
 const user = require("../nodejs/Database/models/users");
@@ -7,13 +6,10 @@ const reservation = require('../nodejs/Database/models/reservation');
 const Order = require('../nodejs/Database/models/orders');
 const { isStrongPassword } = require("validator");
 const moment = require('moment-timezone');
-const multer = require("multer");
-const cookie = require("cookie-parser");
 const fs = require("fs");
 const path = require("path");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
-const { render } = require("ejs");
 const orders = require("../nodejs/Database/models/orders");
 const maxAge = 1 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
@@ -520,8 +516,8 @@ module.exports.messages_get = (req, res) => {
   }else {
     res.render('admin/messages');
   }
-  
 }
+
 
 module.exports.user_profile_get = (req, res) => {
   res.render('user/profile');
