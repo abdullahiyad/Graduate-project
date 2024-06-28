@@ -1,4 +1,3 @@
-const express = require("express");
 const jwt = require("jsonwebtoken");
 const webPush = require("web-push");
 const user = require("../nodejs/Database/models/users");
@@ -7,13 +6,10 @@ const reservation = require('../nodejs/Database/models/reservation');
 const Order = require('../nodejs/Database/models/orders');
 const { isStrongPassword } = require("validator");
 const moment = require('moment-timezone');
-const multer = require("multer");
-const cookie = require("cookie-parser");
 const fs = require("fs");
 const path = require("path");
 let errors = { name: "", phone: "", email: "", password: "" };
 const bcrypt = require("bcrypt");
-const { render } = require("ejs");
 const orders = require("../nodejs/Database/models/orders");
 const maxAge = 1 * 24 * 60 * 60;
 const secretKey = "OdayIsNerd";
@@ -133,7 +129,7 @@ module.exports.dashboard_get_data = async (req, res) => {
 
     const U = await user.findById(userId);
     // Step 1: Find all accepted reservations
-    const reservations = await reservation.find({ status: 'pending' });
+    const reservations = await reservation.find({ status: 'accepted' });
     
     // Step 2: Prepare an array to store formatted reservation data
     let reservationsForm = [];
@@ -155,6 +151,7 @@ module.exports.dashboard_get_data = async (req, res) => {
       };
       reservationsForm.push(formattedReservation);
     };
+    console.log(reservationsForm);
     // Step 2: Find users created in the last 24 hours
     const H24 = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentUsers = await user.find({ createdAt: { $gte: H24 } });
@@ -520,8 +517,8 @@ module.exports.messages_get = (req, res) => {
   }else {
     res.render('admin/messages');
   }
-  
 }
+
 
 module.exports.user_profile_get = (req, res) => {
   res.render('user/profile');
@@ -589,9 +586,24 @@ module.exports.user_profile_get_api = async (req, res) => {
 };
 
 
-module.exports.checkOut = (req, res) => {
-  res.render('check-out');
+module.exports.checkOut = async (req, res) => {
+  try {
+    const userId = getUserData(req);
+    const userData = await user.findById(userId);
+
+    if (!userData) {
+      return res.status(404).json({ message: "Can't find user, please Login" });
+    }
+
+    if (userData.status === "admin") {
+      return res.status(403).json({ message: "Admins cannot make checkouts" });
+    }
+    res.render('check-out');
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
+
 
 module.exports.checkOut_post = async (req, res) => {
   try {
@@ -900,10 +912,10 @@ module.exports.get_orders_user_data = async (req, res) => {
         const productData = await Product.findById(product.productId);
         return {
           productName: productData.name,
-          quantity: product.quantity
+          quantity: productData.quantity
         };
       }));
-
+      // console.log(order);
       return {
         userName: userData.name,
         userEmail: userData.email,
@@ -919,9 +931,10 @@ module.exports.get_orders_user_data = async (req, res) => {
         status: order.status,
       };
     }));
-    // Send the formatted orders in the response
+    console.log(ordersData);
     res.status(200).json(ordersData);
   } catch (err) {
+    console.error(`Error processing order: ${err.message}`);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
