@@ -196,6 +196,16 @@ function calcScore() {
 }
 
 function checkScore() {
+  fetch("/user/dashboard/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      userScore = data.Score;
+      console.log(userScore);
+    })
+    .catch((error) => console.error("Error fetching dashboard data:", error));
   calcScore();
   if (neededScore <= userScore) {
     document.querySelector("#coinsR").disabled = false;
@@ -218,14 +228,15 @@ function checkRadio() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      userScore = data.Score;
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   fetch("/user/dashboard/api")
+//     .then(async (response) => {
+//       if (!response.ok) {
+//         throw new Error("Network response was not ok");
+//       }
+//       const data = await response.json();
+//       userScore = data.Score;
+//       console.log(userScore);
+//     })
+//     .catch((error) => console.error("Error fetching dashboard data:", error));
+// });
