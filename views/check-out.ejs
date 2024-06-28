@@ -88,14 +88,14 @@
                         <label for="" class="method-payment">payment methods :</label>
                         <div class="cod">
                             <input type="radio" name="paymentRadio" id="cod" value="cod" class="Cash" checked>
-                            <label for="cod" class="cod-label">Cash on Delivery</label>
+                            <label for="cod" class="cod-label">Cash on Delivery <span id="GScore">(Score: +1456)</span></label>
                         </div>
                         <div class="coins">
                             <input type="radio" name="paymentRadio" id="coinsR" value="coins" class="Score"
                                 onclick="checkRadio()">
                             <label for="coinsR" class="cod-label" id="coinsLabel">Score</label>
                             <label for="coinsR" class="cod-label" id="coinsLabel-notEnough"
-                                onclick="checkRadio()"><del>Score</del></label>
+                                onclick="checkRadio()"><del>Score</del></label><span id="NScore">(150/500)</span>
                         </div>
                         <div class="submit-btn">
                             <input type="button" class="back" onclick="backFunc()" value="back">

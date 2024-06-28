@@ -691,9 +691,6 @@ module.exports.checkOut_post = async (req, res) => {
   }
 };
 
-
-
-
 module.exports.messages_data_get = async (req, res) => {
   try {
     const reservations = await reservation.find({ status: "pending" });
@@ -758,7 +755,7 @@ module.exports.message_acc_rej_com = async (req, res) => {
         { 
           $inc: { 
             reservationNumbers: 1,
-            score: 10,
+            score: 20,
           }
         },
         { new: true }
@@ -770,8 +767,6 @@ module.exports.message_acc_rej_com = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-
 
 module.exports.getOrders = (req, res) => {
   const userId = getUserData(req);
@@ -830,8 +825,6 @@ module.exports.get_orders_data = async (req, res) => {
   }
 };
 
-
-
 webPush.setVapidDetails('mailto:ooday2424@gmail.com', publicVapidKey, privateVapidKey);
 
 module.exports.subscription_post = (req, res) => {
@@ -844,7 +837,6 @@ module.exports.subscription_post = (req, res) => {
         body: 'This is a test push notification',
         icon: 'http://image.ibb.co/frYOFD/tmlogo.png' 
     });
-
     webPush.sendNotification(subscription, payload).catch(err => console.error(err));
 };
 
@@ -983,15 +975,15 @@ module.exports.deleteReservation = async (req, res) => {
   }
 };
 
-
 module.exports.finishedOrders = async (req, res) => {
   try {
     const orderId = req.body.orderId;
-
+    const order = await Order.findById(orderId);
+    const IncreasedScore = order.totalPrice;
     // Find and update the order status
     const orderData = await Order.findByIdAndUpdate(
       orderId,
-      { status: 'completed' },
+      { status: 'completed', $inc: {scores: IncreasedScore}},
       { new: true }
     );
 
@@ -1002,13 +994,10 @@ module.exports.finishedOrders = async (req, res) => {
 
     // If payment method is Cash, update the user's score
     if (orderData.paymentType === 'Cash') {
-      const userId = orderData.userId;
-      const totalPrice = orderData.totalPrice;
-
       // Find and update the user's score
       const updatedUser = await user.findByIdAndUpdate(
         userId,
-        { $inc: { score: totalPrice } },
+        { $inc: { score: IncreasedScore } },
         { new: true }
       );
 

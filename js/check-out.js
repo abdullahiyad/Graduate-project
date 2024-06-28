@@ -10,6 +10,8 @@ let phoneValidate = false;
 let amountContainer = document.querySelector(".total .price .number");
 document.addEventListener("DOMContentLoaded", () => {
   checkScore();
+  
+  
   // Function to format currency
   function formatCurrency(amount) {
     return `${amount.toFixed(2)}`;
@@ -58,7 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
-  checkScore();
+  // Chec
+  document.getElementById("GScore").innerHTML = `(Score: +${totalAmount})`
+  
 });
 
 //check the phone validty
@@ -115,7 +119,7 @@ document
             icon: "success",
           });
           //here the info that should submitted for backend
-          submitOrder(name, phone, city, address, address2, productsArray);
+          submitOrder(name, phone, city, address, address2, productsArray,payMethod);
           setTimeout(() => {
             sessionStorage.removeItem("productsArray");
             // window.location.href = "/menu";
@@ -173,7 +177,12 @@ async function submitOrder(
       title: "Success!",
       text: "Order created successfully",
       icon: "success",
+      showConfirmButton: false,
     });
+    setTimeout(() => {
+      window.location.href = "/menu";
+    }, 1500);
+    
     // Redirect or update UI as needed
   } catch (error) {
     Swal.fire({
@@ -185,7 +194,6 @@ async function submitOrder(
     console.error("Error submitting order:", error);
   }
 }
-
 
 //function to make an element disabled
 function disabledFunc() {
@@ -224,19 +232,10 @@ function checkScore() {
       }
       const data = await response.json();
       userScore = data.Score;
-      console.log(userScore);
+      document.getElementById("NScore").innerHTML = `(${userScore}/${totalAmount*50})`
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
   calcScore();
-  if (neededScore <= userScore) {
-    document.querySelector("#coinsR").disabled = false;
-    document.querySelector("#coinsLabel").disabled = false;
-    document.querySelector("#coinsLabel-notEnough").style.display = "none";
-  } else {
-    document.querySelector("#coinsLabel").style.display = "none";
-    document.querySelector("#coinsR").disabled = true;
-    document.querySelector("#coinsLabel-notEnough").style.display = "contents";
-  }
 }
 
 function checkRadio() {
@@ -249,15 +248,3 @@ function checkRadio() {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   fetch("/user/dashboard/api")
-//     .then(async (response) => {
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       const data = await response.json();
-//       userScore = data.Score;
-//       console.log(userScore);
-//     })
-//     .catch((error) => console.error("Error fetching dashboard data:", error));
-// });
