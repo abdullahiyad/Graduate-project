@@ -608,6 +608,7 @@ module.exports.checkOut = async (req, res) => {
 module.exports.checkOut_post = async (req, res) => {
   try {
     const userId = getUserData(req);
+    const now = new Date();
     const userData = await user.findById(userId);
     if (!userId) {
       return res.status(401).json({ error: "User not authenticated" });
@@ -617,7 +618,7 @@ module.exports.checkOut_post = async (req, res) => {
       return res.status(400).json({ error: "Cart is empty" });
     }
 
-    if (userData.status === 'admin') { // Assuming user roles are defined, and admin is one of them
+    if (userData.status === 'admin') {
       return res.status(403).json({ error: "Admins cannot make orders" });
     }
 
@@ -625,31 +626,32 @@ module.exports.checkOut_post = async (req, res) => {
       return res.status(400).json({ error: "Customer information is incomplete" });
     }
 
-    // Check for recent orders within the last 1 minutes
-    const oneMinutesAgo = new Date(Date.now() - 1 * 60 * 1000);
-    const recentOrder = await Order.findOne({ userId: userId, createdAt: { $gte: oneMinutesAgo } }).exec();
+    const oneMinutesAgo = new Date(now.getTime() - 1 * 60 * 1000);
+    const recentOrder = await Order.findOne({ userId: userId, createdAt: { $gte: oneMinutesAgo }, status:"pending" }).exec();
     if (recentOrder) {
       return res.status(429).json({ error: "You can only place an order every one minute" });
     }
-
-    // Process cart items and calculate total price
     let totalPrice = 0;
     const products = await Promise.all(cart.map(async item => {
       const product = await Product.findById(item.id).exec();
       if (!product) {
         throw new Error(`Product with ID ${item.id} not found`);
       }
+      
       totalPrice += product.price * item.quan;
-      neededScore = totalPrice * 50;
-      if(pM === "Score") {
-        if(neededScore >= userData.score) {
-          await user.findByIdAndUpdate(
+      let neededScore = totalPrice * 50;
+      if (pM === "Score") {
+        if (neededScore <= userData.score) {
+          const updatedUser = await user.findByIdAndUpdate(
             userId,
             { $inc: { score: -neededScore } },
             { new: true }
           );
-        } else { 
-          return res.json({message: "you don't have enough score."});
+          if (!updatedUser) {
+            throw new Error("Failed to update user's score.");
+          }
+        } else {
+          return res.status(400).json({ error: "You don't have enough score." });
         }
       }
       return {
@@ -657,6 +659,8 @@ module.exports.checkOut_post = async (req, res) => {
         quantity: item.quan,
       };
     }));
+    
+    const gmtPlus3 = new Date(now.getTime() + (3 * 60 * 60 * 1000));
     const orderData = {
       userId: userId,
       customer: {
@@ -664,17 +668,17 @@ module.exports.checkOut_post = async (req, res) => {
         phone: customer.phone,
         City: customer.City,
         address1: customer.address1,
-        address2: customer.address2 || "", // Optional field
+        address2: customer.address2 || "",
       },
       products: products,
       totalPrice: totalPrice,
+      createdAt: gmtPlus3,
       paymentType: pM,
     };
     
     const newOrder = new Order(orderData);
     await newOrder.save();
 
-    // Increment the user's orderNumbers field
     await user.findByIdAndUpdate(
       userId,
       { $inc: { orderNumbers: 1 } },
@@ -683,9 +687,10 @@ module.exports.checkOut_post = async (req, res) => {
 
     res.status(201).json({ message: "Order created successfully" });
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: err.message || "Internal Server Error" });
   }
 };
+
 
 
 

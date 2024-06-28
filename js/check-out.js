@@ -9,11 +9,11 @@ let userScore = 0;
 let phoneValidate = false;
 let amountContainer = document.querySelector(".total .price .number");
 document.addEventListener("DOMContentLoaded", () => {
+  checkScore();
   // Function to format currency
   function formatCurrency(amount) {
     return `${amount.toFixed(2)}`;
   }
-
   // Redirect logic
   fetch("/checkout/switch")
     .then(async (response) => {
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
-  checkScore();
+  // Chec
 });
 
 //check the phone validty
@@ -115,7 +115,7 @@ document
             icon: "success",
           });
           //here the info that should submitted for backend
-          submitOrder(name, phone, city, address, address2, productsArray);
+          submitOrder(name, phone, city, address, address2, productsArray,payMethod);
           setTimeout(() => {
             sessionStorage.removeItem("productsArray");
             window.location.href = "/menu";
@@ -171,22 +171,21 @@ async function submitOrder(
     const data = await response.json();
     Swal.fire({
       title: "Success!",
-      text: "Your order has been created successfully.",
+      text: "Order created successfully",
       icon: "success",
-      timer: 1500,
-      showConfirmButton: false,
     });
+    // Redirect or update UI as needed
   } catch (error) {
-    console.error("Error submitting order:", error.message);
     Swal.fire({
       title: "Error!",
       text: error.message,
       icon: "error",
-      timer: 1500,
-      showConfirmButton: false,
+      timer: 2500,
     });
+    console.error("Error submitting order:", error);
   }
 }
+
 
 
 //function to make an element disabled
@@ -206,7 +205,15 @@ function calcScore() {
     }, 50);
   } else {
     neededScore = orderSalaryInScore.textContent * 50;
-    // console.log("needed Score for order =", neededScore);
+    if (neededScore <= userScore) {
+      document.querySelector("#coinsR").disabled = false;
+      document.querySelector("#coinsLabel").disabled = false;
+      document.querySelector("#coinsLabel-notEnough").style.display = "none";
+    } else {
+      document.querySelector("#coinsLabel").style.display = "none";
+      document.querySelector("#coinsR").disabled = true;
+      document.querySelector("#coinsLabel-notEnough").style.display = "contents";
+    }
   }
 }
 
@@ -218,19 +225,9 @@ function checkScore() {
       }
       const data = await response.json();
       userScore = data.Score;
-      console.log(userScore);
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
   calcScore();
-  if (neededScore <= userScore) {
-    document.querySelector("#coinsR").disabled = false;
-    document.querySelector("#coinsLabel").disabled = false;
-    document.querySelector("#coinsLabel-notEnough").style.display = "none";
-  } else {
-    document.querySelector("#coinsLabel").style.display = "none";
-    document.querySelector("#coinsR").disabled = true;
-    document.querySelector("#coinsLabel-notEnough").style.display = "contents";
-  }
 }
 
 function checkRadio() {
@@ -243,15 +240,4 @@ function checkRadio() {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   fetch("/user/dashboard/api")
-//     .then(async (response) => {
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       const data = await response.json();
-//       userScore = data.Score;
-//       console.log(userScore);
-//     })
-//     .catch((error) => console.error("Error fetching dashboard data:", error));
-// });
+
