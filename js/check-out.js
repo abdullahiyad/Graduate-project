@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
+
   checkScore();
 });
 
@@ -115,10 +116,18 @@ document
             icon: "success",
           });
           //here the info that should submitted for backend
-          submitOrder(name, phone, city, address, address2, productsArray);
+          submitOrder(
+            name,
+            phone,
+            city,
+            address,
+            address2,
+            productsArray,
+            payMethod
+          );
           setTimeout(() => {
             sessionStorage.removeItem("productsArray");
-            window.location.href = "/menu";
+            // window.location.href = "/menu";
           }, 1000);
         }
       });
@@ -188,7 +197,6 @@ async function submitOrder(
   }
 }
 
-
 //function to make an element disabled
 function disabledFunc() {
   const scoreRadio = document.querySelector("#coins");
@@ -210,26 +218,28 @@ function calcScore() {
   }
 }
 
-function checkScore() {
-  fetch("/user/dashboard/api")
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.json();
-      userScore = data.Score;
-      console.log(userScore);
-    })
-    .catch((error) => console.error("Error fetching dashboard data:", error));
-  calcScore();
-  if (neededScore <= userScore) {
-    document.querySelector("#coinsR").disabled = false;
-    document.querySelector("#coinsLabel").disabled = false;
-    document.querySelector("#coinsLabel-notEnough").style.display = "none";
-  } else {
-    document.querySelector("#coinsLabel").style.display = "none";
-    document.querySelector("#coinsR").disabled = true;
-    document.querySelector("#coinsLabel-notEnough").style.display = "contents";
+async function checkScore() {
+  try {
+    const response = await fetch("/user/dashboard/api");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    const userScore = data.Score;
+    calcScore(); // Assuming this function uses userScore or modifies a global variable
+
+    if (neededScore <= userScore) {
+      document.querySelector("#coinsR").disabled = false;
+      document.querySelector("#coinsLabel").disabled = false;
+      document.querySelector("#coinsLabel-notEnough").style.display = "none";
+    } else {
+      document.querySelector("#coinsLabel").style.display = "none";
+      document.querySelector("#coinsR").disabled = true;
+      document.querySelector("#coinsLabel-notEnough").style.display =
+        "contents";
+    }
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
   }
 }
 
@@ -243,15 +253,14 @@ function checkRadio() {
   }
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   fetch("/user/dashboard/api")
-//     .then(async (response) => {
-//       if (!response.ok) {
-//         throw new Error("Network response was not ok");
-//       }
-//       const data = await response.json();
-//       userScore = data.Score;
-//       console.log(userScore);
-//     })
-//     .catch((error) => console.error("Error fetching dashboard data:", error));
-// });
+document.addEventListener("DOMContentLoaded", () => {
+  fetch("/user/dashboard/api")
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      userScore = data.Score;
+    })
+    .catch((error) => console.error("Error fetching dashboard data:", error));
+});
