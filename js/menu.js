@@ -92,11 +92,11 @@ function addProduct(
   }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   // Initialize products
   initializeProducts();
   // Step 1: Fetch product data and user data from the backend
-  fetch("/menu/api")
+  await fetch("/menu/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
