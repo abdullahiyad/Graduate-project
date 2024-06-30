@@ -115,14 +115,15 @@ module.exports.menu_data_get = async (req, res) => {
 };
 module.exports.dashboard_get = async (req, res) => {
   const userId = getUserData(req);
-  const User = user.findById(userId);
-  if( User.status === 'user'){
-    res.render("user/dashboard");
-  } else {
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'admin') {
     res.render("admin/dashboard");
+  } else {
+    res.render("home"); 
   }
 };
-
 module.exports.dashboard_get_data = async (req, res) => {
   try {
     const userId = getUserData(req);
@@ -186,11 +187,13 @@ module.exports.dashboard_get_data = async (req, res) => {
 
 module.exports.admin_users_get = async (req, res) => {
   const userId = getUserData(req);
-  const User = user.findById(userId);
-  if( User.status === 'user'){
-    res.render("home");
-  } else {
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'admin') {
     res.render("admin/users");
+  } else {
+    res.render("home"); 
   }
 };
 module.exports.users_data_get = async (req, res) => {
@@ -277,11 +280,13 @@ module.exports.edit_product = async (req, res) => {
 
 module.exports.products_get = async (req, res) => {
   const userId = getUserData(req);
-  const User = user.findById(userId);
-  if( User.status === 'user'){
-    res.render("home");
-  } else {
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'admin') {
     res.render("admin/products");
+  } else {
+    res.render("home"); 
   }
 };
 
@@ -297,11 +302,13 @@ module.exports.products_data_get = async (req, res) => {
 
 module.exports.admin_profile_get = async (req, res) => {
   const userId = getUserData(req);
-  const User = user.findById(userId);
-  if( User.status === 'user'){
-    res.render("user/profile");
-  } else {
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'admin') {
     res.render("admin/profile");
+  } else {
+    res.render("home"); 
   }
 };
 
@@ -508,23 +515,41 @@ module.exports.delete_loggedIn_user = async (req, res) => {
   }
 };
 
-module.exports.messages_get = (req, res) => {
+module.exports.messages_get = async (req, res) => {
   const userId = getUserData(req);
-  const User = user.findById(userId);
-  if(User.status === 'user'){
-    res.render('user/profile');
-  }else {
-    res.render('admin/messages');
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'admin') {
+    res.render("admin/messages");
+  } else {
+    res.render("home"); 
   }
 }
 
 
-module.exports.user_profile_get = (req, res) => {
-  res.render('user/profile');
+module.exports.user_profile_get = async (req, res) => {
+  const userId = getUserData(req);
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'user') {
+    res.render("user/profile");
+  } else {
+    res.render("home"); 
+  }
 }
 
-module.exports.user_reservation_get = (req, res) => {
-  res.render('user/reservation');
+module.exports.user_reservation_get = async (req, res) => {
+  const userId = getUserData(req);
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'user') {
+    res.render("user/reservation");
+  } else {
+    res.render("home");
+  }
 }
 
 module.exports.reservation_get = (req, res) => {
@@ -777,13 +802,15 @@ module.exports.message_acc_rej_com = async (req, res) => {
   }
 };
 
-module.exports.getOrders = (req, res) => {
+module.exports.getOrders = async (req, res) => {
   const userId = getUserData(req);
-  const User = user.findById(userId);
-  if(User.status === 'user') {
-    res.render('user/orders');
-  }else { 
-    res.render('admin/orders');
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'admin') {
+    res.render("admin/orders");
+  } else {
+    res.render("home"); 
   }
 };
 
@@ -851,12 +878,28 @@ module.exports.subscription_post = (req, res) => {
     webPush.sendNotification(subscription, payload).catch(err => console.error(err));
 };
 
-module.exports.user_dashboard_get = (req, res) => {
+module.exports.user_dashboard_get = async (req, res) => {
+  const userId = getUserData(req);
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'user') {
     res.render("user/dashboard");
+  } else {
+    res.render("home"); 
+  }
 }
 
-module.exports.get_user_orders = (req, res) => {
-  res.render('user/orders');
+module.exports.get_user_orders = async (req, res) => {
+  const userId = getUserData(req);
+  const User = await user.findById(userId);
+  if(!User){
+    res.render("login");
+  } else if (User.status === 'user') {
+    res.render("user/orders");
+  } else {
+    res.render("home"); 
+  }
 };
 
 module.exports.get_user_messages = async (req, res) => {
