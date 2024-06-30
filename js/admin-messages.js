@@ -1,4 +1,3 @@
-
 // Function to show the links list in medium and small screens
 let listIcon = document.querySelector("#menu-icon");
 let dashboard = document.querySelector(".messages-container");
@@ -55,7 +54,11 @@ function rejectReservation(event) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: reservationID, status: "rejected", message: reason }),
+        body: JSON.stringify({
+          id: reservationID,
+          status: "rejected",
+          message: reason,
+        }),
       })
         .then((response) => {
           if (!response.ok) {
@@ -171,18 +174,21 @@ document.addEventListener("DOMContentLoaded", () => {
       return data;
     })
     .then((data) => {
-      
-      if(data.message) {
+      if (data.message) {
         const error = data.message;
         // 1- No User found login
         // 2- no reservation
         // 3- No users data found in reservation
         // 4- Internal server error
-        console.log(error);
-        // 
-        // 
-        // 
-        // 
+        if (error == "2") {
+          document.querySelector(".no-items").style.display = "block";
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `There is an error ${error}, please try reloading the page`,
+          });
+        }
       }
       data.forEach((reservation) => {
         addMessage(
@@ -196,7 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
           reservation.details
         );
       });
-     
     })
     .catch((error) => console.error("Error fetching user data:", error));
 });
@@ -215,14 +220,14 @@ window.logout = function () {
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch('/getUserName');
+    const response = await fetch("/getUserName");
     if (!response.ok) {
-      throw new Error('Failed to fetch user name');
+      throw new Error("Failed to fetch user name");
     }
     const data = await response.json();
     updateName(data.name);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);

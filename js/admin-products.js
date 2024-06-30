@@ -13,11 +13,15 @@ function addProduct(
   productPrice,
   productDesc,
   productType,
-  productId
+  productId,
+  productState
 ) {
-  const newProduct = ` 
+  let newProduct;
+  if (productState == "disabled") {
+    newProduct = ` 
                     <div class="product">
                     <div class="product-id">${productId}</div>
+                    <div class="product-state" onclick="changeState(event)">${productState}</div>
                     <div class="product-img"><img src="${imgSrc}" alt="">
                     </div>
                     <div class="product-info">
@@ -31,6 +35,25 @@ function addProduct(
                     <div class="type">${productType}</div>
                 </div>
   `;
+  } else {
+    newProduct = ` 
+                    <div class="product">
+                    <div class="product-id">${productId}</div>
+                    <div class="product-state product-availabel" onclick="changeState(event)">${productState}</div>
+                    <div class="product-img"><img src="${imgSrc}" alt="">
+                    </div>
+                    <div class="product-info">
+                        <p class="product-title">${productName}</p>
+                        <p class="product-description">${productDesc}</p>
+                    </div>
+                    <div class="price">
+                        <p><span class="price-x">${productPrice}</span> ₪</p>
+                        <button class="atc" onclick="activeMoreDetailsPage(event)">More Details</button>
+                    </div>
+                    <div class="type">${productType}</div>
+                </div>
+  `;
+  }
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = newProduct;
   // tempDiv.classList = "product-item";
@@ -59,14 +82,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           arrayBufferToBase64(product.image.data.data);
         // Now imgSrc contains the Base64-encoded image data, which you can use as the src attribute of an <img> tag
         // Example usage:
-        const sta = product.status;
         addProduct(
           imgSrc,
           product.name,
           product.price,
           product.description,
           product.type,
-          product._id
+          product._id,
+          product.status
         );
       });
     })
@@ -225,6 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);
 });
+
 //function to update btn
 function updateProduct(event) {
   const id = document.querySelector(".details-page .product-id").textContent;
@@ -269,6 +293,38 @@ function updateProduct(event) {
     .catch((err) => {
       console.error("Update Failed:", err);
     });
+}
+//function to update btn
+function changeState(event) {
+  const clickedElement = event.target;
+  let product = clickedElement.parentElement;
+  let id = product.querySelector("product-id");
+  let status;
+  if (
+    product.querySelector(".product-state").textContent.toLocaleLowerCase() ==
+    "availabel"
+  ) {
+    status = "Not Availabel";
+  } else {
+    status = "Availabel";
+  }
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will change the state of this product!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, change it",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Changed status!",
+        text: "the state changed.",
+        icon: "success",
+      });
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", async function () {

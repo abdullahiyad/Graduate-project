@@ -10,8 +10,7 @@ let phoneValidate = false;
 let amountContainer = document.querySelector(".total .price .number");
 document.addEventListener("DOMContentLoaded", () => {
   checkScore();
-  
-  
+
   // Function to format currency
   function formatCurrency(amount) {
     return `${amount.toFixed(2)}`;
@@ -61,8 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Display the total amount
   amountContainer.textContent = totalAmount.toFixed(2);
   // Chec
-  document.getElementById("GScore").innerHTML = `(Score: +${totalAmount})`
-  
+  document.getElementById("GScore").innerHTML = `(Score: +${totalAmount})`;
 });
 
 //check the phone validty
@@ -119,7 +117,15 @@ document
             icon: "success",
           });
           //here the info that should submitted for backend
-          submitOrder(name, phone, city, address, address2, productsArray,payMethod);
+          submitOrder(
+            name,
+            phone,
+            city,
+            address,
+            address2,
+            productsArray,
+            payMethod
+          );
           setTimeout(() => {
             sessionStorage.removeItem("productsArray");
             // window.location.href = "/menu";
@@ -182,7 +188,7 @@ async function submitOrder(
     setTimeout(() => {
       window.location.href = "/menu";
     }, 1500);
-    
+
     // Redirect or update UI as needed
   } catch (error) {
     Swal.fire({
@@ -212,15 +218,6 @@ function calcScore() {
     }, 50);
   } else {
     neededScore = orderSalaryInScore.textContent * 50;
-    if (neededScore <= userScore) {
-      document.querySelector("#coinsR").disabled = false;
-      document.querySelector("#coinsLabel").disabled = false;
-      document.querySelector("#coinsLabel-notEnough").style.display = "none";
-    } else {
-      document.querySelector("#coinsLabel").style.display = "none";
-      document.querySelector("#coinsR").disabled = true;
-      document.querySelector("#coinsLabel-notEnough").style.display = "contents";
-    }
   }
 }
 
@@ -232,10 +229,21 @@ function checkScore() {
       }
       const data = await response.json();
       userScore = data.Score;
-      document.getElementById("NScore").innerHTML = `(${userScore}/${totalAmount*50})`
+      document.getElementById("NScore").innerHTML = `(${userScore}/${
+        totalAmount * 50
+      })`;
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
   calcScore();
+  if (neededScore <= userScore) {
+    document.querySelector("#coinsR").disabled = false;
+    document.querySelector("#coinsLabel").disabled = false;
+    document.querySelector("#coinsLabel-notEnough").style.display = "none";
+  } else {
+    document.querySelector("#coinsLabel").style.display = "none";
+    document.querySelector("#coinsR").disabled = true;
+    document.querySelector("#coinsLabel-notEnough").style.display = "contents";
+  }
 }
 
 function checkRadio() {
@@ -247,4 +255,3 @@ function checkRadio() {
     });
   }
 }
-

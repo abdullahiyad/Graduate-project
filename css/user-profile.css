@@ -296,9 +296,8 @@ form .part {
 }
 .output .btns {
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: column;
   align-items: center;
   width: 100%;
   gap: 10px;

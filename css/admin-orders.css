@@ -330,6 +330,7 @@ body {
 .orders-table .no-items{
   font-size: 16px;
     color: var(--aside-links-color);
+    display: none;
 }
 
 .message .info-container{

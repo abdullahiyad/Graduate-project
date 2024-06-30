@@ -240,16 +240,20 @@ document.addEventListener("DOMContentLoaded", () => {
       return data;
     })
     .then((data) => {
-      if(data.message){
+      if (data.message) {
         const error = data.message;
-        // 1- No user 
+        // 1- No user
         // 2- No Reservation
         // 3- internal server Error
-        // 
-        console.log(error);
-        // 
-        // 
-        //
+        if (error == "2") {
+          document.querySelector(".no-items").style.display = "block";
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `There is an error ${error}, please try reloading the page`,
+          });
+        }
       }
       data.forEach((reservation) => {
         if (reservation.status === "pending") {
@@ -290,14 +294,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch('/getUserName');
+    const response = await fetch("/getUserName");
     if (!response.ok) {
-      throw new Error('Failed to fetch user name');
+      throw new Error("Failed to fetch user name");
     }
     const data = await response.json();
     updateName(data.name);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);

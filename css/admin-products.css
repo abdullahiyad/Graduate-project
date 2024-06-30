@@ -267,6 +267,7 @@ body {
   text-transform: capitalize;
   border: 1px solid var(--product-background-color);
   box-shadow: 0 32px 48px rgb(132 139 200 / 18%);
+      position: relative;
 }
 .products-table .product .product-img {
   overflow: hidden;
@@ -281,8 +282,22 @@ body {
   color: #ff0000d4;
   font-size: 12px;
 }
+.product-state{
+  position: absolute;
+    background-color: #ff0000db;
+    color: white;
+    padding: 0 5px;
+    border-radius: var(--border-radius-3);
+    top: 15px;
+    left: 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.product-availabel{
+  background-color: rgba(0, 128, 0, 0.799) !important;
+}
 .product .product-id,
-.product .type {
+.product .type{
   display: none;
 }
 .product .product-info {

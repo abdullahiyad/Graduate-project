@@ -309,6 +309,11 @@ body {
   -ms-transition: 0.5s;
   -o-transition: 0.5s;
 }
+ .no-items{
+  font-size: 16px;
+    color: var(--aside-links-color);
+    display: none;
+}
 .orders-table .message {
   width: 100%;
   height: 60px;

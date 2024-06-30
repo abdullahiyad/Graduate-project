@@ -19,33 +19,34 @@ function doneMessagge(event) {
   const parent = clickedElement.parentElement.parentElement;
   const orderId = parent.querySelector(".order-id").textContent;
 
-  fetch('/admin/orders', {
+  fetch("/admin/orders", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json", // Specify the content type
     },
-    body: JSON.stringify({orderId}),
-    }
-  ).then((response) => {
-    if(!response.ok) {
-      throw new Error("Response Was Not Ok!!");
-    }
-    return response.text();
-  }).then((data) => {
-    Swal.fire({
-      title: "Finished!",
-      text: "The Order is completed.",
-      icon: "success",
+    body: JSON.stringify({ orderId }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Response Was Not Ok!!");
+      }
+      return response.text();
+    })
+    .then((data) => {
+      Swal.fire({
+        title: "Finished!",
+        text: "The Order is completed.",
+        icon: "success",
+      });
+      clickedElement.parentElement.parentElement.parentElement.remove();
+    })
+    .catch((err) => {
+      Swal.fire({
+        title: "Failed!",
+        text: "There is something error." + err,
+        icon: "failed",
+      });
     });
-    clickedElement.parentElement.parentElement.parentElement.remove();
-  }).catch((err) => {
-    Swal.fire({
-      title: "Failed!",
-      text: "There is something error." + err,
-      icon: "failed",
-    });
-  });
-
 }
 
 let ordersTable = document.querySelector(".orders-table");
@@ -150,15 +151,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return data;
     })
     .then((data) => {
-      if(data.message) {
+      if (data.message) {
         const error = data.message;
         // 1- Order not found
         // 2- user not found
         // 3- product not found
         // 4- internal server error
-        console.log(error);
-        // 
-        // 
+        if (error == "1") {
+          document.querySelector(".no-items").style.display = "block";
+        } else if (error == "3") {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "The Product that has been ordered is not availabel",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "There is an error , please try reloading the page",
+          });
+        }
+
+        //
+        //
       }
       data.orders.forEach((order) => {
         // Extract user data
@@ -200,14 +216,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch('/getUserName');
+    const response = await fetch("/getUserName");
     if (!response.ok) {
-      throw new Error('Failed to fetch user name');
+      throw new Error("Failed to fetch user name");
     }
     const data = await response.json();
     updateName(data.name);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);

@@ -49,6 +49,7 @@
                 <li class="orders"><a href="orders"><i class="fa-solid fa-scroll"></i> orders</a></li>
                 <li class="messages"><a href="messages"><i class="fa-regular fa-envelope"></i> Reservation</a></li>
                 <li class="profile"><a href="profile"><i class="fa-solid fa-user"></i> your profile</a></li>
+                <li class="backToHome"><a href="/home"><i class="fa-solid fa-left-long"></i>Back to Home</a></li>
             </ul>
             <button class="logout" onclick="logout()">logout <i
                     class="fa-solid fa-arrow-right-from-bracket"></i></button>
@@ -64,7 +65,7 @@
                         <p onclick="showMsgs(event)">pending reservation requests</p>
                     </div>
                     <div class="content-section">
-
+                        <p class="no-items">There are currently no resrvations</p>
                     </div>
                 </div>
                 <div class="accepted-reservation reservation-section">
@@ -73,7 +74,7 @@
                         <p onclick="showMsgs(event)">accepted reservation requests</p>
                     </div>
                     <div class="content-section">
-
+                        <p class="no-items">There are currently no resrvations</p>
                     </div>
                 </div>
                 <div class="rejected-reservation reservation-section">
@@ -82,7 +83,7 @@
                         <p onclick="showMsgs(event)">rejected reservation requests</p>
                     </div>
                     <div class="content-section">
-
+                        <p class="no-items">There are currently no resrvations</p>
                     </div>
                 </div>
 

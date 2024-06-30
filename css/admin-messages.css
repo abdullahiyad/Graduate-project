@@ -326,7 +326,11 @@ body {
   background-color: var(--color-background);
   padding: 20px;
 }
-
+ .no-items{
+  font-size: 16px;
+    color: var(--aside-links-color);
+    display: none;
+}
 .message .info-container{
     width: 80%;
 }

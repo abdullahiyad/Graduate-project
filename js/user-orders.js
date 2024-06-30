@@ -133,16 +133,20 @@ document.addEventListener("DOMContentLoaded", () => {
       return data;
     })
     .then((data) => {
-      if(data.message){
-        const error = data.message
+      if (data.message) {
+        const error = data.message;
         // 1 - user not found
         // 2- orders not found
         // 3- internal server error
-        // you can take the error message from end point
-        console.log(error);
-        // 
-        // 
-        // 
+        if (error == "2") {
+          document.querySelector(".no-items").style.display = "block";
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `There is an error ${error}, please try reloading the page`,
+          });
+        }
       }
       data.forEach((Order) => {
         addOrder(
@@ -160,19 +164,21 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       });
     })
-    .catch((error) => console.error("Error fetching orders data:", error.message));
+    .catch((error) =>
+      console.error("Error fetching orders data:", error.message)
+    );
 });
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch('/getUserName');
+    const response = await fetch("/getUserName");
     if (!response.ok) {
-      throw new Error('Failed to fetch user name');
+      throw new Error("Failed to fetch user name");
     }
     const data = await response.json();
     updateName(data.name);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
   const logoutButton = document.querySelector(".logout");
   logoutButton.addEventListener("click", logout);
