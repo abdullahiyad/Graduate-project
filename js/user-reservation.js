@@ -235,14 +235,22 @@ window.logout = function () {
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/messages/api")
     .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
       let data = await response.json();
       // console.log(data);
       return data;
     })
     .then((data) => {
+      if(data.message){
+        const error = data.message;
+        // 1- No user 
+        // 2- No Reservation
+        // 3- internal server Error
+        // 
+        console.log(error);
+        // 
+        // 
+        //
+      }
       data.forEach((reservation) => {
         if (reservation.status === "pending") {
           addMessagePending(

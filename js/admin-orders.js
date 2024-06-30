@@ -146,13 +146,20 @@ window.logout = function () {
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/admin/orders/api")
     .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
       let data = await response.json();
       return data;
     })
     .then((data) => {
+      if(data.message) {
+        const error = data.message;
+        // 1- Order not found
+        // 2- user not found
+        // 3- product not found
+        // 4- internal server error
+        console.log(error);
+        // 
+        // 
+      }
       data.orders.forEach((order) => {
         // Extract user data
         const userName = order.userName;

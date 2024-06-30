@@ -167,13 +167,23 @@ here more details : [${moreDetails}]
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/admin/messages/api")
     .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
       let data = await response.json();
       return data;
     })
     .then((data) => {
+      
+      if(data.message) {
+        const error = data.message;
+        // 1- No User found login
+        // 2- no reservation
+        // 3- No users data found in reservation
+        // 4- Internal server error
+        console.log(error);
+        // 
+        // 
+        // 
+        // 
+      }
       data.forEach((reservation) => {
         addMessage(
           reservation.userName,
