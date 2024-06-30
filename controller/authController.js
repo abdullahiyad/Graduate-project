@@ -151,7 +151,6 @@ module.exports.dashboard_get_data = async (req, res) => {
       };
       reservationsForm.push(formattedReservation);
     };
-    console.log(reservationsForm);
     // Step 2: Find users created in the last 24 hours
     const H24 = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const recentUsers = await user.find({ createdAt: { $gte: H24 } });
@@ -928,7 +927,6 @@ module.exports.get_orders_user_data = async (req, res) => {
         status: order.status,
       };
     }));
-    console.log(ordersData);
     res.status(200).json(ordersData);
   } catch (err) {
     console.error(`Error processing order: ${err.message}`);
