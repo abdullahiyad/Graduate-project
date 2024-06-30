@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
           arrayBufferToBase64(product.image.data.data);
         // Now imgSrc contains the Base64-encoded image data, which you can use as the src attribute of an <img> tag
         // Example usage:
+        const sta = product.status;
         addProduct(
           imgSrc,
           product.name,
@@ -241,6 +242,11 @@ function updateProduct(event) {
   formData.append("product-price", price);
   formData.append("product-type", type);
   formData.append("product-desc", description);
+  // 
+  // 
+  // 
+  // send Status to back-end
+  formData.append("product-status", status);
 
   if (imgInput.files.length > 0) {
     formData.append("choose-file", imgInput.files[0]);
