@@ -327,6 +327,10 @@ body {
   -ms-transition:all 0.5s ease;
   -o-transition:all 0.5s ease;
 }
+.orders-table .no-items{
+  font-size: 16px;
+    color: var(--aside-links-color);
+}
 
 .message .info-container{
     width: 80%;
