@@ -55,7 +55,6 @@ const orderSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
   },
   paymentType: {
     type: String,
@@ -64,11 +63,11 @@ const orderSchema = new mongoose.Schema({
   }
 });
 
-orderSchema.pre('save', function (next) {
-  const now = new Date();
-  const gmtPlus3 = new Date(now.getTime() + (3 * 60 * 60 * 1000));
-  this.createdAt = gmtPlus3;
-  next();
-});
+// orderSchema.pre('save', function (next) {
+//   const now = new Date();
+//   const gmtPlus3 = new Date(now.getTime() + (3 * 60 * 60 * 1000));
+//   this.createdAt = gmtPlus3;
+//   next();
+// });
 
 module.exports = Order = mongoose.model("Order", orderSchema);

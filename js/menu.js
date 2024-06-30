@@ -110,6 +110,13 @@ document.addEventListener("DOMContentLoaded", function () {
       data.products.forEach((product) => {
         let base64Image = arrayBufferToBase64(product.image.data.data);
         let imgSrc = base64Image;
+        // 
+        // 
+        const sta = product.status;
+        // 
+        // 
+        // 
+        //         
         addProduct(
           product._id,
           imgSrc,
