@@ -41,9 +41,9 @@ function addProduct(
   productTable.appendChild(tempDiv.firstElementChild);
 }
 //adding proudct from data base to page
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   // Fetch product data from the backend and populate the table
-  fetch("/admin/products/api")
+  await fetch("/admin/products/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -242,9 +242,9 @@ function updateProduct(event) {
   formData.append("product-price", price);
   formData.append("product-type", type);
   formData.append("product-desc", description);
-  // 
-  // 
-  // 
+  //
+  //
+  //
   // send Status to back-end
   formData.append("product-status", status);
 
@@ -273,13 +273,13 @@ function updateProduct(event) {
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const response = await fetch('/getUserName');
+    const response = await fetch("/getUserName");
     if (!response.ok) {
-      throw new Error('Failed to fetch user name');
+      throw new Error("Failed to fetch user name");
     }
     const data = await response.json();
     updateName(data.name);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 });
