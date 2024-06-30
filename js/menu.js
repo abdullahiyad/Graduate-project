@@ -109,21 +109,16 @@ document.addEventListener("DOMContentLoaded", function () {
       data.products.forEach((product) => {
         let base64Image = arrayBufferToBase64(product.image.data.data);
         let imgSrc = base64Image;
-        //
-        //
-        const sta = product.status;
-        //
-        //
-        //
-        //
-        addProduct(
-          product._id,
-          imgSrc,
-          product.name,
-          product.price,
-          product.description,
-          product.type
-        );
+        if (product.status == "Available") {
+          addProduct(
+            product._id,
+            imgSrc,
+            product.name,
+            product.price,
+            product.description,
+            product.type
+          );
+        }
       });
       // Step 3: Check user login status if user data is available
       if (data.user) {
