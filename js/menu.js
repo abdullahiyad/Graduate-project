@@ -95,7 +95,6 @@ function addProduct(
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize products
   initializeProducts();
-  
   // Step 1: Fetch product data and user data from the backend
   fetch("/menu/api")
     .then(async (response) => {
@@ -110,13 +109,13 @@ document.addEventListener("DOMContentLoaded", function () {
       data.products.forEach((product) => {
         let base64Image = arrayBufferToBase64(product.image.data.data);
         let imgSrc = base64Image;
-        // 
-        // 
+        //
+        //
         const sta = product.status;
-        // 
-        // 
-        // 
-        //         
+        //
+        //
+        //
+        //
         addProduct(
           product._id,
           imgSrc,
@@ -184,7 +183,7 @@ function initializeProducts(
       cartList.appendChild(newProduct.firstElementChild);
     });
   }
-
+  updateCartCounter();
 }
 
 //function to create array Products
@@ -260,6 +259,7 @@ function addToCart(event) {
 
   // Update the cart list in the DOM
   updateCartList();
+  updateCartCounter();
 }
 
 // Function to update the cart list in the DOM based on session storage
@@ -283,6 +283,7 @@ function updateCartList() {
     `;
     cartList.appendChild(productElement.firstElementChild);
   });
+  updateCartCounter();
 }
 
 // Call the updateCartList function on page load to initialize the cart
@@ -297,6 +298,7 @@ function increaseQuantity(event) {
   product.quan += 1;
   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
   updateCartList();
+  updateCartCounter();
 }
 
 function decreaseQuantity(event) {
@@ -311,6 +313,7 @@ function decreaseQuantity(event) {
   }
   sessionStorage.setItem("productsArray", JSON.stringify(productsArray));
   updateCartList();
+  updateCartCounter();
 }
 
 function deleteProduct(event) {
@@ -351,7 +354,7 @@ async function redirectToCheckout() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Network response was not ok");
       } else {
-        window.location.href = '/checkout';
+        window.location.href = "/checkout";
       }
     } catch (error) {
       Swal.fire({
@@ -374,3 +377,11 @@ function checkLoggedIn() {
 document
   .querySelector(".checkout")
   .addEventListener("click", redirectToCheckout);
+
+//functiion to update cart counter number
+function updateCartCounter() {
+  const cartCounter = document.querySelector(".cart-counter");
+  cartCounter.textContent = JSON.parse(
+    sessionStorage.getItem("productsArray")
+  ).length;
+}

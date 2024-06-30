@@ -117,6 +117,22 @@
   color: var(--color-dark);
   font-size: 25px;
   padding: 5px;
+  position: relative;
+}
+.header .right-header a .cart-counter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  padding: 2px;
+  font-size: 12px;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media (max-width: 800px) {
   .header .burger-icon {
