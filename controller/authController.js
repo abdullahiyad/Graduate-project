@@ -692,7 +692,15 @@ module.exports.checkOut_post = async (req, res) => {
 
 module.exports.messages_data_get = async (req, res) => {
   try {
+    const adminId = getUserData(req);
+    const admin = await user.findById(adminId)
+    if(!admin) {
+      return res.status(404).json({ message: "1" })
+    }
     const reservations = await reservation.find({ status: "pending" });
+    if(reservations.length === 0) {
+      return res.status(404).json({ message: "2" })
+    }
     const usersData = [];
     
     reservations.forEach((data) => {
@@ -701,7 +709,9 @@ module.exports.messages_data_get = async (req, res) => {
 
     const userDataList = await Promise.all(usersData);
     const Reservations = [];
-
+    if(userDataList.length === 0) {
+      return res.status(404).json({ message: "3" })
+    }
     reservations.forEach((data, index) => {
       const users = userDataList[index];
       if (users) {
@@ -719,7 +729,7 @@ module.exports.messages_data_get = async (req, res) => {
     });
     res.status(200).json(Reservations);
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "4" });
   }
 };
 
@@ -781,20 +791,22 @@ module.exports.get_orders_data = async (req, res) => {
   try {
     // Fetch all pending orders
     const orders = await Order.find({ status: "pending" });
-
+    if(orders.length === 0) {
+      return res.status(404).json({ message: "1" });
+    }
     // Process each order to get user and product information
     const ordersData = await Promise.all(orders.map(async order => {
       // Fetch user information
       const User = await user.findById(order.userId).exec();
       if (!User) {
-        throw new Error(`User with ID ${order.userId} not found`);
+        return res.status(404).json({ message: "2" });
       }
 
       // Fetch product information
       const products = await Promise.all(order.products.map(async productItem => {
         const product = await Product.findById(productItem.productId).exec();
         if (!product) {
-          throw new Error(`Product with ID ${productItem.productId} not found`);
+          return res.status(404).json({ message: "3" });
         }
         return {
           productId: product._id,
@@ -820,7 +832,7 @@ module.exports.get_orders_data = async (req, res) => {
     // Send the combined data back to the client
     res.status(200).json({ orders: ordersData });
   } catch (err) {
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "4" });
   }
 };
 
@@ -855,7 +867,7 @@ module.exports.get_user_messages = async (req, res) => {
     // Fetch the user data
     const userData = await user.findById(userId);
     if (!userData) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "1" });
     }
 
     // Search for reservations by userId
@@ -863,7 +875,7 @@ module.exports.get_user_messages = async (req, res) => {
 
     // Check if reservations exist for the user
     if (userReservations.length === 0) {
-      return res.status(404).json({ message: "No reservations found for this user" });
+      return res.status(404).json({ message: "2" });
     }
 
     // Format the reservations data with user details
@@ -882,7 +894,7 @@ module.exports.get_user_messages = async (req, res) => {
     // Send the formatted reservations in the response
     res.status(200).json(reservationsForm);
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "3" });
   }
 };
 
@@ -894,13 +906,13 @@ module.exports.get_orders_user_data = async (req, res) => {
     // Fetch the user data
     const userData = await user.findById(userId);
     if (!userData) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "1" });
     }
     
     // Fetch the orders for the user
     const userOrders = await Order.find({ userId: userId });
     if (userOrders.length === 0) {
-      return res.status(404).json({ message: "No orders found for this user" });
+      return res.status(404).json({ message: "2" });
     }
     // Fetch product details for each order
     const ordersData = await Promise.all(userOrders.map(async (order) => {
@@ -930,7 +942,7 @@ module.exports.get_orders_user_data = async (req, res) => {
     res.status(200).json(ordersData);
   } catch (err) {
     console.error(`Error processing order: ${err.message}`);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "3" });
   }
 };
 

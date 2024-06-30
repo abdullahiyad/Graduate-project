@@ -12,8 +12,8 @@ const product_schema = new mongoose.Schema({
     },
     status: {
         type:String,
-        enum:["available","disable"],
-        default:"available"
+        enum:["Available","Disable"],
+        default:"Available"
     },
     type: {
         type:String,

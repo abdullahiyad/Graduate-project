@@ -128,20 +128,22 @@ window.logout = function () {
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/user/orders/api")
     .then(async (response) => {
-      if (!response.ok) {
-        // throw new Error("Network response was not ok");
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
-      }
       let data = await response.json();
       // console.log(data);
       return data;
     })
     .then((data) => {
-      console.log(data);
+      if(data.message){
+        const error = data.message
+        // 1 - user not found
+        // 2- orders not found
+        // 3- internal server error
+        // you can take the error message from end point
+        console.log(error);
+        // 
+        // 
+        // 
+      }
       data.forEach((Order) => {
         addOrder(
           Order.userName,
@@ -158,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       });
     })
-    .catch((error) => console.error("Error fetching orders data:", error));
+    .catch((error) => console.error("Error fetching orders data:", error.message));
 });
 
 document.addEventListener("DOMContentLoaded", async function () {
