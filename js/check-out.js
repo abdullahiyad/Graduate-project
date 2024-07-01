@@ -221,8 +221,8 @@ function calcScore() {
   }
 }
 
-function checkScore() {
-  fetch("/user/dashboard/api")
+async function checkScore() {
+  await fetch("/user/dashboard/api")
     .then(async (response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -232,14 +232,21 @@ function checkScore() {
       document.getElementById("NScore").innerHTML = `(${userScore}/${
         totalAmount * 50
       })`;
+      calcScore();
     })
     .catch((error) => console.error("Error fetching dashboard data:", error));
   calcScore();
   if (neededScore <= userScore) {
+    // console.log("needed Score", neededScore);
+    // console.log("userScore", userScore);
+    // console.log("enough");
     document.querySelector("#coinsR").disabled = false;
     document.querySelector("#coinsLabel").disabled = false;
     document.querySelector("#coinsLabel-notEnough").style.display = "none";
   } else {
+    // console.log("needed Score", neededScore);
+    // console.log("userScore", userScore);
+    // console.log("not enough");
     document.querySelector("#coinsLabel").style.display = "none";
     document.querySelector("#coinsR").disabled = true;
     document.querySelector("#coinsLabel-notEnough").style.display = "contents";
