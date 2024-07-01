@@ -76,7 +76,7 @@ function addOrder(
             </thead>
             ${products.outerHTML}
             <tfoot>
-              <td>total price : ${totalPrice} $</td>
+              <td>total price : ${totalPrice} ₪</td>
               <td></td>
             </tfoot>
           </table>
