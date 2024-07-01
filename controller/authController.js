@@ -46,6 +46,7 @@ module.exports.signup_post = async (req, res) => {
     res.status(400).send(errors);
   }
 };
+
 module.exports.login_post = async (req, res) => {
   try {
     const check = await user.findOne({ email: req.body.email });
