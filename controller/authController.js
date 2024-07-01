@@ -242,6 +242,7 @@ module.exports.edit_product = async (req, res) => {
     const price = req.body["product-price"];
     const type = req.body["product-type"];
     const description = req.body["product-desc"];
+    const status = req.body.status;
     
     let image;
     if (req.file) {
@@ -260,6 +261,7 @@ module.exports.edit_product = async (req, res) => {
     if (price) updates.price = price;
     if (description) updates.description = description;
     if (type) updates.type = type;
+    if (status) updates.status = status;
     
     // Update the product using findOneAndUpdate
     const updatedProduct = await Product.findOneAndUpdate(

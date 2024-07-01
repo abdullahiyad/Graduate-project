@@ -17,7 +17,7 @@ function addProduct(
   productState
 ) {
   let newProduct;
-  if (productState == "disabled") {
+  if (productState.toLocaleLowerCase() == "not available") {
     newProduct = ` 
                     <div class="product">
                     <div class="product-id">${productId}</div>
@@ -266,11 +266,6 @@ function updateProduct(event) {
   formData.append("product-price", price);
   formData.append("product-type", type);
   formData.append("product-desc", description);
-  //
-  //
-  //
-  // send Status to back-end
-  formData.append("product-status", status);
 
   if (imgInput.files.length > 0) {
     formData.append("choose-file", imgInput.files[0]);
@@ -294,20 +289,20 @@ function updateProduct(event) {
       console.error("Update Failed:", err);
     });
 }
+
 //function to update btn
 function changeState(event) {
   const clickedElement = event.target;
-  let product = clickedElement.parentElement;
-  let id = product.querySelector("product-id");
+  const product = clickedElement.closest('.product');
+  const id = product.querySelector(".product-id").textContent; // Assuming product-id is a class
   let status;
-  if (
-    product.querySelector(".product-state").textContent.toLocaleLowerCase() ==
-    "availabel"
-  ) {
-    status = "Not Availabel";
+  
+  if (product.querySelector(".product-state").textContent.toLowerCase() === "available") {
+    status = "Not Available";
   } else {
-    status = "Availabel";
+    status = "Available";
   }
+
   Swal.fire({
     title: "Are you sure?",
     text: "You will change the state of this product!",
@@ -318,11 +313,37 @@ function changeState(event) {
     confirmButtonText: "Yes, change it",
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire({
-        title: "Changed status!",
-        text: "the state changed.",
-        icon: "success",
-      });
+      fetch("/admin/products", {
+        method: "PUT",
+        body: JSON.stringify({ id: id, status: status }), // Stringify the body for JSON
+        headers: {
+          "Content-Type": "application/json", // Specify the content type
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Something went wrong!");
+          }
+          return response.json(); // Return the JSON data
+        })
+        .then((data) => {
+          // Update the product state in the DOM
+          product.querySelector(".product-state").textContent = status;
+          product.querySelector(".product-state").classList.toggle("product-availabel");
+          Swal.fire({
+            title: "Changed status!",
+            text: "The state changed successfully.",
+            icon: "success",
+          });
+        })
+        .catch((err) => {
+          console.error("Update Failed:", err);
+          Swal.fire({
+            title: "Error!",
+            text: "There was an error changing the status.",
+            icon: "error",
+          });
+        });
     }
   });
 }
