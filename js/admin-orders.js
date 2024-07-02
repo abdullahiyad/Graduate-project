@@ -38,7 +38,7 @@ function doneMessagge(event) {
         text: "The Order is completed.",
         icon: "success",
       });
-      clickedElement.parentElement.parentElement.parentElement.remove();
+      parent.remove();
     })
     .catch((err) => {
       Swal.fire({
